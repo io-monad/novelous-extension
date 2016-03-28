@@ -1,0 +1,19 @@
+extends: airbnb
+env:
+  browser: true
+  webextensions: true
+  jquery: true
+plugins:
+  - react
+globals:
+  _: true
+  __ENV__: true
+  __VENDOR__: true
+  LIVERELOAD: true
+rules:
+  arrow-body-style: off
+  no-console: off
+  no-param-reassign: off
+  quotes:
+    - error
+    - double

@@ -1,0 +1,29 @@
+{
+  "appName": {
+    "message": "のべらす",
+    "description": "The name of the application"
+  },
+  "appShortName": {
+    "message": "novelous",
+    "description": "The short_name (maximum of 12 characters recommended) is a short version of the app's name."
+  },
+  "appDescription": {
+    "message": "「小説家になろう」「カクヨム」などの小説サイトでの執筆作業をサポートします",
+    "description": "The description of the application"
+  },
+  "siteNarouName": {
+    "message": "小説家になろう"
+  },
+  "siteKakuyomuName": {
+    "message": "カクヨム"
+  },
+  "enableThisSite": {
+    "message": "このサイトを有効にする"
+  },
+  "defaultNarouNcode": {
+    "message": "作品のNコード"
+  },
+  "defaultKakuyomuWorkId": {
+    "message": "作品のID"
+  }
+}

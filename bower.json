@@ -1,0 +1,35 @@
+{
+  "name": "novelous-extension",
+  "description": "A tool that watches various Japanese novel sites and helps publishing on them.",
+  "main": "",
+  "authors": [
+    "IRIDE Monad <iride.monad@gmail.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "es6"
+  ],
+  "homepage": "https://github.com/io-monad/novelous-extension",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "dist",
+    "packages"
+  ],
+  "dependencies": {
+    "font-awesome": "^4.5.0",
+    "bootswatch-dist": "paper"
+  },
+  "overrides": {
+    "font-awesome": {
+      "main": []
+    },
+    "bootswatch-dist": {
+      "main": "**/*.min.{css,js}"
+    }
+  }
+}

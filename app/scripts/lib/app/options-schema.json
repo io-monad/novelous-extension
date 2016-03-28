@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Novelous Options",
+  "type": "object",
+  "required": [
+    "sites"
+  ],
+  "properties": {
+    "sites": {
+      "title": "novelSites",
+      "type": "object",
+      "properties": {
+        "narou": {
+          "title": "siteNarouName",
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {
+            "enabled": {
+              "title": "enableThisSite",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "kakuyomu": {
+          "title": "siteKakuyomuName",
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {
+            "enabled": {
+              "title": "enableThisSite",
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
