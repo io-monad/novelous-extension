@@ -12,12 +12,7 @@ export default class Narou extends Base {
    * @param {Object} [settings] - Settings.
    */
   constructor(settings) {
-    settings = _.extend({
-      name: "narou",
-      displayName: chrome.i18n.getMessage("siteNarouName"),
-      baseUrl: "http://syosetu.com",
-    }, settings);
-
+    settings = _.defaults(settings, Narou.meta);
     super(settings);
   }
 
@@ -52,3 +47,9 @@ export default class Narou extends Base {
     return code;
   }
 }
+
+Narou.meta = {
+  name: "narou",
+  displayName: "小説家になろう",
+  baseUrl: "http://syosetu.com",
+};

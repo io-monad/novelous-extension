@@ -11,12 +11,6 @@
     "message": "「小説家になろう」「カクヨム」などの小説サイトでの執筆作業をサポートします",
     "description": "The description of the application"
   },
-  "siteNarouName": {
-    "message": "小説家になろう"
-  },
-  "siteKakuyomuName": {
-    "message": "カクヨム"
-  },
   "enableThisSite": {
     "message": "このサイトを有効にする"
   },

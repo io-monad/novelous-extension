@@ -12,12 +12,7 @@ export default class Kakuyomu extends Base {
    * @param {Object} [settings] - Settings.
    */
   constructor(settings) {
-    settings = _.extend({
-      name: "kakuyomu",
-      displayName: chrome.i18n.getMessage("siteKakuyomuName"),
-      baseUrl: "https://kakuyomu.jp",
-    }, settings);
-
+    settings = _.defaults(settings, Kakuyomu.meta);
     super(settings);
   }
 
@@ -58,3 +53,9 @@ export default class Kakuyomu extends Base {
     return code;
   }
 }
+
+Kakuyomu.meta = {
+  name: "kakuyomu",
+  displayName: "カクヨム",
+  baseUrl: "https://kakuyomu.jp",
+};

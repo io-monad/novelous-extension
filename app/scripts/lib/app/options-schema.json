@@ -11,7 +11,7 @@
       "type": "object",
       "properties": {
         "narou": {
-          "title": "siteNarouName",
+          "title": "小説家になろう",
           "type": "object",
           "required": ["enabled"],
           "properties": {
@@ -23,7 +23,7 @@
           }
         },
         "kakuyomu": {
-          "title": "siteKakuyomuName",
+          "title": "カクヨム",
           "type": "object",
           "required": ["enabled"],
           "properties": {
