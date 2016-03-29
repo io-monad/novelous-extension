@@ -14,7 +14,14 @@ export default class Publication {
   constructor(settings = {}) {
     this.title = settings.title || "";
     this.body = settings.body || "";
-    this.time = settings.time ? new Date(settings.time) : null;
+    this.time = settings.time || null;
     this.sites = settings.sites || {};
+  }
+
+  set time(time) {
+    this._time = time ? new Date(time) : null;
+  }
+  get time() {
+    return this._time;
   }
 }
