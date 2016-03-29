@@ -12,21 +12,21 @@ test("new Options", t => {
 });
 
 test("#constructor sets default", t => {
-  t.true(options.sites.narou.enabled);
-  t.true(options.sites.kakuyomu.enabled);
+  t.true(options.sites.narou);
+  t.true(options.sites.kakuyomu);
 });
 
 test("#overwrite updates values with default values", t => {
   options.overwrite({
-    sites: { narou: { enabled: false } },
+    sites: { narou: false },
   });
-  t.false(options.sites.narou.enabled);
+  t.false(options.sites.narou);
 
   options.overwrite({
-    sites: { kakuyomu: { enabled: false } },
+    sites: { kakuyomu: false },
   });
-  t.true(options.sites.narou.enabled);
-  t.false(options.sites.kakuyomu.enabled);
+  t.true(options.sites.narou);
+  t.false(options.sites.kakuyomu);
 });
 
 test("#schema returns schema", t => {
@@ -35,7 +35,7 @@ test("#schema returns schema", t => {
 
 test("#sites returns sites Object", t => {
   t.ok(_.isObject(options.sites));
-  t.ok(_.isObject(options.sites.narou));
+  t.true(options.sites.narou);
 });
 
 test(".load returns options Promise", t => {

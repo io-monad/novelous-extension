@@ -67,7 +67,7 @@ test.cb("Built handler handles returned Promise", t => {
 
   const message = { type: "HELLO", foo: "bar" };
   const ret = handler(message, {}, (result) => {
-    t.same(result, { error: null, test: "bar" });
+    t.same(result, { test: "bar" });
     t.end();
   });
   t.true(ret);

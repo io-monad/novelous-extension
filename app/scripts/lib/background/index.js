@@ -1,12 +1,12 @@
 import externalEvents from "./external-events";
-import buildPublisher from "../publications/publisher-builder";
+import Publisher from "../publications/publisher";
 import Options from "../app/options";
 
 export default function () {
   let publisher;
 
   function loadOptions(options) {
-    publisher = buildPublisher(options);
+    publisher = new Publisher(options);
   }
 
   Options.load().then(options => {

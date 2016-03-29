@@ -13,25 +13,13 @@
         "narou": {
           "title": "小説家になろう",
           "type": "object",
-          "required": ["enabled"],
           "properties": {
-            "enabled": {
-              "title": "enableThisSite",
-              "type": "boolean",
-              "default": true
-            }
           }
         },
         "kakuyomu": {
           "title": "カクヨム",
           "type": "object",
-          "required": ["enabled"],
           "properties": {
-            "enabled": {
-              "title": "enableThisSite",
-              "type": "boolean",
-              "default": true
-            }
           }
         }
       }

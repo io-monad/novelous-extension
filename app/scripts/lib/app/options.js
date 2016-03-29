@@ -5,12 +5,8 @@ const STORAGE_OPTIONS_KEY = "options";
 
 const DEFAULT_OPTIONS = {
   sites: {
-    narou: {
-      enabled: true,
-    },
-    kakuyomu: {
-      enabled: true,
-    },
+    narou: true,
+    kakuyomu: true,
   },
 };
 

@@ -48,7 +48,7 @@ export default class Site {
           if (results.length > 0 && results[0]) {
             reject(results[0]);
           } else {
-            resolve();
+            resolve(results[0]);
           }
         });
       });

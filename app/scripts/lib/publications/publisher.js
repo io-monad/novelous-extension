@@ -1,4 +1,5 @@
 import Publication from "./publication";
+import SiteFactory from "../sites/site-factory";
 
 /**
  * Publisher that publishes article to novel sites.
@@ -6,22 +7,32 @@ import Publication from "./publication";
 export default class Publisher {
   /**
    * @param {Object} [settings] - Settings.
-   * @param {Site[]} [settings.sites] - Sites used for publishing.
+   * @param {Object} [settings.sites] - Site settings used for publishing.
+   *     This is an Object with site name keys.
+   *     A value can be an Object of site settings, or Site instance, or
+   *     just `true` for using default options.
    */
   constructor(settings) {
     settings = settings || {};
-    this.sites = _.keyBy(settings.sites || [], "name");
+    this.sites = this._buildSites(settings.sites || []);
+  }
+
+  /** @private */
+  _buildSites(siteSettings) {
+    const sites = {};
+    _.each(siteSettings, (settings, siteName) => {
+      const site = SiteFactory.create(siteName, settings);
+      if (site) {
+        sites[siteName] = site;
+      }
+    });
+    return sites;
   }
 
   /**
-   * @param {Site} site - Site to be registered.
-   */
-  registerSite(site) {
-    this.sites[site.name] = site;
-  }
-
-  /**
-   * @param {Publication[]|Object[]} pubs - Publications to be made.
+   * Publish a set of Publications.
+   *
+   * @param {Publication[]|Object[]} pubs - A set of Publications to be made.
    * @return {Promise}
    */
   publishAll(pubs) {
@@ -31,6 +42,8 @@ export default class Publisher {
   }
 
   /**
+   * Publish a single Publication.
+   *
    * @param {Publication|Object} pub - A Publication to be made.
    * @return {Promise}
    */
@@ -38,10 +51,12 @@ export default class Publisher {
     return new Promise((resolve, reject) => {
       if (!(pub instanceof Publication)) pub = new Publication(pub);
 
-      const sites = _.keys(pub.sites);
-      Promise.all(_.map(sites, site => this.publishToSite(pub, site)))
+      const siteNames = _.keys(pub.sites);
+      const promises = _.map(siteNames, name => this.publishToSite(pub, name));
+
+      Promise.all(promises)
       .then(results => {
-        resolve(_.keyBy(results, (result, i) => sites[i]));
+        resolve(_.fromPairs(_.zip(siteNames, results)));
       })
       .catch(reject);
     });
@@ -56,6 +71,7 @@ export default class Publisher {
    */
   publishToSite(pub, siteName) {
     if (!this.sites[siteName]) return Promise.reject(`Unknown site: ${siteName}`);
+    if (!(pub instanceof Publication)) pub = new Publication(pub);
     return this.sites[siteName].publish(pub);
   }
 }
