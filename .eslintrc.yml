@@ -3,6 +3,7 @@ env:
   browser: true
   webextensions: true
   jquery: true
+parser: babel-eslint
 plugins:
   - react
 globals:

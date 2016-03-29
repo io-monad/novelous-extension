@@ -3,5 +3,9 @@
     "es2015",
     "stage-2"
   ],
+  "plugins": [
+    "espower",
+    "transform-runtime",
+  ],
   "ignore": ["node_modules"]
 }
