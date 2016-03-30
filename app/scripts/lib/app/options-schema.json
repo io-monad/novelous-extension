@@ -12,15 +12,31 @@
       "properties": {
         "narou": {
           "title": "小説家になろう",
-          "type": "object",
-          "properties": {
-          }
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+              }
+            }
+          ],
+          "default": true
         },
         "kakuyomu": {
           "title": "カクヨム",
-          "type": "object",
-          "properties": {
-          }
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+              }
+            }
+          ],
+          "default": true
         }
       }
     }
