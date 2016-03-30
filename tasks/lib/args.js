@@ -31,6 +31,12 @@ const args = yargs
     describe: "Force the creation of sourcemaps",
   })
 
+  .option("serial", {
+    boolean: true,
+    default: false,
+    describe: "Run tests in serial mode",
+  })
+
   .argv;
 
 // Use production flag for sourcemaps
