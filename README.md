@@ -1,5 +1,7 @@
 # Novelous Extension
 
+[![Build Status](https://travis-ci.org/io-monad/novelous-extension.svg?branch=master)](https://travis-ci.org/io-monad/novelous-extension)
+
 ![](app/images/logo.png)
 
 「小説家になろう」「カクヨム」などの小説サイトでの執筆作業をサポートする拡張機能です。
