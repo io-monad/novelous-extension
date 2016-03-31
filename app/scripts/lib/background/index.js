@@ -7,6 +7,16 @@ export default function () {
   const updateAlarm = new ChromeAlarm("update");
   let publisher;
 
+  chrome.runtime.onStartup.addListener(initialize);
+  chrome.runtime.onInstalled.addListener(initialize);
+
+  function initialize() {
+    Options.load().then(options => {
+      loadOptions(options);
+      options.observeUpdate(loadOptions);
+    });
+  }
+
   function loadOptions(options) {
     publisher = new Publisher(options);
     updateAlarm.startImmediate({
@@ -14,19 +24,19 @@ export default function () {
     });
   }
 
-  Options.load().then(options => {
-    loadOptions(options);
-    options.observeUpdate(loadOptions);
+  updateAlarm.on("alarm", () => {
+    console.log("Timer ticked!");
   });
 
-  const externalHandler = externalEvents.buildHandler((e) => ({
-    [e.PUBLISH_NOVEL](message, sender) {
-      return publisher && publisher.publishAll(message.pubs).then(() => {
-        if (message.close && sender.tab) {
-          chrome.tabs.remove(sender.tab.id);
-        }
-      });
-    },
-  }));
-  chrome.runtime.onMessageExternal.addListener(externalHandler);
+  chrome.runtime.onMessageExternal.addListener(
+    externalEvents.buildHandler(e => ({
+      [e.PUBLISH_NOVEL](message, sender) {
+        return publisher && publisher.publishAll(message.pubs).then(() => {
+          if (message.close && sender.tab) {
+            chrome.tabs.remove(sender.tab.id);
+          }
+        });
+      },
+    }))
+  );
 }
