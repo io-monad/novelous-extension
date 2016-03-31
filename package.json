@@ -36,6 +36,7 @@
     "eslint": "^2.4.0",
     "eslint-config-airbnb": "^6.2.0",
     "eslint-plugin-react": "^4.2.3",
+    "eventemitter3": "^1.2.0",
     "factory-girl": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-bump": "^2.0.1",

@@ -12,6 +12,7 @@
   "permissions": [
     "tabs",
     "storage",
+    "alarms",
     "http://syosetu.com/*",
     "https://kakuyomu.jp/*"
   ],
