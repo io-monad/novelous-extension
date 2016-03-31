@@ -1,16 +1,27 @@
-import OpenFormStrategy from "../strategies/open-form";
+import openPage from "../../util/open-page";
 import strftime from "strftime";
 
 /**
- * Open a publish form in Narou.
+ * Opener for a publish form in Narou.
  */
-export default class NarouOpenFormStrategy extends OpenFormStrategy {
+export default class NarouFormOpener {
   /**
    * @param {string} baseUrl - A base URL of Narou.
    */
   constructor(baseUrl) {
-    super();
     this.baseUrl = baseUrl;
+  }
+
+  /**
+   * Open a publish form with publication values set.
+   *
+   * @param {Publication} pub - A Publication to be set.
+   * @return {Promise}
+   */
+  openForm(pub) {
+    const url = this._getURL(pub);
+    const code = this._getCode(pub);
+    return openPage(url, code);
   }
 
   _getURL(pub) {

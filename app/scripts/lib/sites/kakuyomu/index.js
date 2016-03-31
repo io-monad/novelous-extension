@@ -1,5 +1,5 @@
 import Site from "../site";
-import KakuyomuOpenFormStrategy from "./open-form";
+import KakuyomuFormOpener from "./form-opener";
 
 /**
  * Site "Kakuyomu" (kakuyomu.jp)
@@ -13,11 +13,17 @@ export default class Kakuyomu extends Site {
    */
   constructor(settings) {
     super(_.defaults(settings, Kakuyomu.meta));
-    this.publishStrategy = new KakuyomuOpenFormStrategy(this.baseUrl);
+    this.formOpener = new KakuyomuFormOpener(this.baseUrl);
   }
 
+  /**
+   * Publish an episode by opening a publish form.
+   *
+   * @param {Publication} pub - A Publication to be published.
+   * @return {Promise}
+   */
   publish(pub) {
-    return this.publishStrategy.publish(pub);
+    return this.formOpener.openForm(pub);
   }
 }
 

@@ -1,5 +1,5 @@
 import Site from "../site";
-import NarouOpenFormStrategy from "./open-form";
+import NarouFormOpener from "./form-opener";
 
 /**
  * Site "Syosetuka ni Narou" (syosetu.com)
@@ -13,11 +13,17 @@ export default class Narou extends Site {
    */
   constructor(settings) {
     super(_.defaults(settings, Narou.meta));
-    this.publishStrategy = new NarouOpenFormStrategy(this.baseUrl);
+    this.formOpener = new NarouFormOpener(this.baseUrl);
   }
 
+  /**
+   * Publish an episode by opening a publish form.
+   *
+   * @param {Publication} pub - A Publication to be published.
+   * @return {Promise}
+   */
   publish(pub) {
-    return this.publishStrategy.publish(pub);
+    return this.formOpener.openForm(pub);
   }
 }
 
