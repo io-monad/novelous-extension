@@ -48,18 +48,9 @@ export default class Publisher {
    * @return {Promise}
    */
   publish(pub) {
-    return new Promise((resolve, reject) => {
-      if (!(pub instanceof Publication)) pub = new Publication(pub);
-
-      const siteNames = _.keys(pub.sites);
-      const promises = _.map(siteNames, name => this.publishToSite(pub, name));
-
-      Promise.all(promises)
-      .then(results => {
-        resolve(_.fromPairs(_.zip(siteNames, results)));
-      })
-      .catch(reject);
-    });
+    if (!(pub instanceof Publication)) pub = new Publication(pub);
+    const promises = _.map(pub.sites, (site, name) => this.publishToSite(pub, name));
+    return Promise.all(promises);
   }
 
   /**

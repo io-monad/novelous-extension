@@ -20,8 +20,7 @@ test("#publish", t => {
   chrome.tabs.create.callsArgWithAsync(1, { id: 123 });
   chrome.tabs.executeScript.callsArgWithAsync(2, [null]);
 
-  return narou.publish(pub).then(result => {
-    t.ok(result === null);
+  return narou.publish(pub).then(() => {
     t.true(chrome.tabs.create.calledOnce);
     t.same(chrome.tabs.create.args[0][0], {
       url: `http://syosetu.com/usernovelmanage/ziwainput/ncode/${pub.sites.narou.novelId}/`,

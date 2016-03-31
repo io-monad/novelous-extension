@@ -24,8 +24,7 @@ test("#publish", t => {
   chrome.tabs.create.callsArgWithAsync(1, { id: 123 });
   chrome.tabs.executeScript.callsArgWithAsync(2, [null]);
 
-  return kakuyomu.publish(pub).then(result => {
-    t.ok(result === null);
+  return kakuyomu.publish(pub).then(() => {
     t.true(chrome.tabs.create.calledOnce);
     t.same(chrome.tabs.create.args[0][0], {
       url: `https://kakuyomu.jp/my/works/${pub.sites.kakuyomu.novelId}/episodes/new`,

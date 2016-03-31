@@ -1,4 +1,4 @@
-import Site from "./base";
+import Site from "./site";
 import Sites from "./sites";
 
 export default {

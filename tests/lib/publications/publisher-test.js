@@ -28,10 +28,9 @@ test("#publishToSite calls site.publish", t => {
   const stub = stubPublish(publisher, "narou");
 
   const pub = factory.buildSync("publication");
-  return publisher.publishToSite(pub, "narou").then((result) => {
+  return publisher.publishToSite(pub, "narou").then(() => {
     t.ok(stub.calledOnce);
     t.is(stub.args[0][0], pub);
-    t.ok(result === null);
   });
 });
 
@@ -40,10 +39,9 @@ test("#publish calls site.publish", t => {
   const stub = stubPublish(publisher, "narou");
 
   const pub = factory.buildSync("publication");
-  return publisher.publish(pub).then((results) => {
+  return publisher.publish(pub).then(() => {
     t.ok(stub.calledOnce);
     t.is(stub.args[0][0], pub);
-    t.same(results, { narou: null });
   });
 });
 
@@ -52,11 +50,10 @@ test("#publishAll calls site.publish", async t => {
   const stub = stubPublish(publisher, "narou");
 
   const pubs = await factory.buildMany("publication", 3);
-  const results = await publisher.publishAll(pubs);
-
-  t.is(stub.callCount, pubs.length);
-  t.is(stub.args[0][0], pubs[0]);
-  t.is(stub.args[1][0], pubs[1]);
-  t.is(stub.args[2][0], pubs[2]);
-  t.same(results, [{ narou: null }, { narou: null }, { narou: null }]);
+  return publisher.publishAll(pubs).then(() => {
+    t.is(stub.callCount, pubs.length);
+    t.is(stub.args[0][0], pubs[0]);
+    t.is(stub.args[1][0], pubs[1]);
+    t.is(stub.args[2][0], pubs[2]);
+  });
 });
