@@ -1,3 +1,4 @@
+import kakuyomuMeta from "./meta.json";
 import openPage from "../../util/open-page";
 import strftime from "strftime";
 
@@ -6,10 +7,10 @@ import strftime from "strftime";
  */
 export default class KakuyomuFormOpener {
   /**
-   * @param {string} baseUrl - A base URL of Kakuyomu.
+   * @param {string} [baseUrl] - A base URL of Kakuyomu.
    */
   constructor(baseUrl) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = baseUrl || kakuyomuMeta.baseUrl;
   }
 
   /**

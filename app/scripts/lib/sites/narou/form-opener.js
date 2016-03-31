@@ -1,3 +1,4 @@
+import narouMeta from "./meta.json";
 import openPage from "../../util/open-page";
 import strftime from "strftime";
 
@@ -6,10 +7,10 @@ import strftime from "strftime";
  */
 export default class NarouFormOpener {
   /**
-   * @param {string} baseUrl - A base URL of Narou.
+   * @param {string} [baseUrl] - A base URL of Narou.
    */
   constructor(baseUrl) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = baseUrl || narouMeta.baseUrl;
   }
 
   /**

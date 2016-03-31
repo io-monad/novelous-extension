@@ -5,6 +5,8 @@ import lodash from "lodash";
 import factory from "factory-girl";
 import bluebird from "bluebird";
 import requireDir from "require-dir";
+import fixture from "./test-utils/fixture-loader";
+import jsdom from "./test-utils/init-jsdom";
 requireDir("./factories");
 
 global.chrome = chrome;
@@ -20,5 +22,7 @@ module.exports = {
   test,
   sinon,
   sinonsb,
+  jsdom,
+  fixture,
   factory: factory.promisify(bluebird),
 };

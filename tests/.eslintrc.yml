@@ -1,3 +1,4 @@
 extends: ../.eslintrc.yml
 globals:
   sinon: true
+  mockjax: true

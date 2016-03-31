@@ -75,7 +75,7 @@ test("#load returns options Promise", t => {
   });
 });
 
-test("#save saves values into storage", t => {
+test.serial("#save saves values into storage", t => {
   chrome.storage.sync.set.callsArgAsync(1);
   return options.save().then(() => {
     t.ok(chrome.storage.sync.set.called);

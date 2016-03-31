@@ -1,4 +1,7 @@
 import Site from "../site";
+import kakuyomuMeta from "./meta.json";
+import KakuyomuNovelFetcher from "./novel-fetcher";
+import KakuyomuUserNovelLister from "./user-novel-lister";
 import KakuyomuFormOpener from "./form-opener";
 
 /**
@@ -12,8 +15,34 @@ export default class Kakuyomu extends Site {
    * @param {Object} [settings] - Settings.
    */
   constructor(settings) {
-    super(_.defaults(settings, Kakuyomu.meta));
-    this.formOpener = new KakuyomuFormOpener(this.baseUrl);
+    settings = _.defaults(settings, kakuyomuMeta);
+    super(settings);
+    this.novelFetcher = settings.novelFetcher || new KakuyomuNovelFetcher(this.baseUrl);
+    this.userNovelLister = settings.userNovelLister || new KakuyomuUserNovelLister(this.baseUrl);
+    this.formOpener = settings.formOpener || new KakuyomuFormOpener(this.baseUrl);
+  }
+
+  /**
+   * Fetch novel data from Kakuyomu.
+   *
+   * @param {string} novelId - Novel ID.
+   * @return {Promise} Fetched novel data.
+   * @see KakuyomuNovelFetcher
+   */
+  fetchNovel(novelId) {
+    return this.novelFetcher.fetchNovel(novelId);
+  }
+
+  /**
+   * Get a list of novels of a user.
+   *
+   * @param {string} userId - User ID.
+   * @param {number} [page=1] - Page number to get.
+   * @return {Promise} A promise that resolves to a list of novels.
+   * @see KakuyomuUserNovelLister
+   */
+  listNovelsOfUser(userId, page = 1) {
+    return this.userNovelLister.listNovelsOfUser(userId, page);
   }
 
   /**
@@ -21,14 +50,11 @@ export default class Kakuyomu extends Site {
    *
    * @param {Publication} pub - A Publication to be published.
    * @return {Promise}
+   * @see KakuyomuFormOpener
    */
   publish(pub) {
     return this.formOpener.openForm(pub);
   }
 }
 
-Kakuyomu.meta = {
-  name: "kakuyomu",
-  displayName: "カクヨム",
-  baseUrl: "https://kakuyomu.jp",
-};
+Kakuyomu.meta = kakuyomuMeta;
