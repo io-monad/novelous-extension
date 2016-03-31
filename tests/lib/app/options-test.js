@@ -12,6 +12,7 @@ test("new Options", t => {
 });
 
 test("#constructor sets default", t => {
+  t.is(options.updateIntervalMinutes, 15);
   t.true(options.sites.narou);
   t.true(options.sites.kakuyomu);
 });
@@ -29,8 +30,30 @@ test("#overwrite updates values with default values", t => {
   t.false(options.sites.kakuyomu);
 });
 
+test("#overwrite calls setter for each value", t => {
+  options.overwrite({
+    updateIntervalMinutes: "20abc",
+  });
+  t.is(options.updateIntervalMinutes, 20);
+});
+
 test("#schema returns schema", t => {
   t.ok(_.isObject(options.schema));
+});
+
+test("#updateIntervalMinutes setter converts string into number", t => {
+  options.updateIntervalMinutes = "20";
+  t.is(options.updateIntervalMinutes, 20);
+});
+
+test("#updateIntervalMinutes setter uses default for NaN", t => {
+  options.updateIntervalMinutes = "foobar";
+  t.is(options.updateIntervalMinutes, 15);
+});
+
+test("#updateIntervalMinutes setter uses default for interval less than minimum", t => {
+  options.updateIntervalMinutes = 1;
+  t.is(options.updateIntervalMinutes, 15);
 });
 
 test("#sites returns sites Object", t => {

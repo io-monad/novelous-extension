@@ -3,9 +3,16 @@
   "title": "Novelous Options",
   "type": "object",
   "required": [
+    "updateIntervalMinutes",
     "sites"
   ],
   "properties": {
+    "updateIntervalMinutes": {
+      "title": "updateIntervalMinutes",
+      "type": "integer",
+      "minimum": 5,
+      "default": 15
+    },
     "sites": {
       "title": "novelSites",
       "type": "object",

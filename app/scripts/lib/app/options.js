@@ -1,14 +1,11 @@
+import jsonSchemaDefaults from "json-schema-defaults";
 import cutil from "../util/chrome-util";
 import optionsSchema from "./options-schema.json";
 
 const STORAGE_OPTIONS_KEY = "options";
-
-const DEFAULT_OPTIONS = {
-  sites: {
-    narou: true,
-    kakuyomu: true,
-  },
-};
+const DEFAULT_OPTIONS = jsonSchemaDefaults(optionsSchema);
+const MINIMUM_UPDATE_INTERVAL_MINUTES =
+  optionsSchema.properties.updateIntervalMinutes.minimum;
 
 export default class Options {
   static load() {
@@ -16,16 +13,33 @@ export default class Options {
   }
 
   constructor(options) {
+    this.options = {};
     this.overwrite(options);
   }
 
   overwrite(options) {
-    this.options = _.defaultsDeep(options, DEFAULT_OPTIONS);
+    _(options)
+    .pick(_.keys(DEFAULT_OPTIONS))
+    .defaultsDeep(DEFAULT_OPTIONS)
+    .each((v, k) => { this[k] = v; });
   }
 
   get schema() {
     return optionsSchema;
   }
+
+  get updateIntervalMinutes() {
+    return this.options.updateIntervalMinutes;
+  }
+  set updateIntervalMinutes(minutes) {
+    minutes = parseInt(minutes, 10);
+    if (isNaN(minutes) || minutes < MINIMUM_UPDATE_INTERVAL_MINUTES) {
+      this.options.updateIntervalMinutes = DEFAULT_OPTIONS.updateIntervalMinutes;
+    } else {
+      this.options.updateIntervalMinutes = minutes;
+    }
+  }
+
   get sites() {
     return this.options.sites;
   }
