@@ -4,7 +4,7 @@
   "type": "object",
   "required": [
     "updateIntervalMinutes",
-    "sites"
+    "siteSettings"
   ],
   "properties": {
     "updateIntervalMinutes": {
@@ -13,8 +13,8 @@
       "minimum": 5,
       "default": 15
     },
-    "sites": {
-      "title": "novelSites",
+    "siteSettings": {
+      "title": "siteSettings",
       "type": "object",
       "properties": {
         "narou": {

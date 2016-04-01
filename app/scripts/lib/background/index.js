@@ -22,7 +22,7 @@ export default function () {
   }
 
   function loadOptions(options) {
-    const sites = SiteFactory.createMap(options.sites);
+    const sites = SiteFactory.createMap(options.siteSettings);
     subscriber = new Subscriber(sites, options);
     publisher = new Publisher(sites, options);
     updateAlarm.startImmediate({

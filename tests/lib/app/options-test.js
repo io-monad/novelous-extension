@@ -13,21 +13,21 @@ test("new Options", t => {
 
 test("#constructor sets default", t => {
   t.is(options.updateIntervalMinutes, 15);
-  t.true(options.sites.narou);
-  t.true(options.sites.kakuyomu);
+  t.true(options.siteSettings.narou);
+  t.true(options.siteSettings.kakuyomu);
 });
 
 test("#overwrite updates values with default values", t => {
   options.overwrite({
-    sites: { narou: false },
+    siteSettings: { narou: false },
   });
-  t.false(options.sites.narou);
+  t.false(options.siteSettings.narou);
 
   options.overwrite({
-    sites: { kakuyomu: false },
+    siteSettings: { kakuyomu: false },
   });
-  t.true(options.sites.narou);
-  t.false(options.sites.kakuyomu);
+  t.true(options.siteSettings.narou);
+  t.false(options.siteSettings.kakuyomu);
 });
 
 test("#overwrite calls setter for each value", t => {
@@ -56,9 +56,9 @@ test("#updateIntervalMinutes setter uses default for interval less than minimum"
   t.is(options.updateIntervalMinutes, 15);
 });
 
-test("#sites returns sites Object", t => {
-  t.ok(_.isObject(options.sites));
-  t.true(options.sites.narou);
+test("#siteSettings returns siteSettings Object", t => {
+  t.ok(_.isObject(options.siteSettings));
+  t.true(options.siteSettings.narou);
 });
 
 test(".load returns options Promise", t => {

@@ -40,11 +40,11 @@ export default class Options {
     }
   }
 
-  get sites() {
-    return this.options.sites;
+  get siteSettings() {
+    return this.options.siteSettings;
   }
-  set sites(siteSettings) {
-    this.options.sites = siteSettings;
+  set siteSettings(siteSettings) {
+    this.options.siteSettings = siteSettings;
   }
 
   load() {
