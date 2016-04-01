@@ -1,20 +1,20 @@
 import EventEmitter from "eventemitter3";
-import SiteFactory from "../sites/site-factory";
+import buildDebug from "debug";
 
 /**
  * Subscriber holds subscription list and update them from remote sites.
  */
 export default class Subscriber extends EventEmitter {
   /**
+   * @param {Object.<string, Site>} sites - A map of site name and Site object.
    * @param {Object} settings - Settings.
-   * @param {Object.<string, Site|boolean|Object>} settings.sites
    * @param {Subscription[]} settings.subscriptions
    * @param {number} settings.updateInterval
    */
-  constructor(settings) {
+  constructor(sites, settings) {
     super();
     settings = settings || {};
-    this.sites = SiteFactory.createMap(settings.sites || {});
+    this.sites = sites;
     this.subscriptions = settings.subscriptions || [];
     this.updateInterval = settings.updateInterval || 1000;
 
@@ -52,8 +52,10 @@ export default class Subscriber extends EventEmitter {
   updateAll() {
     // To be in good manner, we should have one request per site at once.
     const sitesToSubs = _.groupBy(this.subscriptions, "siteName");
-    const promises = _.map(sitesToSubs, (subs) => {
-      return this._updateSequence(subs);
+    const promises = _.map(sitesToSubs, (subs, siteName) => {
+      const logger = buildDebug(`Subscriber:${siteName}`);
+      logger(`Updating ${subs.length} subscriptions`);
+      return this._updateSequence(subs, logger);
     });
     return Promise.all(promises);
   }
@@ -65,7 +67,7 @@ export default class Subscriber extends EventEmitter {
    * @return {Promise}
    * @private
    */
-  _updateSequence(subscriptions) {
+  _updateSequence(subscriptions, logger) {
     if (subscriptions.length === 0) return Promise.resolve();
     return new Promise((resolve, reject) => {
       const queue = _.clone(subscriptions);
@@ -76,8 +78,10 @@ export default class Subscriber extends EventEmitter {
           reject(`Unknown site name: ${sub.siteName}`);
         }
 
+        logger(`Fetching data for ${sub.id}`);
         this.sites[sub.siteName].getItem(sub.itemType, sub.itemId)
         .then((item) => {
+          logger(`Fetched data for ${sub.id}:`, item);
           sub.item = item;
 
           if (queue.length === 0) {
@@ -86,7 +90,10 @@ export default class Subscriber extends EventEmitter {
             setTimeout(updateNext, this.updateInterval);
           }
         })
-        .catch(reject);
+        .catch((err) => {
+          logger(`Error occurred for ${sub.id}:`, err);
+          reject(err);
+        });
       };
       updateNext();
     });

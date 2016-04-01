@@ -2,7 +2,7 @@ import { test, factory, sinonsb } from "../../common";
 import Subscription from "../../../app/scripts/lib/subscriptions/subscription";
 
 test.beforeEach(t => {
-  t.context.settings = factory.buildSync("publicationSettings");
+  t.context.settings = factory.buildSync("subscriptionSettings");
   t.context.sub = new Subscription(t.context.settings);
 });
 
@@ -27,7 +27,7 @@ test.serial.cb("setting item emits update event", t => {
     t.is(given.lastUpdatedAt, _.now());
     t.end();
   });
-  sub.item = factory.buildSync("publicationSettings");
+  sub.item = factory.buildSync("narouNovel");
 });
 
 test("setting the same item does not emit update event", t => {

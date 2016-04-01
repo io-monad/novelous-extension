@@ -1,9 +1,10 @@
 import { test, factory, sinonsb } from "../../common";
+import SiteFactory from "../../../app/scripts/lib/sites/site-factory";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 
 test.beforeEach(t => {
-  t.context.settings = factory.buildSync("subscriberSettings", { updateInterval: 0 });
-  t.context.subscriber = new Subscriber(t.context.settings);
+  const sites = SiteFactory.createMap({ narou: true, kakuyomu: true });
+  t.context.subscriber = new Subscriber(sites, { updateInterval: 0 });
 });
 
 test("new Subscriber", t => {

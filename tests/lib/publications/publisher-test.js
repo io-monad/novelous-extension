@@ -1,26 +1,21 @@
 import { test, sinonsb, factory } from "../../common";
+import SiteFactory from "../../../app/scripts/lib/sites/site-factory";
 import Publisher from "../../../app/scripts/lib/publications/publisher";
 
 test.beforeEach(t => {
-  t.context.settings = factory.buildSync("publisherSettings");
-  t.context.publisher = new Publisher(t.context.settings);
+  const sites = SiteFactory.createMap({ narou: true });
+  t.context.publisher = new Publisher(sites);
 });
 
 function stubPublish(publisher, siteName) {
   const stub = sinonsb.stub();
   publisher.sites[siteName] = { publish: stub };
-  stub.returns(Promise.resolve(null));
+  stub.returns(Promise.resolve());
   return stub;
 }
 
 test("new Publisher", t => {
   t.ok(t.context.publisher instanceof Publisher);
-});
-test("enabled sites registered", t => {
-  t.true(_.isObject(t.context.publisher.sites.narou));
-});
-test("disabled sites not registered", t => {
-  t.false(_.isObject(t.context.publisher.sites.kakuyomu));
 });
 
 test("#publishToSite calls site.publish", t => {

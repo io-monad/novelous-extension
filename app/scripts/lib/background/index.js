@@ -1,10 +1,14 @@
 import externalEvents from "./external-events";
+import SiteFactory from "../sites/site-factory";
+import Subscriber from "../subscriptions/subscriber";
 import Publisher from "../publications/publisher";
 import Options from "../app/options";
 import ChromeAlarm from "../util/chrome-alarm";
+const debug = require("debug")("Background");
 
 export default function () {
   const updateAlarm = new ChromeAlarm("update");
+  let subscriber;
   let publisher;
 
   chrome.runtime.onStartup.addListener(initialize);
@@ -18,14 +22,21 @@ export default function () {
   }
 
   function loadOptions(options) {
-    publisher = new Publisher(options);
+    const sites = SiteFactory.createMap(options.sites);
+    subscriber = new Subscriber(sites, options);
+    publisher = new Publisher(sites, options);
     updateAlarm.startImmediate({
       periodInMinutes: options.updateIntervalMinutes,
     });
   }
 
   updateAlarm.on("alarm", () => {
-    console.log("Timer ticked!");
+    debug("Starting subscriber.updateAll");
+    subscriber.updateAll().then(() => {
+      debug("Finished subscriber.updateAll successfully");
+    }).catch((e) => {
+      console.error("Error in subscriber.updateAll:", e);
+    });
   });
 
   chrome.runtime.onMessageExternal.addListener(
