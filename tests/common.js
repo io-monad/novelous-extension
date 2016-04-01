@@ -7,6 +7,7 @@ import bluebird from "bluebird";
 import requireDir from "require-dir";
 import fixture from "./test-utils/fixture-loader";
 import jsdom from "./test-utils/init-jsdom";
+import FactoryAdapter from "./test-utils/factory-adapter";
 requireDir("./factories");
 
 global.chrome = chrome;
@@ -17,6 +18,8 @@ test.afterEach(() => {
   chrome.flush();
   sinonsb.restore();
 });
+
+factory.setAdapter(new FactoryAdapter());
 
 module.exports = {
   test,
