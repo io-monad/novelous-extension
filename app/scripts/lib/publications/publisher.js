@@ -14,19 +14,7 @@ export default class Publisher {
    */
   constructor(settings) {
     settings = settings || {};
-    this.sites = this._buildSites(settings.sites || []);
-  }
-
-  /** @private */
-  _buildSites(siteSettings) {
-    const sites = {};
-    _.each(siteSettings, (settings, siteName) => {
-      const site = SiteFactory.create(siteName, settings);
-      if (site) {
-        sites[siteName] = site;
-      }
-    });
-    return sites;
+    this.sites = SiteFactory.createMap(settings.sites || {});
   }
 
   /**

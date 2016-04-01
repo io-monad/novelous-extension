@@ -5,7 +5,7 @@ export default {
   /**
    * Create a Site instance with given settings.
    *
-   * @param {String} siteName - Site name (key of sites)
+   * @param {string} siteName - Site name (key of sites)
    * @param {boolean|Object} settings - Site settings.
    *     This can be an Object of site settings, or Site instance, or
    *     just `true` for using default options.
@@ -24,5 +24,20 @@ export default {
       return new Sites[siteName](settings);
     }
     return null;
+  },
+
+  /**
+   * Create a map of Site instances with given settings map.
+   *
+   * @param {Object.<string, Site|boolean|Object>} settingsMap
+   *     A map of site name keys and site setting values.
+   * @return {Object.<string, Site>} Created map of Site instances.
+   *     This does not contain disabled sites.
+   */
+  createMap(settingsMap) {
+    return _(settingsMap)
+      .mapValues((settings, siteName) => this.create(siteName, settings))
+      .omitBy(_.isNull)
+      .value();
   },
 };
