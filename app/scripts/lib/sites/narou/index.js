@@ -19,6 +19,7 @@ export default class Narou extends Site {
   constructor(settings) {
     settings = _.defaults(settings, narouMeta);
     super(settings);
+    this.apiBaseUrl = settings.apiBaseUrl;
     this.ncodeBaseUrl = settings.ncodeBaseUrl;
     this.mypageBaseUrl = settings.mypageBaseUrl;
     this.novelFetcher = settings.novelFetcher || new NarouNovelFetcher(this.ncodeBaseUrl);
