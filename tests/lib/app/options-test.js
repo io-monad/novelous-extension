@@ -12,7 +12,7 @@ test("new Options", t => {
 });
 
 test("#constructor sets default", t => {
-  t.is(options.updateIntervalMinutes, 15);
+  t.is(options.updatePeriodMinutes, 15);
   t.true(options.siteSettings.narou);
   t.true(options.siteSettings.kakuyomu);
 });
@@ -32,28 +32,28 @@ test("#overwrite updates values with default values", t => {
 
 test("#overwrite calls setter for each value", t => {
   options.overwrite({
-    updateIntervalMinutes: "20abc",
+    updatePeriodMinutes: "20abc",
   });
-  t.is(options.updateIntervalMinutes, 20);
+  t.is(options.updatePeriodMinutes, 20);
 });
 
 test("#schema returns schema", t => {
   t.ok(_.isObject(options.schema));
 });
 
-test("#updateIntervalMinutes setter converts string into number", t => {
-  options.updateIntervalMinutes = "20";
-  t.is(options.updateIntervalMinutes, 20);
+test("#updatePeriodMinutes setter converts string into number", t => {
+  options.updatePeriodMinutes = "20";
+  t.is(options.updatePeriodMinutes, 20);
 });
 
-test("#updateIntervalMinutes setter uses default for NaN", t => {
-  options.updateIntervalMinutes = "foobar";
-  t.is(options.updateIntervalMinutes, 15);
+test("#updatePeriodMinutes setter uses default for NaN", t => {
+  options.updatePeriodMinutes = "foobar";
+  t.is(options.updatePeriodMinutes, 15);
 });
 
-test("#updateIntervalMinutes setter uses default for interval less than minimum", t => {
-  options.updateIntervalMinutes = 1;
-  t.is(options.updateIntervalMinutes, 15);
+test("#updatePeriodMinutes setter uses default for interval less than minimum", t => {
+  options.updatePeriodMinutes = 1;
+  t.is(options.updatePeriodMinutes, 15);
 });
 
 test("#siteSettings returns siteSettings Object", t => {

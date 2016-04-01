@@ -3,12 +3,12 @@
   "title": "Novelous Options",
   "type": "object",
   "required": [
-    "updateIntervalMinutes",
+    "updatePeriodMinutes",
     "siteSettings"
   ],
   "properties": {
-    "updateIntervalMinutes": {
-      "title": "updateIntervalMinutes",
+    "updatePeriodMinutes": {
+      "title": "updatePeriodMinutes",
       "type": "integer",
       "minimum": 5,
       "default": 15

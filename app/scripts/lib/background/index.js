@@ -26,7 +26,7 @@ export default function () {
     subscriber = new Subscriber(sites, options);
     publisher = new Publisher(sites, options);
     updateAlarm.startImmediate({
-      periodInMinutes: options.updateIntervalMinutes,
+      periodInMinutes: options.updatePeriodMinutes,
     });
   }
 

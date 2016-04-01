@@ -4,8 +4,8 @@ import optionsSchema from "./options-schema.json";
 
 const STORAGE_OPTIONS_KEY = "options";
 const DEFAULT_OPTIONS = jsonSchemaDefaults(optionsSchema);
-const MINIMUM_UPDATE_INTERVAL_MINUTES =
-  optionsSchema.properties.updateIntervalMinutes.minimum;
+const MINIMUM_UPDATE_PERIOD_MINUTES =
+  optionsSchema.properties.updatePeriodMinutes.minimum;
 
 export default class Options {
   static load() {
@@ -28,15 +28,15 @@ export default class Options {
     return optionsSchema;
   }
 
-  get updateIntervalMinutes() {
-    return this.options.updateIntervalMinutes;
+  get updatePeriodMinutes() {
+    return this.options.updatePeriodMinutes;
   }
-  set updateIntervalMinutes(minutes) {
+  set updatePeriodMinutes(minutes) {
     minutes = parseInt(minutes, 10);
-    if (isNaN(minutes) || minutes < MINIMUM_UPDATE_INTERVAL_MINUTES) {
-      this.options.updateIntervalMinutes = DEFAULT_OPTIONS.updateIntervalMinutes;
+    if (isNaN(minutes) || minutes < MINIMUM_UPDATE_PERIOD_MINUTES) {
+      this.options.updatePeriodMinutes = DEFAULT_OPTIONS.updatePeriodMinutes;
     } else {
-      this.options.updateIntervalMinutes = minutes;
+      this.options.updatePeriodMinutes = minutes;
     }
   }
 
