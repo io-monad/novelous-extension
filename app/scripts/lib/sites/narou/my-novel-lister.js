@@ -39,7 +39,6 @@ export default class NarouMyNovelLister {
   }
 
   /**
-   * @param {string} userId - User ID.
    * @return {Promise.<NarouMyNovelList>}
    */
   listNovels() {

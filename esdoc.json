@@ -1,0 +1,4 @@
+{
+  "source": "./app/scripts",
+  "destination": "./docs"
+}
