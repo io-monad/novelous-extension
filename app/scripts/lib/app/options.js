@@ -47,6 +47,13 @@ export default class Options {
     this.options.siteSettings = siteSettings;
   }
 
+  get subscriptionSettings() {
+    return this.options.subscriptionSettings;
+  }
+  set subscriptionSettings(subscriptionSettings) {
+    this.options.subscriptionSettings = subscriptionSettings;
+  }
+
   load() {
     return new Promise((resolve, reject) => {
       cutil.syncGetValue(STORAGE_OPTIONS_KEY).then((options) => {

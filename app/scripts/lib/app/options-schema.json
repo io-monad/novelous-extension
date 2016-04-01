@@ -4,7 +4,8 @@
   "type": "object",
   "required": [
     "updatePeriodMinutes",
-    "siteSettings"
+    "siteSettings",
+    "subscriptionSettings"
   ],
   "properties": {
     "updatePeriodMinutes": {
@@ -16,6 +17,7 @@
     "siteSettings": {
       "title": "siteSettings",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "narou": {
           "title": "小説家になろう",
@@ -44,6 +46,48 @@
             }
           ],
           "default": true
+        }
+      }
+    },
+    "subscriptionSettings": {
+      "title": "subscriptionSettings",
+      "type": "array",
+      "default": [],
+      "additionalItems": false,
+      "items": {
+        "title": "subscription",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "siteName",
+          "itemType",
+          "itemId"
+        ],
+        "properties": {
+          "siteName": {
+            "type": "string",
+            "enum": ["narou", "kakuyomu"]
+          },
+          "itemType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "itemId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "item": {
+            "oneOf": [
+              { "type": "object" },
+              { "type": "null" }
+            ]
+          },
+          "lastUpdatedAt": {
+            "oneOf": [
+              { "type": "integer" },
+              { "type": "null" }
+            ]
+          }
         }
       }
     }

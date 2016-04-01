@@ -61,6 +61,10 @@ test("#siteSettings returns siteSettings Object", t => {
   t.true(options.siteSettings.narou);
 });
 
+test("#subscriptionSettings returns array of settings", t => {
+  t.ok(_.isArray(options.subscriptionSettings));
+});
+
 test(".load returns options Promise", t => {
   chrome.storage.sync.get.callsArgWithAsync(1, {});
   return Options.load().then((opts) => {
