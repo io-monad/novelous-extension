@@ -1,23 +1,24 @@
 {
-  "messageCount": 1,
+  "messageType": "received",
+  "messageCount": 3,
   "messages": [
     {
-      "senderName": "テストユーザー1",
-      "senderUrl": "http://mypage.syosetu.com/99999999/",
+      "personName": "テストユーザー1",
+      "personUrl": "http://mypage.syosetu.com/99999999/",
       "subject": "テストのメッセージ1",
       "url": "http://syosetu.com/messagebox/view/meskey/99999999/",
       "createdAt": 1462073640000
     },
     {
-      "senderName": "テストユーザー2",
-      "senderUrl": "http://mypage.syosetu.com/99999998/",
+      "personName": "テストユーザー2",
+      "personUrl": "http://mypage.syosetu.com/99999998/",
       "subject": "テストのメッセージ2",
       "url": "http://syosetu.com/messagebox/view/meskey/99999998/",
       "createdAt": 1462069320000
     },
     {
-      "senderName": "テストユーザー3",
-      "senderUrl": "http://mypage.syosetu.com/99999997/",
+      "personName": "テストユーザー3",
+      "personUrl": "http://mypage.syosetu.com/99999997/",
       "subject": "テストのメッセージ3",
       "url": "http://syosetu.com/messagebox/view/meskey/99999997/",
       "createdAt": 1462029060000
