@@ -16,6 +16,5 @@ test.serial("#listNovels", async t => {
   const myNovelLister = new NarouMyNovelLister;
   return myNovelLister.listNovels().then((result) => {
     t.same(result, expected);
-    t.pass();
   });
 });

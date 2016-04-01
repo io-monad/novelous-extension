@@ -12,7 +12,6 @@ test.serial("#getNovelById", async t => {
   const novelAPI = new NarouNovelAPI;
   return novelAPI.getNovelById("n5191dd").then((novel) => {
     t.same(novel, expected);
-    t.pass();
   });
 });
 
@@ -27,7 +26,6 @@ test.serial("#getNovelsByIds", async t => {
   const novelAPI = new NarouNovelAPI;
   return novelAPI.getNovelsByIds(["n5191dd", "n3861ci"]).then((novels) => {
     t.same(novels, expected);
-    t.pass();
   });
 });
 
@@ -42,6 +40,5 @@ test.serial("#getNovelsByUserId", async t => {
   const novelAPI = new NarouNovelAPI;
   return novelAPI.getNovelsByUserId(518056).then((result) => {
     t.same(result, expected);
-    t.pass();
   });
 });

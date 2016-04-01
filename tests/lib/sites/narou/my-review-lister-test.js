@@ -12,6 +12,5 @@ test.serial("#listReceivedReviews", async t => {
   const myReviewLister = new NarouMyReviewLister;
   return myReviewLister.listReceivedReviews().then((reviews) => {
     t.same(reviews, expected);
-    t.pass();
   });
 });

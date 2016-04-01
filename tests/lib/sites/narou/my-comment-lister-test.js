@@ -12,6 +12,5 @@ test.serial("#listReceivedComments", async t => {
   const myCommentLister = new NarouMyCommentLister;
   return myCommentLister.listReceivedComments().then((comments) => {
     t.same(comments, expected);
-    t.pass();
   });
 });

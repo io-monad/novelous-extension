@@ -12,6 +12,5 @@ test.serial("#fetchNovel", async t => {
   const novelFetcher = new NarouNovelFetcher;
   return novelFetcher.fetchNovel("n5191dd").then((novel) => {
     t.same(novel, expectedNovel);
-    t.pass();
   });
 });
