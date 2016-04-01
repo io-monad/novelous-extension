@@ -1,6 +1,7 @@
 import externalEvents from "./external-events";
 import SiteFactory from "../sites/site-factory";
 import Subscriber from "../subscriptions/subscriber";
+import Subscription from "../subscriptions/subscription";
 import Publisher from "../publications/publisher";
 import Options from "../app/options";
 import ChromeAlarm from "../util/chrome-alarm";
@@ -23,8 +24,9 @@ export default function () {
 
   function loadOptions(options) {
     const sites = SiteFactory.createMap(options.siteSettings);
-    subscriber = new Subscriber(sites, options);
-    publisher = new Publisher(sites, options);
+    const subscriptions = _.map(options.subscriptionSettings, sub => new Subscription(sub));
+    subscriber = new Subscriber(sites, { subscriptions });
+    publisher = new Publisher(sites);
     updateAlarm.startImmediate({
       periodInMinutes: options.updatePeriodMinutes,
     });
