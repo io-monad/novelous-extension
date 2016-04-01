@@ -2,7 +2,7 @@ import { test, fixture, jsdom } from "../../../common";
 import NarouUserNovelLister from "../../../../app/scripts/lib/sites/narou/user-novel-lister";
 import expectedList from "../../../fixtures/narou/user-novel-list.json";
 
-test.serial.only("#listNovelsOfUser", async t => {
+test.serial("#listNovelsOfUser", async t => {
   await jsdom();
   mockjax({
     url: "http://mypage.syosetu.com/mypage/novellist/userid/518056/",
