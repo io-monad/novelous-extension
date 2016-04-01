@@ -1,8 +1,10 @@
 import Site from "../site";
 import narouMeta from "./meta.json";
 import NarouNovelFetcher from "./novel-fetcher";
-import NarouUserNovelLister from "./user-novel-lister";
+import NarouMessageLister from "./message-lister";
 import NarouFormOpener from "./form-opener";
+import NarouItemType from "./item-type";
+import NarouMessageType from "./message-type";
 
 /**
  * Site "Syosetuka ni Narou" (syosetu.com)
@@ -20,31 +22,26 @@ export default class Narou extends Site {
     this.ncodeBaseUrl = settings.ncodeBaseUrl;
     this.mypageBaseUrl = settings.mypageBaseUrl;
     this.novelFetcher = settings.novelFetcher || new NarouNovelFetcher(this.ncodeBaseUrl);
-    this.userNovelLister = settings.userNovelLister || new NarouUserNovelLister(this.mypageBaseUrl);
+    this.messageLister = settings.messageLister || new NarouMessageLister(this.baseUrl);
     this.formOpener = settings.formOpener || new NarouFormOpener(this.baseUrl);
   }
 
   /**
-   * Fetch novel data from Narou.
+   * Get latest item data from Narou.
    *
-   * @param {string} novelId - Novel ID.
-   * @return {Promise} Fetched novel data.
-   * @see NarouNovelFetcher
+   * @param {string} itemType - Item type from `NarouItemType`.
+   * @param {string} itemId - Item ID.
+   * @return {Promise}
    */
-  fetchNovel(novelId) {
-    return this.novelFetcher.fetchNovel(novelId);
-  }
-
-  /**
-   * Get a list of novels of a user.
-   *
-   * @param {string} userId - User ID.
-   * @param {number} [page=1] - Page number to get.
-   * @return {Promise} A promise that resolves to a list of novels.
-   * @see KakuyomuUserNovelLister
-   */
-  listNovelsOfUser(userId, page = 1) {
-    return this.userNovelLister.listNovelsOfUser(userId, page);
+  getItem(itemType, itemId) {
+    switch (itemType) {
+      case NarouItemType.NOVEL:
+        return this.novelFetcher.fetchNovel(itemId);
+      case NarouItemType.MESSAGES:
+        return this.messageLister.listMessages(itemId);
+      default:
+        return Promise.reject(`Unknown item type ${itemType}`);
+    }
   }
 
   /**
@@ -59,3 +56,5 @@ export default class Narou extends Site {
 }
 
 Narou.meta = narouMeta;
+Narou.ItemType = NarouItemType;
+Narou.MessageType = NarouMessageType;
