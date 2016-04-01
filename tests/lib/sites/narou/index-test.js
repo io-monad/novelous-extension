@@ -22,19 +22,6 @@ test("#getItem with novel item type", t => {
   });
 });
 
-test("#getItem with messages item type", t => {
-  const narou = new Narou;
-  const messageList = factory.buildSync("narouMessageList");
-  const stub = sinonsb.stub(narou.messageLister, "listMessages");
-  stub.returns(Promise.resolve(messageList));
-
-  return narou.getItem(Narou.ItemType.MESSAGES, Narou.MessageType.RECEIVED).then((given) => {
-    t.ok(stub.calledOnce);
-    t.is(stub.args[0][0], Narou.MessageType.RECEIVED);
-    t.is(given, messageList);
-  });
-});
-
 test("#publish", t => {
   const narou = new Narou;
   const pub = factory.buildSync("publication");

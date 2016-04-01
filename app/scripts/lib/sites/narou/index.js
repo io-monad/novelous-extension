@@ -1,10 +1,8 @@
 import Site from "../site";
 import narouMeta from "./meta.json";
 import NarouNovelFetcher from "./novel-fetcher";
-import NarouMessageLister from "./message-lister";
 import NarouFormOpener from "./form-opener";
 import NarouItemType from "./item-type";
-import NarouMessageType from "./message-type";
 
 /**
  * Site "Syosetuka ni Narou" (syosetu.com)
@@ -23,7 +21,6 @@ export default class Narou extends Site {
     this.ncodeBaseUrl = settings.ncodeBaseUrl;
     this.mypageBaseUrl = settings.mypageBaseUrl;
     this.novelFetcher = settings.novelFetcher || new NarouNovelFetcher(this.ncodeBaseUrl);
-    this.messageLister = settings.messageLister || new NarouMessageLister(this.baseUrl);
     this.formOpener = settings.formOpener || new NarouFormOpener(this.baseUrl);
   }
 
@@ -38,8 +35,6 @@ export default class Narou extends Site {
     switch (itemType) {
       case NarouItemType.NOVEL:
         return this.novelFetcher.fetchNovel(itemId);
-      case NarouItemType.MESSAGES:
-        return this.messageLister.listMessages(itemId);
       default:
         return Promise.reject(`Unknown item type ${itemType}`);
     }
@@ -58,4 +53,3 @@ export default class Narou extends Site {
 
 Narou.meta = narouMeta;
 Narou.ItemType = NarouItemType;
-Narou.MessageType = NarouMessageType;

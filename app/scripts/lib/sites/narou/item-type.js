@@ -3,5 +3,4 @@
  */
 export default {
   NOVEL: "novel",
-  MESSAGES: "messages",
 };
