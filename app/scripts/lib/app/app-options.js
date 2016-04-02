@@ -86,10 +86,12 @@ export default class AppOptions extends EventEmitter {
     settings = settings || [];
 
     // Fill missing keys with default values
-    settings = settings.concat(
-      _.differenceBy(
-        DEFAULT_OPTIONS.subscriptionSettings, settings,
-        s => `${s.siteName}-${s.itemType}-${s.itemId}`
+    settings = _.uniqWith(
+      settings.concat(DEFAULT_OPTIONS.subscriptionSettings),
+      (a, b) => (
+        a.siteName === b.siteName &&
+        a.itemType === b.itemType &&
+        ((!a.itemId && !b.itemId) || (a.itemId === b.itemId))
       )
     );
 

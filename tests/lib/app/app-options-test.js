@@ -99,6 +99,13 @@ test("#subscriptions setter updates subscriptionSettings but keeps defaults", t 
   t.same(options.subscriptions[0], newSub);
 });
 
+test("#subscriptions setter not duplicating defaults", t => {
+  const { options } = t.context;
+  const newSub = new Subscription({ siteName: "narou", itemType: "myNovels" });
+  options.subscriptions = [newSub];
+  t.is(options.subscriptions.length, DEFAULT_OPTIONS.subscriptionSettings.length);
+});
+
 test.serial(".load returns options Promise", t => {
   chrome.storage.local.get.callsArgWithAsync(1, {});
   return AppOptions.load().then((opts) => {
