@@ -1,7 +1,5 @@
 import externalEvents from "./external-events";
-import SiteFactory from "../sites/site-factory";
 import Subscriber from "../subscriptions/subscriber";
-import Subscription from "../subscriptions/subscription";
 import Publisher from "../publications/publisher";
 import AppOptions from "../app/app-options";
 import ChromeAlarm from "../util/chrome-alarm";
@@ -24,10 +22,10 @@ export default function () {
   function handleAppOptionUpdate() {
     logger("Updating with new AppOptions", appOptions.options);
 
-    const sites = SiteFactory.createMap(appOptions.siteSettings);
-    const subscriptions = _.map(appOptions.subscriptionSettings, sub => new Subscription(sub));
-    subscriber = new Subscriber(sites, { subscriptions });
-    publisher = new Publisher(sites);
+    subscriber = new Subscriber(appOptions.sites, {
+      subscriptions: appOptions.subscriptions,
+    });
+    publisher = new Publisher(appOptions.sites);
 
     subscriberAlarm.start({
       when: appOptions.nextWillUpdateAt,
@@ -42,8 +40,7 @@ export default function () {
       logger("Finished subscriber.updateAll successfully");
 
       appOptions.lastUpdatedAt = _.now();
-      appOptions.subscriptionSettings =
-        _.invokeMap(subscriber.subscriptions, "toObject");
+      appOptions.subscriptions = subscriber.subscriptions;
 
       appOptions.save().then(() => {
         logger("Saved updated AppOptions successfully", appOptions.options);

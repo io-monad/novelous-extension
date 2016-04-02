@@ -1,5 +1,11 @@
 import { test } from "../../common";
+import jsonSchemaDefaults from "json-schema-defaults";
 import AppOptions from "../../../app/scripts/lib/app/app-options";
+import appOptionsSchema from "../../../app/scripts/lib/app/app-options-schema.json";
+import Site from "../../../app/scripts/lib/sites/site";
+import Subscription from "../../../app/scripts/lib/subscriptions/subscription";
+
+const DEFAULT_OPTIONS = jsonSchemaDefaults(appOptionsSchema);
 
 test.beforeEach(t => {
   t.context.options = new AppOptions();
@@ -7,15 +13,6 @@ test.beforeEach(t => {
 
 test("new AppOptions", t => {
   t.ok(t.context.options instanceof AppOptions);
-});
-
-test("#constructor sets default", t => {
-  const { options } = t.context;
-  t.is(options.updatePeriodMinutes, 15);
-  t.true(options.siteSettings.narou);
-  t.true(options.siteSettings.kakuyomu);
-  t.ok(_.isArray(options.subscriptionSettings));
-  t.is(options.subscriptionSettings.length, 5);
 });
 
 test("#overwrite updates values with default values", t => {
@@ -42,7 +39,12 @@ test("#overwrite calls setter for each value", t => {
 
 test("#schema returns schema", t => {
   const { options } = t.context;
-  t.ok(_.isObject(options.schema));
+  t.same(options.schema, appOptionsSchema);
+});
+
+test("#updatePeriodMinutes returns default value", t => {
+  const { options } = t.context;
+  t.is(options.updatePeriodMinutes, DEFAULT_OPTIONS.updatePeriodMinutes);
 });
 
 test("#updatePeriodMinutes setter converts string into number", t => {
@@ -54,24 +56,47 @@ test("#updatePeriodMinutes setter converts string into number", t => {
 test("#updatePeriodMinutes setter uses default for NaN", t => {
   const { options } = t.context;
   options.updatePeriodMinutes = "foobar";
-  t.is(options.updatePeriodMinutes, 15);
+  t.is(options.updatePeriodMinutes, DEFAULT_OPTIONS.updatePeriodMinutes);
 });
 
 test("#updatePeriodMinutes setter uses default for interval less than minimum", t => {
   const { options } = t.context;
   options.updatePeriodMinutes = 1;
-  t.is(options.updatePeriodMinutes, 15);
+  t.is(options.updatePeriodMinutes, DEFAULT_OPTIONS.updatePeriodMinutes);
 });
 
-test("#siteSettings returns siteSettings Object", t => {
+test("#siteSettings returns default value", t => {
   const { options } = t.context;
-  t.ok(_.isObject(options.siteSettings));
-  t.true(options.siteSettings.narou);
+  t.same(options.siteSettings, DEFAULT_OPTIONS.siteSettings);
 });
 
-test("#subscriptionSettings returns array of settings", t => {
+test("#sites returns a map of Site", t => {
   const { options } = t.context;
-  t.ok(_.isArray(options.subscriptionSettings));
+  t.ok(_.isObject(options.sites));
+  t.ok(_.every(options.sites, site => site instanceof Site));
+  t.is(_.size(options.sites), _.size(DEFAULT_OPTIONS.siteSettings));
+});
+
+test("#subscriptionSettings returns default value", t => {
+  const { options } = t.context;
+  t.same(options.subscriptionSettings, DEFAULT_OPTIONS.subscriptionSettings);
+});
+
+test("#subscriptions returns array of Subscription", t => {
+  const { options } = t.context;
+  t.ok(_.isArray(options.subscriptions));
+  t.ok(_.every(options.subscriptions, sub => sub instanceof Subscription));
+  t.is(options.subscriptions.length, DEFAULT_OPTIONS.subscriptionSettings.length);
+});
+
+test("#subscriptions setter updates subscriptionSettings but keeps defaults", t => {
+  const { options } = t.context;
+  const newSub = new Subscription({ siteName: "test", itemType: "foo" });
+  options.subscriptions = [newSub];
+  t.ok(_.isArray(options.subscriptions));
+  t.ok(_.every(options.subscriptions, sub => sub instanceof Subscription));
+  t.is(options.subscriptions.length, DEFAULT_OPTIONS.subscriptionSettings.length + 1);
+  t.same(options.subscriptions[0], newSub);
 });
 
 test.serial(".load returns options Promise", t => {

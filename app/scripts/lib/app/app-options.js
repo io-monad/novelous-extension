@@ -2,11 +2,12 @@ import EventEmitter from "eventemitter3";
 import jsonSchemaDefaults from "json-schema-defaults";
 import cutil from "../util/chrome-util";
 import appOptionsSchema from "./app-options-schema.json";
+import SiteFactory from "../sites/site-factory";
+import Subscription from "../subscriptions/subscription";
 
 const OPTION_KEYS = _.keys(appOptionsSchema.properties);
 const DEFAULT_OPTIONS = jsonSchemaDefaults(appOptionsSchema);
-const MINIMUM_UPDATE_PERIOD_MINUTES =
-  appOptionsSchema.properties.updatePeriodMinutes.minimum;
+const PROP_SCHEMA = appOptionsSchema.properties;
 
 export default class AppOptions extends EventEmitter {
   static load() {
@@ -23,18 +24,14 @@ export default class AppOptions extends EventEmitter {
   overwrite(options) {
     _(options)
     .pick(OPTION_KEYS)
-    .defaultsDeep(DEFAULT_OPTIONS)
+    .defaults(DEFAULT_OPTIONS)
     .each((v, k) => { this[k] = v; });
   }
 
   _bindEvents() {
     chrome.storage.onChanged.addListener((changes) => {
       _(changes).pick(OPTION_KEYS).each(({ newValue }, key) => {
-        if (_.isUndefined(newValue)) {
-          this[key] = DEFAULT_OPTIONS[key];
-        } else {
-          this[key] = newValue;
-        }
+        this[key] = newValue;
       });
       this.emit("update", this);
     });
@@ -49,7 +46,7 @@ export default class AppOptions extends EventEmitter {
   }
   set updatePeriodMinutes(minutes) {
     minutes = parseInt(minutes, 10);
-    if (isNaN(minutes) || minutes < MINIMUM_UPDATE_PERIOD_MINUTES) {
+    if (isNaN(minutes) || minutes < PROP_SCHEMA.updatePeriodMinutes.minimum) {
       this.options.updatePeriodMinutes = DEFAULT_OPTIONS.updatePeriodMinutes;
     } else {
       this.options.updatePeriodMinutes = minutes;
@@ -60,7 +57,7 @@ export default class AppOptions extends EventEmitter {
     return this.options.lastUpdatedAt;
   }
   set lastUpdatedAt(time) {
-    this.options.lastUpdatedAt = time;
+    this.options.lastUpdatedAt = parseInt(time, 10) || null;
   }
 
   get nextWillUpdateAt() {
@@ -72,14 +69,41 @@ export default class AppOptions extends EventEmitter {
     return this.options.siteSettings;
   }
   set siteSettings(siteSettings) {
-    this.options.siteSettings = siteSettings;
+    this.options.siteSettings = _.defaultsDeep(siteSettings, DEFAULT_OPTIONS.siteSettings);
+    this._sites = null;
+  }
+  get sites() {
+    if (!this._sites) {
+      this._sites = SiteFactory.createMap(this.siteSettings);
+    }
+    return this._sites;
   }
 
   get subscriptionSettings() {
     return this.options.subscriptionSettings;
   }
-  set subscriptionSettings(subscriptionSettings) {
-    this.options.subscriptionSettings = subscriptionSettings;
+  set subscriptionSettings(settings) {
+    settings = settings || [];
+
+    // Fill missing keys with default values
+    settings = settings.concat(
+      _.differenceBy(
+        DEFAULT_OPTIONS.subscriptionSettings, settings,
+        s => `${s.siteName}-${s.itemType}-${s.itemId}`
+      )
+    );
+
+    this.options.subscriptionSettings = settings;
+    this._subscriptions = null;
+  }
+  get subscriptions() {
+    if (!this._subscriptions) {
+      this._subscriptions = _.map(this.subscriptionSettings, sub => new Subscription(sub));
+    }
+    return this._subscriptions;
+  }
+  set subscriptions(subscriptions) {
+    this.subscriptionSettings = _.invokeMap(subscriptions, "toObject");
   }
 
   load() {
