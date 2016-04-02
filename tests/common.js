@@ -2,6 +2,7 @@ import test from "ava";
 import sinon from "sinon";
 import chrome from "sinon-chrome";
 import lodash from "lodash";
+import debug from "debug";
 import factory from "factory-girl";
 import bluebird from "bluebird";
 import requireDir from "require-dir";
@@ -15,6 +16,7 @@ requireDir("./factories");
 
 global.chrome = chrome;
 global._ = lodash;
+global.debug = debug;
 const sinonsb = sinon.sandbox.create();
 
 test.afterEach(() => {
