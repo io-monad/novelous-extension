@@ -8,7 +8,7 @@ export default class Subscription extends EventEmitter {
    * @param {Object} settings - Settings.
    * @param {string} settings.siteName - Site name.
    * @param {string} settings.itemType - Item type. This depends on the site.
-   * @param {string} settings.itemId - Item ID. This depends on the site.
+   * @param {string} [settings.itemId] - Item ID. This depends on the site.
    * @param {Object} settings.item - Item object. This depends on the site.
    * @param {number} settings.lastUpdatedAt - Timestamp of last update.
    */
@@ -24,7 +24,10 @@ export default class Subscription extends EventEmitter {
   }
 
   get id() {
-    return [this.siteName, this.itemType, this.itemId].join("-");
+    if (this.itemId) {
+      return `${this.siteName}-${this.itemType}-${this.itemId}`;
+    }
+    return `${this.siteName}-${this.itemType}`;
   }
   get siteName() {
     return this.settings.siteName;

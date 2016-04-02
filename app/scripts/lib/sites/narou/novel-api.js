@@ -112,11 +112,7 @@ export default class NarouNovelAPI {
    */
   query(query) {
     return new Promise((resolve, reject) => {
-      query = _.extend({
-        out: "json",
-        gzip: 5,
-      }, query);
-
+      query = _.extend({ out: "json" }, query);
       $.getJSON(this._getURL(query))
       .done(response => {
         resolve(this._parseResponse(response, query));

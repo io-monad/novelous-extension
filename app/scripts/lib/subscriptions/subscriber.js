@@ -1,5 +1,4 @@
 import EventEmitter from "eventemitter3";
-import buildDebug from "debug";
 
 /**
  * Subscriber holds subscription list and update them from remote sites.
@@ -54,7 +53,7 @@ export default class Subscriber extends EventEmitter {
       // To be in good manner, we should have one request per site at once.
       const sitesToSubs = _.groupBy(this.subscriptions, "siteName");
       const promises = _.map(sitesToSubs, (subs, siteName) => {
-        const logger = buildDebug(`subscriber:${siteName}`);
+        const logger = debug(`subscriber:${siteName}`);
         return this._updateSequence(subs, logger);
       });
       Promise.all(promises)
@@ -73,6 +72,7 @@ export default class Subscriber extends EventEmitter {
   _updateSequence(subscriptions, logger) {
     if (subscriptions.length === 0) return Promise.resolve();
     return new Promise((resolve, reject) => {
+      logger(`Updating ${subscriptions.length} subscriptions`);
       const queue = _.clone(subscriptions);
       const updateNext = () => {
         const sub = queue.shift();

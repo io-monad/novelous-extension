@@ -55,7 +55,12 @@
     "subscriptionSettings": {
       "title": "subscriptionSettings",
       "type": "array",
-      "default": [],
+      "default": [
+        { "siteName": "narou", "itemType": "myNovels" },
+        { "siteName": "narou", "itemType": "myMessages" },
+        { "siteName": "narou", "itemType": "myComments" },
+        { "siteName": "narou", "itemType": "myReviews" }
+      ],
       "additionalItems": false,
       "items": {
         "title": "subscription",
@@ -63,8 +68,7 @@
         "additionalProperties": false,
         "required": [
           "siteName",
-          "itemType",
-          "itemId"
+          "itemType"
         ],
         "properties": {
           "siteName": {
