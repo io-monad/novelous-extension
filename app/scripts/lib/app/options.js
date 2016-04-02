@@ -30,7 +30,11 @@ export default class Options extends EventEmitter {
   _bindEvents() {
     chrome.storage.onChanged.addListener((changes) => {
       _(changes).pick(OPTION_KEYS).each(({ newValue }, key) => {
-        this[key] = newValue;
+        if (_.isUndefined(newValue)) {
+          this[key] = DEFAULT_OPTIONS[key];
+        } else {
+          this[key] = newValue;
+        }
       });
       this.emit("update", this);
     });

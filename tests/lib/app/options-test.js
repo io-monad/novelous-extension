@@ -15,7 +15,7 @@ test("#constructor sets default", t => {
   t.true(options.siteSettings.narou);
   t.true(options.siteSettings.kakuyomu);
   t.ok(_.isArray(options.subscriptionSettings));
-  t.is(options.subscriptionSettings.length, 4);
+  t.is(options.subscriptionSettings.length, 5);
 });
 
 test("#overwrite updates values with default values", t => {
@@ -118,6 +118,24 @@ test.serial.cb("emits update event for storage change", t => {
   });
   chrome.storage.onChanged.trigger(
     { updatePeriodMinutes: { newValue: 20 } },
-    "sync"
+    "local"
+  );
+});
+
+test.serial.cb("uses default value if storage value is undefined", t => {
+  const { options } = t.context;
+  t.plan(3);
+  options.on("update", (opts) => {
+    t.ok(opts instanceof Options);
+    t.is(opts.updatePeriodMinutes, 15);
+    t.ok(_.isObject(opts.siteSettings));
+    t.end();
+  });
+  chrome.storage.onChanged.trigger(
+    {
+      updatePeriodMinutes: { newValue: undefined },
+      siteSettings: { newValue: undefined },
+    },
+    "local"
   );
 });
