@@ -8,6 +8,7 @@ plugins:
   - react
 globals:
   _: true
+  debug: true
   __ENV__: true
   __VENDOR__: true
   LIVERELOAD: true

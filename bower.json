@@ -22,7 +22,8 @@
   ],
   "dependencies": {
     "font-awesome": "^4.5.0",
-    "bootswatch-dist": "paper"
+    "bootswatch-dist": "paper",
+    "visionmedia-debug": "^2.2.0"
   },
   "overrides": {
     "font-awesome": {
@@ -30,6 +31,9 @@
     },
     "bootswatch-dist": {
       "main": "**/*.min.{css,js}"
+    },
+    "visionmedia-debug": {
+      "main": []
     }
   }
 }
