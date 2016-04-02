@@ -1,0 +1,662 @@
+<!-- Original: https://kakuyomu.jp/my -->
+
+
+
+<!DOCTYPE html>
+<html lang="ja" data-route="public:my" data-is-guest="0">
+<head>
+<meta charset="utf-8">
+
+
+<title>小説管理 - カクヨム</title>
+<link rel="stylesheet" href="https://cdn-static.kakuyomu.jp/css/kakuyomu.css?VhFFO9xdcw3V" />
+<meta name="description" content="カクヨムは、KADOKAWA × はてな がおくる「書ける、読める、伝えられる」新しい小説投稿サイトです。人気タイトルの二次創作小説も楽しめます。" />
+<meta name="keywords" content="カクヨム,kakuyomu,kaku-yomu,KADOKAWA,はてな,小説,ライトノベル,投稿,二次創作,かくよむ,書く読む" />
+<link rel="icon" sizes="256x256" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/app-256.png?eAT04G0Rt23A" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-180.png?jD1Ujts_O5bh" />
+<link rel="apple-touch-icon" sizes="152x152" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-152.png?tcQNUOKPRkaP" />
+<link rel="apple-touch-icon" sizes="120x120" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-120.png?mh0uoEa8gNOP" />
+<link rel="apple-touch-icon" sizes="76x76" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-76.png?erVa27mMO7Yf" />
+<link rel="apple-touch-icon" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-60.png?rlrrWzJp_nxx" />
+<link rel="shortcut icon" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/favicon.ico?XLwj7_gTNs6l" />
+<link rel="manifest" href="/manifest.json" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<!--[if lt IE 9]>
+<script>
+  (function (elements) {
+    for (var i = 0, l = elements.length; i < l; ++i)
+      document.createElement(elements[i]);
+  })('abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video'.split(/\s+/));
+</script>
+<![endif]-->
+
+</head>
+<body id="page-my" class="wrapper isPC">
+<script>
+ dataLayer = [{
+   'visitorType': 'user',
+   'accessedFrom': 'Web'
+ }];
+</script>
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5CGN6D"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5CGN6D');</script>
+<!-- End Google Tag Manager -->
+
+
+
+<div id="globalHeader-sp">
+  <p id="globalHeader-sp-button"><label for="globalHeader-toggleButton"><i class="icon-menu"></i></label></p>
+  <p id="globalHeader-sp-logo"><a href="/">
+    <img src="https://cdn-static.kakuyomu.jp/images/brand/kakuyomu-logo.png?TdK0yPPPxQpL" alt="カクヨム" />
+  </a></p>
+</div>
+<input type="checkbox" id="globalHeader-toggleButton" />
+<header id="globalHeader" class="test-header isSignedInUser">
+  <div id="globalHeader-inner" class="float-parent">
+    <div class="float-left float-parent">
+      <h1 id="globalHeader-logo" class="float-left"><a href="/">
+        <img src="https://cdn-static.kakuyomu.jp/images/brand/kakuyomu-logo.png?TdK0yPPPxQpL" alt="カクヨム" />
+      </a></h1>
+      <p id="globalHeader-sp-screenName"><a href="/users/io-monad"><span><span id="globalHeader-sp-screenName-label">ログイン中</span><span id="globalHeader-sp-screenName-name">@io-monad</span></span></a></p>
+      <nav class="float-left">
+        <ul id="globalHeader-globalNav"><li id="globalHeader-home"><a href="/"><span>ホーム</span></a></li><li id="globalHeader-antenna"><a href="/my/antenna/works"><span>マイページ</span></a></li><li><a href="/trends"><span>小説を探す</span></a></li>
+        </ul>
+      </nav>
+    </div>
+    <nav class="float-right">
+      <ul id="globalHeader-subNav">
+          <li id="globalHeader-writeWork" tabindex="0" onclick=""><a href="/my/works/new"><span>新しい小説を作成</span></a></li><li id="globalHeader-my"><a href="/my" class="isActive"><span>小説管理</span></a></li><li class="ui-contextMenu" tabindex="0" onclick="">
+            <a id="globalHeader-profileLabel" href="/users/io-monad"><span>@io-monad <i class="icon-bottom"></i></span></a>
+            <div class="ui-contextMenu-content ui-contextMenu-content-isRight">
+              <ul>
+                <li id="globalHeader-my-inContextMenu"><a href="/my" class="isActive">小説管理</a></li>
+                <li><a href="/users/io-monad">プロフィール</a></li>
+                <li class="contextMenu-border"><a href="/users/io-monad/works">公開済小説一覧</a></li>
+                <li class="contextMenu-border" id="globalHeader-writeWork-inContextMenu"><a href="/my/works/new">新しい小説を作成</a></li>
+                <li><a href="/settings">アカウント設定</a></li>
+                <li class="contextMenu-border"><a href="/site_feedback?location=%2Fmy">要望を送る</a></li>
+                <li><form action="/logout" method="POST" id="globalHeader-subNav-logoutForm">
+                  <input type="hidden" name="csrf_token" value="xxxxxxx">
+                  <button type="submit" class="ui-button-silent"><i class="icon-logout"></i> ログアウト</button>
+                </form></li>
+              </ul>
+            </div>
+          </li><li id="globalHeader-info" class="ui-contextMenu" tabindex="0" onclick="">
+          <span id="globalHeader-infoLabel"><i class="icon-ellipsis"></i></span>
+          <div class="ui-contextMenu-content ui-contextMenu-content-isRight">
+            <ul>
+              <li><a href="https://kakuyomu.jp/help/">ヘルプ</a></li>
+              <li class="contextMenu-border"><a href="https://kakuyomu.jp/info/">ブログ</a></li>
+              <li><a href="/legal/tos">利用規約</a></li>
+              <li><a href="/legal/guideline">ガイドライン</a></li>
+              <li class="contextMenu-border"><a href="http://www.kadokawa.co.jp/privacy/" target="_blank">プライバシーポリシー</a></li>
+              <li><a href="/violation_report?url=https%3A%2F%2Fkakuyomu.jp%2Fmy">このページを通報</a></li>
+            </ul>
+          </div>
+        </li></ul>
+    </nav>
+  </div>
+</header>
+
+
+
+
+<div id="container">
+  <div id="container-inner">
+
+<div id="my" class="widget-column widget-column-clear-800">
+  <main id="works-wrapper" class="widget-column-left widget-column-remainder-2">
+    <section>
+      <header class="float-parent heading-parent">
+        <div class="float-left">
+          <h2 class="heading-level2">執筆中の小説</h2>
+            <p>3作品を執筆中
+              ／全3作品
+            </p>
+        </div>
+        <p class="float-right ui-arrow">
+          <a href="/my/works/new" class="ui-button-black">新しい小説を作成</a>
+
+        </p>
+      </header>
+
+        <section id="works-hasWorks">
+          <ul class="workList widget-list">
+
+
+<li class="widget-list-child">
+  <p class="works-workStatus">
+      <span class="label-workStatus-isUnpublished">未公開</span>
+    <span title="公開済のエピソード数：0">0話</span>
+  </p>
+  <div class="works-work">
+    <div class="works-workParent">
+      <div class="widget-myWork">
+        <h3 class="widget-myWork-title">
+            test2
+          <a href="/my/works/1177354054880772500" class="widget-myWork-edit">編集</a>
+        </h3>
+        <p class="widget-myWork-meta">
+          <span><span class="ui-tooltip ui-tooltip-top" data-ui-tooltip-label="公開済エピソードの総文字数" title="公開済エピソードの総文字数：0文字"><i class="icon-characterCount"></i> 0文字</span></span>
+        </p>
+      </div>
+      <p class="works-editButton">
+        <a href="/my/works/1177354054880772500" class="works-editButton-edit ui-tooltip ui-tooltip-top" data-ui-tooltip-label="小説情報の編集"><i class="icon-settings" aria-label="小説情報の編集"></i></a>
+        <a href="/my/works/1177354054880772500" class="works-editButton-edit-sp ui-button-default ui-tooltip ui-tooltip-top" data-ui-tooltip-label="小説情報の編集">編集</a>
+
+          <a href="/my/works/1177354054880772500/episodes/new" class="works-editButton-writeNextEpisode ui-button-blue"><i class="icon-write"></i> エピソードを執筆</a>
+      </p>
+    </div>
+
+      <ul class="works-workEpisodes">
+          <li class="works-workEpisodes-isEmpty"><em>まだエピソードはありません</em></li>
+      </ul>
+  </div>
+</li>
+
+
+
+<li class="widget-list-child">
+  <p class="works-workStatus">
+      <span class="label-workStatus-isUnpublished">未公開</span>
+    <span title="公開済のエピソード数：0">0話</span>
+  </p>
+  <div class="works-work">
+    <div class="works-workParent">
+      <div class="widget-myWork">
+        <h3 class="widget-myWork-title">
+            test
+          <a href="/my/works/1177354054880772094" class="widget-myWork-edit">編集</a>
+        </h3>
+        <p class="widget-myWork-meta">
+          <span><span class="ui-tooltip ui-tooltip-top" data-ui-tooltip-label="公開済エピソードの総文字数" title="公開済エピソードの総文字数：0文字"><i class="icon-characterCount"></i> 0文字</span></span>
+        </p>
+      </div>
+      <p class="works-editButton">
+        <a href="/my/works/1177354054880772094" class="works-editButton-edit ui-tooltip ui-tooltip-top" data-ui-tooltip-label="小説情報の編集"><i class="icon-settings" aria-label="小説情報の編集"></i></a>
+        <a href="/my/works/1177354054880772094" class="works-editButton-edit-sp ui-button-default ui-tooltip ui-tooltip-top" data-ui-tooltip-label="小説情報の編集">編集</a>
+
+          <a href="/my/works/1177354054880772094/episodes/new" class="works-editButton-writeNextEpisode ui-button-default"><i class="icon-write"></i> 次のエピソードを執筆</a>
+      </p>
+    </div>
+
+      <ul class="works-workEpisodes">
+            <li>
+                <span class="widget-episodeStatusLabel-draft">下書き</span>
+                <span class="works-workEpisodes-labelTitle">第1話</span>
+                <span class="works-workEpisodes-labelDate">2016年4月3日 00:04 最終更新</span>
+              <a href="/my/works/1177354054880772094/episodes/1177354054880772095" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+      </ul>
+  </div>
+</li>
+
+
+
+<li class="widget-list-child">
+  <p class="works-workStatus">
+      <span class="label-workStatus-isRunning">連載中</span>
+    <span title="公開済のエピソード数：50">50話</span>
+  </p>
+  <div class="works-work">
+    <div class="works-workParent">
+      <div class="widget-myWork">
+        <h3 class="widget-myWork-title">
+            <a href="/works/4852201425154996024" class="widget-myWork-permalinkLink">マギハッカーの異世界ベンチャー起業術</a>
+          <a href="/my/works/4852201425154996024" class="widget-myWork-edit">編集</a>
+        </h3>
+        <p class="widget-myWork-meta">
+          <span><span class="ui-tooltip ui-tooltip-top" data-ui-tooltip-label="公開済エピソードの総文字数" title="公開済エピソードの総文字数：263,019文字"><i class="icon-characterCount"></i> 263,019文字</span></span><span><a href="/works/4852201425154996024/reviews" class="ui-tooltip ui-tooltip-top" data-ui-tooltip-label="17人の評価">★43</a></span><span><a href="/works/4852201425154996024/followers"><i class="icon-followingWork"></i> 50人のフォロワー</a></span><span><span class="ui-tooltip ui-tooltip-top test-contest-tooltip" data-ui-tooltip-label="応募中：第1回カクヨムWeb小説コンテスト"><i class="icon-contest"></i> コンテスト応募中</span></span><span class="widget-myWork-meta-accesses"><a href="/works/4852201425154996024/accesses">アクセス数 <i class="icon-next-large"></i></a></span>
+        </p>
+      </div>
+      <p class="works-editButton">
+        <a href="/my/works/4852201425154996024" class="works-editButton-edit ui-tooltip ui-tooltip-top" data-ui-tooltip-label="小説情報の編集"><i class="icon-settings" aria-label="小説情報の編集"></i></a>
+        <a href="/my/works/4852201425154996024" class="works-editButton-edit-sp ui-button-default ui-tooltip ui-tooltip-top" data-ui-tooltip-label="小説情報の編集">編集</a>
+
+          <a href="/my/works/4852201425154996024/episodes/new" class="works-editButton-writeNextEpisode ui-button-default"><i class="icon-write"></i> 次のエピソードを執筆</a>
+      </p>
+    </div>
+
+      <ul class="works-workEpisodes">
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996043" class="works-workEpisodes-labelTitle">001 - hacker.die();</a>
+                <span class="works-workEpisodes-labelDate">2016年2月26日 14:22 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996043" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996122" class="works-workEpisodes-labelTitle">002 - hacker.say(&quot;Hello, world!&quot;);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月27日 05:22 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996122" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996138" class="works-workEpisodes-labelTitle">003 - hacker.crawl(library);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月21日 21:55 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996138" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996174" class="works-workEpisodes-labelTitle">004 - hacker.meet(boss);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月21日 21:57 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996174" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996186" class="works-workEpisodes-labelTitle">005 - hacker.belongTo(new Company());</a>
+                <span class="works-workEpisodes-labelDate">2016年2月21日 21:59 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996186" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996203" class="works-workEpisodes-labelTitle">006 - hacker.carry(boss);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月21日 22:04 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996203" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996245" class="works-workEpisodes-labelTitle">007 - hacker.learn(MagiLanguage);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月21日 22:09 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996245" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425154996287" class="works-workEpisodes-labelTitle">008 - hacker.discuss(business).with(boss);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月21日 22:16 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425154996287" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425155003743" class="works-workEpisodes-labelTitle">009 - hacker.meet(backer);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月23日 03:59 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425155003743" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425155008233" class="works-workEpisodes-labelTitle">010 - hacker.ignore(sparkles);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月27日 05:22 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425155008233" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425155010302" class="works-workEpisodes-labelTitle">011 - hacker.setFlag(true);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月24日 03:25 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425155010302" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425155014512" class="works-workEpisodes-labelTitle">012 - boss.understand(hacker);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月27日 05:22 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425155014512" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/4852201425155016487" class="works-workEpisodes-labelTitle">013 - hacker.flash();</a>
+                <span class="works-workEpisodes-labelDate">2016年2月25日 01:09 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/4852201425155016487" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880200553" class="works-workEpisodes-labelTitle">014 - hacker.hack(wall);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月26日 15:52 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880200553" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880205328" class="works-workEpisodes-labelTitle">015 - hacker.pat(apple);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月26日 15:57 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880205328" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880226366" class="works-workEpisodes-labelTitle">016 - hacker.spacewalk();</a>
+                <span class="works-workEpisodes-labelDate">2016年3月1日 06:46 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880226366" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880259385" class="works-workEpisodes-labelTitle">017 - hacker.has(ambition);</a>
+                <span class="works-workEpisodes-labelDate">2016年2月29日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880259385" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880293560" class="works-workEpisodes-labelTitle">018 - hacker.develop(headache);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月1日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880293560" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880335407" class="works-workEpisodes-labelTitle">019 - hacker.develop(Phone);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月2日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880335407" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880361615" class="works-workEpisodes-labelTitle">020 - hacker.freeze();</a>
+                <span class="works-workEpisodes-labelDate">2016年3月3日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880361615" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880385125" class="works-workEpisodes-labelTitle">021 - hacker.enjoy(AnotherWorld);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月6日 13:09 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880385125" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880406385" class="works-workEpisodes-labelTitle">CoffeeBreak 01 - hacker.explain(Phone);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月5日 18:02 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880406385" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880427458" class="works-workEpisodes-labelTitle">CoffeeBreak 02 - c.apologize();</a>
+                <span class="works-workEpisodes-labelDate">2016年3月7日 18:49 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880427458" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880446356" class="works-workEpisodes-labelTitle">022 - hacker.setSummoned(true);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月7日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880446356" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880461845" class="works-workEpisodes-labelTitle">023 - hacker.isLazy();</a>
+                <span class="works-workEpisodes-labelDate">2016年3月8日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880461845" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880482890" class="works-workEpisodes-labelTitle">024 - hacker.hook(stone, &quot;transfer&quot;);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月9日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880482890" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880498155" class="works-workEpisodes-labelTitle">025 - hacker.diveInto(sea);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月10日 18:04 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880498155" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880512403" class="works-workEpisodes-labelTitle">026 - hacker.setState(SEARCHING);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月11日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880512403" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880527807" class="works-workEpisodes-labelTitle">027 - hacker.infer(man, &quot;kind&quot;);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月12日 18:17 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880527807" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880540688" class="works-workEpisodes-labelTitle">028 - hacker.identify(wirepuller);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月13日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880540688" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880554178" class="works-workEpisodes-labelTitle">029 - hacker.expose(wirepuller.character);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月14日 18:48 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880554178" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880565368" class="works-workEpisodes-labelTitle">030 - hacker.loadFile(&quot;hoge.magi&quot;).run();</a>
+                <span class="works-workEpisodes-labelDate">2016年3月15日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880565368" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880578103" class="works-workEpisodes-labelTitle">031 - hacker.encounter(gate);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月16日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880578103" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880588661" class="works-workEpisodes-labelTitle">032 - hacker.sow(seeds);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月17日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880588661" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880598157" class="works-workEpisodes-labelTitle">033 - hacker.cross(chasm);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月18日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880598157" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880614266" class="works-workEpisodes-labelTitle">034 - hacker.try(-&gt; { hacker.undo() });</a>
+                <span class="works-workEpisodes-labelDate">2016年3月19日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880614266" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880627337" class="works-workEpisodes-labelTitle">035 - hacker.encourage(boss);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月20日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880627337" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880638099" class="works-workEpisodes-labelTitle">036 - hacker.write(&quot;Hello, world!&quot;);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月21日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880638099" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880647535" class="works-workEpisodes-labelTitle">037 - hacker.reach(truth);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月23日 02:55 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880647535" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880656149" class="works-workEpisodes-labelTitle">038 - boss.understand(herself);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月23日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880656149" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880671272" class="works-workEpisodes-labelTitle">039 - hacker.make(presentation);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月24日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880671272" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880679024" class="works-workEpisodes-labelTitle">040 - hacker.pointOut(blindSpot);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月25日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880679024" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880691551" class="works-workEpisodes-labelTitle">041 - hacker.check(criminal);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月26日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880691551" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880705710" class="works-workEpisodes-labelTitle">042 - hacker.move(forward);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月27日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880705710" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880713436" class="works-workEpisodes-labelTitle">CoffeeBreak 03 - hacker.gain(trust);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月28日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880713436" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880727072" class="works-workEpisodes-labelTitle">CoffeeBreak 04 - c.cook(soup);</a>
+                <span class="works-workEpisodes-labelDate">2016年3月29日 18:00 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880727072" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880738751" class="works-workEpisodes-labelTitle">043 - hacker = new Teacher();</a>
+                <span class="works-workEpisodes-labelDate">2016年3月30日 18:04 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880738751" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880744904" class="works-workEpisodes-labelTitle">044 - hacker.start(lesson);</a>
+                <span class="works-workEpisodes-labelDate">2016年4月2日 19:50 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880744904" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880756522" class="works-workEpisodes-labelTitle">045 - hacker.throwAway(CommonSense);</a>
+                <span class="works-workEpisodes-labelDate">2016年4月2日 19:50 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880756522" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+            <li>
+                <span class="widget-episodeStatusLabel-published">公開済</span>
+                <a href="/works/4852201425154996024/episodes/1177354054880768333" class="works-workEpisodes-labelTitle">046 - hacker.start(game);</a>
+                <span class="works-workEpisodes-labelDate">2016年4月2日 18:22 最終更新</span>
+              <a href="/my/works/4852201425154996024/episodes/1177354054880768333" class="works-workEpisodes-labelEdit">編集</a>
+            </li>
+      </ul>
+  </div>
+</li>
+
+
+          </ul>
+        </section>
+    </section>
+  </main>
+
+  <aside class="widget-column-right widget-column-2">
+    <p id="webContest"><a href="/contests/kakuyomu_web_novel_001">
+        <img src="https://cdn-static.kakuyomu.jp/images/contests/kakuyomu-web-novel-001/banner-end.jpg?Y4qbi_VIbvrH"
+             srcset="https://cdn-static.kakuyomu.jp/images/contests/kakuyomu-web-novel-001/banner-end.jpg?Y4qbi_VIbvrH 2x"
+             alt="第1回カクヨムWeb小説コンテスト" />
+    </a></p>
+    <div id="profile">
+      <h2 class="heading-level5 heading-underline"><a href="/users/io-monad">入出もなど <i class="icon-next-large"></i></a></h2>
+      <ul id="profile-activities">
+        <li><a href="/users/io-monad/works">
+          <span class="profile-linkLabel">小説</span>
+          <span class="profile-linkCount">1</span>
+        </a></li>
+        <li><a href="/users/io-monad/reviews">
+          <span class="profile-linkLabel">レビュー</span>
+          <span class="profile-linkCount">0</span>
+        </a></li>
+        <li><a href="/users/io-monad/followers">
+          <span class="profile-linkLabel">フォロワー</span>
+          <span class="profile-linkCount">11</span>
+        </a></li>
+      </ul>
+      <p id="profile-news"><a href="/my/news/new"><i class="icon-plus"></i> 近況ノートの記事を書く</a></p>
+    </div>
+    <section id="information">
+      <h2 class="heading-level5">新機能・お知らせ</h2>
+      <div id="information-list-loading" style="min-height: 150px;" >
+        <div class="informationList-dummy-listItem">
+          <span class="informationList-dummy-listDate"></span>
+          <span class="informationList-dummy-listTitle"></span>
+        </div>
+        <div class="informationList-dummy-listItem">
+          <span class="informationList-dummy-listDate"></span>
+          <span class="informationList-dummy-listTitle"></span>
+        </div>
+      </div>
+      <div id="information-list"></div>
+      <p id="information-readmore"><a href="https://kakuyomu.jp/info/">もっと読む <i class="icon-next-large"></i></a></p>
+    </section>
+
+  </aside>
+</div>
+
+
+<script src="https://www.google.com/jsapi"></script>
+
+<!-- ブログエントリの表示 -->
+<script>
+ (function () {
+     google.load("feeds", "1");
+
+     function initialize() {
+         var feed = new google.feeds.Feed("https://kakuyomu.jp/info/feed");
+         feed.setNumEntries(2);
+         feed.load(function(result) {
+             if (!result.error) {
+                 var container = document.getElementById('information-list');
+
+                 for (var i = 0; i < result.feed.entries.length; i++) {
+                     var entry = result.feed.entries[i];
+
+                     var entryLink = document.createElement('a');
+                     entryLink.setAttribute('target', '_blank');
+                     entryLink.setAttribute('href', entry.link);
+
+                     var entryPublishedTime = document.createElement('time');
+                     entryPublishedTime.className = 'information-datePublished';
+                     entryPublishedTime.setAttribute('itemprop', 'datePublished');
+                     var entryDate = new Date(entry.publishedDate);
+                     entryPublishedTime.setAttribute('datetime', entryDate.toISOString());
+
+                     var year  = entryDate.getFullYear();
+                     var month = ('0' + (entryDate.getMonth() + 1)).slice(-2);
+                     var day   = ('0' + entryDate.getDate()).slice(-2);
+                     entryPublishedTime.textContent = year + "-" + month + "-" + day;
+                     entryLink.appendChild(entryPublishedTime);
+
+                     var entryTitle = document.createElement('h3');
+                     entryTitle.className = 'information-title';
+                     entryTitle.setAttribute('itemprop', 'headline');
+                     entryTitle.textContent = entry.title;
+                     entryLink.appendChild(entryTitle);
+
+                     var entryArticle = document.createElement('article');
+                     entryArticle.setAttribute('itemscope', '');
+                     entryArticle.setAttribute('itemtype', 'http://schema.org/BlogPosting');
+                     entryArticle.appendChild(entryLink);
+
+                     container.appendChild(entryArticle);
+                 }
+
+                 // 読み込みが成功したらloading中に表示しているdummyのdivを消す
+                 var loading = document.getElementById('information-list-loading');
+                 loading.parentNode.removeChild(loading);
+             }
+         });
+     }
+     google.setOnLoadCallback(initialize);
+ }());
+</script>
+
+
+  </div>
+</div>
+
+
+<script src="https://cdn-static.kakuyomu.jp/js/public.js?oDkSAW5Qd3tS"></script>
+
+<script type="text/javascript">
+ (function () {
+     var tagjs = document.createElement("script");
+     var s = document.getElementsByTagName("script")[0];
+     tagjs.async = true;
+     tagjs.src = "//s.yjtag.jp/tag.js#site=nrWs82K";
+     s.parentNode.insertBefore(tagjs, s);
+ }());
+</script>
+<noscript>
+  <iframe src="//b.yjtag.jp/iframe?c=nrWs82K" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+</noscript>
+
+
+
+</body>
+</html>

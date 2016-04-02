@@ -59,7 +59,8 @@
         { "siteName": "narou", "itemType": "myNovels" },
         { "siteName": "narou", "itemType": "myMessages" },
         { "siteName": "narou", "itemType": "myComments" },
-        { "siteName": "narou", "itemType": "myReviews" }
+        { "siteName": "narou", "itemType": "myReviews" },
+        { "siteName": "kakuyomu", "itemType": "myNovels" }
       ],
       "additionalItems": false,
       "items": {
