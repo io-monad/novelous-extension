@@ -40,6 +40,18 @@ export default class Options {
     }
   }
 
+  get lastUpdatedAt() {
+    return this.options.lastUpdatedAt;
+  }
+  set lastUpdatedAt(time) {
+    this.options.lastUpdatedAt = time;
+  }
+
+  get nextWillUpdateAt() {
+    if (!this.lastUpdatedAt) return _.now();
+    return this.lastUpdatedAt + this.updatePeriodMinutes * 60 * 1000;
+  }
+
   get siteSettings() {
     return this.options.siteSettings;
   }
