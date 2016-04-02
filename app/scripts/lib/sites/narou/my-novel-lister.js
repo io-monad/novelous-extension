@@ -9,6 +9,7 @@ import url from "url";
  * @property {string} manageUrl - URL of the page of managing the novel.
  * @property {string} editUrl - URL of the page of editting the novel.
  * @property {string} manageId - ID of the novel in management system.
+ * @property {string} newEpisodeUrl - URL of the page of submitting a new episode.
  */
 
 /**
@@ -64,6 +65,7 @@ export default class NarouMyNovelLister {
       if (matched) {
         novel.manageId = matched[1];
       }
+      novel.newEpisodeUrl = resolve(`/usernovelmanage/ziwainput/ncode/${novel.manageId}/`);
 
       return novel;
     });
