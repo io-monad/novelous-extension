@@ -3,43 +3,42 @@ import url from "url";
 import scrape from "../../util/scrape";
 
 /**
+ * @typedef {Object} KakuyomuNovel
+ * @property {string}   id - ID of the novel.
+ * @property {string}   color - Theme color of the novel in CSS expression.
+ * @property {string}   title - Title of the novel.
+ * @property {string}   url - URL of the novel.
+ * @property {?string}  catchphrase - Catchphrase (tagline) of the novel.
+ * @property {string}   description - Description of the novel.
+ * @property {string}   authorUserId - User ID of the author of the novel.
+ * @property {string}   authorName - Name of the author of the novel.
+ * @property {?string}  authorUrl - URL of the author's page.
+ * @property {string[]} keywords - Keywords of the novel.
+ * @property {?string}  genre - Genre of the novel.
+ * @property {number}   characterCount - Count of characters in the novel.
+ * @property {number}   episodeCount - Count of episodes in the novel.
+ * @property {?string}  latestEpisodeUrl - URL of the latest episode.
+ * @property {boolean}  isFinished - `true` if the novel is marked as finished.
+ * @property {boolean}  isFunFiction - `true` if the novel is a fun-fiction.
+ * @property {?string}  originalTitle - Title of the original work of the novel.
+ * @property {number}   reviewCount - Count of reviews on the novel.
+ * @property {number}   followerCount - Count of followers on the novel.
+ * @property {number}   starCount - Count of stars on the novel.
+ * @property {number}   createdAt - Timestamp when the first episode was published.
+ * @property {number}   updatedAt - Timestamp when the latest episode was published.
+ */
+
+/**
  * Fetcher for novel data in Kakuyomu.
- *
- * Novel data definition:
- * ```
- * {
- *   url: string,
- *   title: string,
- *   color: string,
- *   catchphrase?: string,
- *   description: string,
- *   authorName: string,
- *   authorUrl: string,
- *   keywords: string[],
- *   genre?: string,
- *   isOriginal: boolean,
- *   originalTitle?: string,
- *   isFinished: boolean,
- *
- *   characterCount: number,
- *   episodeCount: number,
- *   latestEpisodeUrl?: string,
- *
- *   starCount: number,
- *   reviewCount: number,
- *   followerCount: number,
- *
- *   createdAt: number,
- *   updatedAt: number
- * }
- * ```
  */
 export default class KakuyomuNovelFetcher {
   /**
-   * @param {string} [baseUrl] - A base URL of Kakuyomu.
+   * @param {Object} [options] - Options.
+   * @param {string} [options.baseUrl] - A base URL of Kakuyomu.
    */
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl || kakuyomuMeta.baseUrl;
+  constructor(options) {
+    options = options || {};
+    this.baseUrl = options.baseUrl || kakuyomuMeta.baseUrl;
   }
 
   /**
@@ -66,8 +65,10 @@ export default class KakuyomuNovelFetcher {
     novel.color = $("#workColor").css("background-color");
     novel.title = $.text($("#workTitle"));
     novel.url = resolve($("#workTitle > a").attr("href"));
+    novel.id = novel.url.match(/\/works\/(\d+)/)[1];
     novel.authorName = $.text($("#workAuthor-activityName"));
     novel.authorUrl = resolve($("#workAuthor-activityName > a").attr("href"));
+    novel.authorUserId = novel.authorUrl.match(/\/users\/([^/]+)/)[1];
     novel.starCount = $.number($("#workPoints"));
     novel.catchphrase = $.text($("#catchphrase-body")) || null;
 
@@ -82,10 +83,10 @@ export default class KakuyomuNovelFetcher {
     const data = _.zipObject(_.map(dts, $.text), _.map(dds, $.text));
 
     novel.isFinished = data["執筆状況"] === "完結済";
-    novel.isOrignal = data["種類"] === "オリジナル小説";
+    novel.isFunFiction = data["種類"] !== "オリジナル小説";
+    novel.originalTitle = data["二次創作原作"] || null;
     novel.episodeCount = $.number(data["エピソード"]);
     novel.genre = data["ジャンル"] || null;
-    novel.originalTitle = data["二次創作原作"] || null;
     novel.keywords = $.keywords(data["セルフレイティング"]).concat($.keywords(data["タグ"]));
     novel.characterCount = $.number(data["総文字数"]);
     novel.createdAt = $.localTime(data["公開日"]);

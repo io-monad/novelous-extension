@@ -12,6 +12,5 @@ test.serial("#listNovelsOfUser", async t => {
   const userNovelLister = new KakuyomuUserNovelLister;
   return userNovelLister.listNovelsOfUser("kadokawabooks").then((result) => {
     t.same(result, expectedList);
-    t.pass();
   });
 });

@@ -12,6 +12,5 @@ test.serial("#fetchNovel", async t => {
   const novelFetcher = new KakuyomuNovelFetcher;
   return novelFetcher.fetchNovel("4852201425154996024").then((novel) => {
     t.same(novel, expectedNovel);
-    t.pass();
   });
 });

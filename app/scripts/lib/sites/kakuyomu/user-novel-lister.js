@@ -3,32 +3,27 @@ import scrape from "../../util/scrape";
 import url from "url";
 
 /**
+ * @typedef {Object} KakuyomuUserNovel
+ * @property {string}   id - ID of the novel.
+ * @property {string}   title - Title of the novel.
+ * @property {string}   url - URL of the novel.
+ * @property {string}   description - Description of the novel.
+ * @property {string}   authorUserId - User ID of the author of the novel.
+ * @property {string}   authorName - Name of the author of the novel.
+ * @property {?string}  authorUrl - URL of the author's page.
+ * @property {string[]} keywords - Keywords of the novel.
+ * @property {?string}  genre - Genre of the novel.
+ * @property {number}   characterCount - Count of characters in the novel.
+ * @property {number}   episodeCount - Count of episodes in the novel.
+ * @property {boolean}  isFinished - `true` if the novel is marked as finished.
+ * @property {boolean}  isFunFiction - `true` if the novel is a fun-fiction.
+ * @property {?string}  originalTitle - Title of the original work of the novel.
+ * @property {number}   starCount - Count of stars on the novel.
+ * @property {number}   updatedAt - Timestamp when the latest episode was published.
+ */
+
+/**
  * Listing novels of a user in Kakuyomu.
- *
- * List definition:
- * ```
- * {
- *   novelCount: number,
- *   pageCount: number,
- *   currentPage: number,
- *   hasNextPage: boolean,
- *   novels: Array.<{
- *     url: string,
- *     title: string,
- *     color: string,
- *     description: string,
- *     keywords: string[],
- *     genre?: string,
- *     isOriginal: boolean,
- *     originalTitle?: string,
- *     isFinished: boolean,
- *     characterCount: number,
- *     episodeCount: number,
- *     starCount: number,
- *     updatedAt: number
- *   }>
- * }
- * ```
  */
 export default class KakuyomuUserNovelLister {
   /**
@@ -42,64 +37,55 @@ export default class KakuyomuUserNovelLister {
    * Get a list of novels of a user.
    *
    * @param {string} userId - User ID.
-   * @param {number} [page=1] - Page number to get.
-   * @return {Promise} A promise that resolves to a list of novels.
+   * @return {Promise.<KakuyomuUserNovel[]>}
    */
-  listNovelsOfUser(userId, page = 1) {
-    return new Promise((resolve, reject) => {
-      scrape.fetch(this._getURL(userId, page))
+  listNovelsOfUser(userId) {
+    return new Promise((resolve, novels) => {
+      scrape.fetch(this._getURL(userId))
       .then($ => { resolve(this._parsePage($)); })
-      .catch(reject);
+      .catch(novels);
     });
   }
 
-  _getURL(userId, page) {  // eslint-disable-line
+  _getURL(userId) {
     const encodedId = encodeURIComponent(userId);
-    // page is not implemented yet!
     return `${this.baseUrl}/users/${encodedId}/works`;
   }
 
   _parsePage($) {
-    const novelCount = $.number($("#user-nav li.active .widget-user-navCount"));
-    const pageCount = 1;
-    const currentPage = 1;
-    const hasNextPage = currentPage < pageCount;
-
-    const novels = _.map($("#works > [itemscope]"), (item) => {
+    return _.map($("#works > [itemscope]"), (item) => {
       const $item = $(item);
       const novel = {};
       const resolve = (path) => url.resolve(this.baseUrl, path);
+      const $props = $item.find("[itemprop]:not([itemscope] [itemscope] *)");
 
       novel.color = $item.find(".widget-workCard-workColor").css("background-color");
-      novel.title = $.text($item.find(".widget-workCard-titleLabel"));
-      novel.url = resolve($item.find(".widget-workCard-titleLabel").attr("href"));
+      novel.title = $.text($props.filter("[itemprop=name]"));
+      novel.url = resolve($props.filter("[itemprop=name]").attr("href"));
+      novel.id = novel.url.match(/\/works\/(\d+)/)[1];
+      novel.authorName = $.text($props.filter("[itemprop=author]"));
+      novel.authorUrl = resolve($props.filter("[itemprop=author]").attr("href"));
+      novel.authorUserId = novel.authorUrl.match(/\/users\/([^/]+)/)[1];
       novel.description = $.text($item.find(".widget-workCard-introduction"));
       novel.starCount = $.number($item.find(".widget-workCard-reviewPoints"));
 
-      const genre = $.text($item.find(".widget-workCard-genre"));
+      const genre = $.text($props.filter("[itemprop=genre]"));
       if (/^二次創作：/.test(genre)) {
-        novel.isOriginal = false;
+        novel.isFunFiction = true;
         novel.genre = null;
         novel.originalTitle = genre.replace(/^二次創作：/, "");
       } else {
-        novel.isOriginal = true;
+        novel.isFunFiction = false;
         novel.genre = genre;
         novel.originalTitle = null;
       }
 
       novel.isFinished = ($.text($item.find(".widget-workCard-statusLabel")) === "完結済");
       novel.episodeCount = $.number($item.find(".widget-workCard-episodeCount"));
-      novel.characterCount = $.number($item.find(".widget-workCard-characterCount"));
-      novel.updatedAt = $.localTime($item.find(".widget-workCard-dateUpdated"));
-
-      novel.keywords = _.map(
-        $item.find(".widget-workCard-summary [itemprop=keywords]"),
-        el => $.text(el)
-      );
-
+      novel.characterCount = $.number($props.filter("[itemprop=characterCount]"));
+      novel.updatedAt = $.localTime($props.filter("[itemprop=dateModified]"));
+      novel.keywords = _.map($props.filter("[itemprop=keywords]"), $.text);
       return novel;
     });
-
-    return { novelCount, pageCount, currentPage, hasNextPage, novels };
   }
 }
