@@ -1,16 +1,16 @@
 import EventEmitter from "eventemitter3";
 import jsonSchemaDefaults from "json-schema-defaults";
 import cutil from "../util/chrome-util";
-import optionsSchema from "./options-schema.json";
+import appOptionsSchema from "./app-options-schema.json";
 
-const OPTION_KEYS = _.keys(optionsSchema.properties);
-const DEFAULT_OPTIONS = jsonSchemaDefaults(optionsSchema);
+const OPTION_KEYS = _.keys(appOptionsSchema.properties);
+const DEFAULT_OPTIONS = jsonSchemaDefaults(appOptionsSchema);
 const MINIMUM_UPDATE_PERIOD_MINUTES =
-  optionsSchema.properties.updatePeriodMinutes.minimum;
+  appOptionsSchema.properties.updatePeriodMinutes.minimum;
 
-export default class Options extends EventEmitter {
+export default class AppOptions extends EventEmitter {
   static load() {
-    return (new Options()).load();
+    return (new AppOptions()).load();
   }
 
   constructor(options) {
@@ -41,7 +41,7 @@ export default class Options extends EventEmitter {
   }
 
   get schema() {
-    return optionsSchema;
+    return appOptionsSchema;
   }
 
   get updatePeriodMinutes() {

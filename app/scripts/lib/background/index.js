@@ -3,7 +3,7 @@ import SiteFactory from "../sites/site-factory";
 import Subscriber from "../subscriptions/subscriber";
 import Subscription from "../subscriptions/subscription";
 import Publisher from "../publications/publisher";
-import Options from "../app/options";
+import AppOptions from "../app/app-options";
 import ChromeAlarm from "../util/chrome-alarm";
 
 export default function () {
@@ -14,7 +14,7 @@ export default function () {
   let publisher;
 
   logger("Initializing");
-  Options.load().then((opts) => {
+  AppOptions.load().then((opts) => {
     logger("Loaded AppOptions successfully", opts.options);
     appOptions = opts;
     appOptions.on("update", handleAppOptionUpdate);

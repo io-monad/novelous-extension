@@ -1,12 +1,12 @@
 import { test } from "../../common";
-import Options from "../../../app/scripts/lib/app/options";
+import AppOptions from "../../../app/scripts/lib/app/app-options";
 
 test.beforeEach(t => {
-  t.context.options = new Options();
+  t.context.options = new AppOptions();
 });
 
-test("new Options", t => {
-  t.ok(t.context.options instanceof Options);
+test("new AppOptions", t => {
+  t.ok(t.context.options instanceof AppOptions);
 });
 
 test("#constructor sets default", t => {
@@ -76,8 +76,8 @@ test("#subscriptionSettings returns array of settings", t => {
 
 test.serial(".load returns options Promise", t => {
   chrome.storage.local.get.callsArgWithAsync(1, {});
-  return Options.load().then((opts) => {
-    t.ok(opts instanceof Options);
+  return AppOptions.load().then((opts) => {
+    t.ok(opts instanceof AppOptions);
   });
 });
 
@@ -85,7 +85,7 @@ test.serial("#load returns options Promise", t => {
   const { options } = t.context;
   chrome.storage.local.get.callsArgWithAsync(1, {});
   return options.load().then((opts) => {
-    t.ok(opts instanceof Options);
+    t.ok(opts instanceof AppOptions);
   });
 });
 
@@ -112,7 +112,7 @@ test.serial.cb("emits update event for storage change", t => {
   const { options } = t.context;
   t.plan(2);
   options.on("update", (opts) => {
-    t.ok(opts instanceof Options);
+    t.ok(opts instanceof AppOptions);
     t.is(opts.updatePeriodMinutes, 20);
     t.end();
   });
@@ -126,7 +126,7 @@ test.serial.cb("uses default value if storage value is undefined", t => {
   const { options } = t.context;
   t.plan(3);
   options.on("update", (opts) => {
-    t.ok(opts instanceof Options);
+    t.ok(opts instanceof AppOptions);
     t.is(opts.updatePeriodMinutes, 15);
     t.ok(_.isObject(opts.siteSettings));
     t.end();
