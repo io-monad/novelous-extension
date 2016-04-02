@@ -36,13 +36,11 @@ scrape.parsers = {
     return _.reject(stringify(str).split(re), _.isEmpty);
   },
 
-  localTime(str, re = /(\d{4})\D+(\d+)\D+(\d+)\D+(\d+)\D+(\d+)(?:\D+(\d+))?/) {
+  localTime(str, re = /(\d{4})\D+(\d+)\D+(\d+)\D+(\d+)\D+(\d+)(?:\D+(\d+))?/, tz = "+0900") {
     const matched = stringify(str).match(re);
     if (matched) {
       const [, y, m, d, h, i, s] = matched;
-
-      // Use local timezone here as the parsed time.
-      return (new Date(y, m, d, h, i, s || 0)).getTime();
+      return (new Date(`${y}-${m}-${d} ${h}:${i}:${s || 0} ${tz}`)).getTime();
     }
     return null;
   },
