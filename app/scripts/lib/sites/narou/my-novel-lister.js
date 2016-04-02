@@ -12,15 +12,6 @@ import url from "url";
  */
 
 /**
- * @typedef {Object} NarouMyNovelList
- * @property {number}  itemsCount - Count of items returned by API.
- * @property {number}  pageCount - Count of available pages.
- * @property {number}  currentPage - Number of the current page (1-origin).
- * @property {boolean} hasNextPage - `true` if there is the next page.
- * @property {NarouMyNovel[]} items - Novels returned from Narou.
- */
-
-/**
  * Listing my own novels in Narou.
  */
 export default class NarouMyNovelLister {
@@ -39,16 +30,15 @@ export default class NarouMyNovelLister {
   }
 
   /**
-   * @return {Promise.<NarouMyNovelList>}
+   * @return {Promise.<NarouMyNovel[]>}
    */
   listNovels() {
     return new Promise((resolve, reject) => {
       scrape.fetch(this._getURL())
       .then($ => {
-        const result = this._parsePage($);
-        this._decorateNovelsByAPI(result.items).then((items) => {
-          result.items = items;
-          resolve(result);
+        const novels = this._parsePage($);
+        this._decorateNovelsByAPI(novels).then((decorated) => {
+          resolve(decorated);
         })
         .catch(reject);
       })
@@ -61,12 +51,7 @@ export default class NarouMyNovelLister {
   }
 
   _parsePage($) {
-    const itemsCount = $.number($("#location .numItems"));
-    const pageCount = $.number($("#location .novellist_naviall"), /([\d,]+ページ中)/) || 1;
-    const currentPage = $.number($("#location .novellist_naviall"), /([\d,]+)ページ目/) || 1;
-    const hasNextPage = currentPage < pageCount;
-
-    const items = _.map($("#novellist tr:not(:first)"), (item) => {
+    return _.map($("#novellist tr:not(:first)"), (item) => {
       const $item = $(item);
       const novel = {};
       const resolve = (path) => url.resolve(this.baseUrl, path);
@@ -82,8 +67,6 @@ export default class NarouMyNovelLister {
 
       return novel;
     });
-
-    return { itemsCount, pageCount, currentPage, hasNextPage, items };
   }
 
   _decorateNovelsByAPI(novels) {
