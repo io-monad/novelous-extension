@@ -5,12 +5,13 @@ import EventEmitter from "eventemitter3";
  */
 export default class Subscription extends EventEmitter {
   /**
-   * @param {Object} settings - Settings.
-   * @param {string} settings.siteName - Site name.
-   * @param {string} settings.itemType - Item type. This depends on the site.
-   * @param {string} [settings.itemId] - Item ID. This depends on the site.
-   * @param {Object} settings.item - Item object. This depends on the site.
-   * @param {number} settings.lastUpdatedAt - Timestamp of last update.
+   * @param {Object}  settings - Settings.
+   * @param {string}  settings.siteName - Site name.
+   * @param {string}  settings.itemType - Item type. This depends on the site.
+   * @param {string}  [settings.itemId] - Item ID. This depends on the site.
+   * @param {Object}  [settings.item] - Item object. This depends on the site.
+   * @param {boolean} [settings.enabled=true] - `false` if disabled.
+   * @param {number}  [settings.lastUpdatedAt] - Timestamp of last update.
    */
   constructor(settings = {}) {
     super();
@@ -19,6 +20,7 @@ export default class Subscription extends EventEmitter {
       itemType: null,
       itemId: null,
       item: null,
+      enabled: true,
       lastUpdatedAt: null,
     });
   }
@@ -48,6 +50,16 @@ export default class Subscription extends EventEmitter {
       this.settings.lastUpdatedAt = _.now();
       this.emit("update", this);
     }
+  }
+  set enabled(enabled) {
+    enabled = !!enabled;
+    if (enabled !== this.settings.enabled) {
+      this.settings.enabled = enabled;
+      this.emit("update", this);
+    }
+  }
+  get enabled() {
+    return this.settings.enabled;
   }
   get lastUpdatedAt() {
     return this.settings.lastUpdatedAt;

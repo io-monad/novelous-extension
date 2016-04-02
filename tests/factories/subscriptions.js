@@ -6,6 +6,7 @@ const subscriptionSchema = {
   itemType: "novel",
   itemId: factory.seq(n => `n${n}`),
   item: () => factory.buildSync("narouNovel"),
+  enabled: true,
   lastUpdatedAt: null,
 };
 
@@ -14,6 +15,7 @@ const kakuyomuSubscriptionSchema = {
   itemType: "novel",
   itemId: factory.seq(n => `${n}`),
   item: () => factory.buildSync("kakuyomuNovel"),
+  enabled: true,
   lastUpdatedAt: null,
 };
 

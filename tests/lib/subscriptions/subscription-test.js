@@ -16,6 +16,7 @@ test("has properties", t => {
   t.is(sub.itemType, settings.itemType);
   t.is(sub.itemId, settings.itemId);
   t.same(sub.item, settings.item);
+  t.is(sub.enabled, settings.enabled);
   t.is(sub.lastUpdatedAt, settings.lastUpdatedAt);
 });
 

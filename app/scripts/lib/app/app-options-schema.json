@@ -69,7 +69,8 @@
         "additionalProperties": false,
         "required": [
           "siteName",
-          "itemType"
+          "itemType",
+          "enabled"
         ],
         "properties": {
           "siteName": {
@@ -89,6 +90,9 @@
               { "type": "object" },
               { "type": "null" }
             ]
+          },
+          "enabled": {
+            "type": "boolean"
           },
           "lastUpdatedAt": {
             "oneOf": [
