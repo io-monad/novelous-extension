@@ -9,14 +9,14 @@ export default class Subscriber extends EventEmitter {
    * @param {Object.<string, Site>} sites - A map of site name and Site object.
    * @param {Object} settings - Settings.
    * @param {Subscription[]} settings.subscriptions
-   * @param {number} settings.updateInterval
+   * @param {number} settings.fetchInterval
    */
   constructor(sites, settings) {
     super();
     settings = settings || {};
     this.sites = sites;
     this.subscriptions = settings.subscriptions || [];
-    this.updateInterval = settings.updateInterval || 1000;
+    this.fetchInterval = settings.fetchInterval || 1000;
 
     this._handleSubscriptionUpdate = this._handleSubscriptionUpdate.bind(this);
     _.each(this.subscriptions, sub => sub.on("update", this._handleSubscriptionUpdate));
@@ -47,17 +47,20 @@ export default class Subscriber extends EventEmitter {
   /**
    * Update all subscriptions.
    *
-   * @return {Promise}
+   * @return {Promise.<Subscriber>}
    */
   updateAll() {
-    // To be in good manner, we should have one request per site at once.
-    const sitesToSubs = _.groupBy(this.subscriptions, "siteName");
-    const promises = _.map(sitesToSubs, (subs, siteName) => {
-      const logger = buildDebug(`Subscriber:${siteName}`);
-      logger(`Updating ${subs.length} subscriptions`);
-      return this._updateSequence(subs, logger);
+    return new Promise((resolve, reject) => {
+      // To be in good manner, we should have one request per site at once.
+      const sitesToSubs = _.groupBy(this.subscriptions, "siteName");
+      const promises = _.map(sitesToSubs, (subs, siteName) => {
+        const logger = buildDebug(`subscriber:${siteName}`);
+        return this._updateSequence(subs, logger);
+      });
+      Promise.all(promises)
+      .then(() => { resolve(this); })
+      .catch(reject);
     });
-    return Promise.all(promises);
   }
 
   /**
@@ -87,7 +90,7 @@ export default class Subscriber extends EventEmitter {
           if (queue.length === 0) {
             resolve();
           } else {
-            setTimeout(updateNext, this.updateInterval);
+            setTimeout(updateNext, this.fetchInterval);
           }
         })
         .catch((err) => {
