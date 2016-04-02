@@ -57,11 +57,11 @@ export default class Subscriber extends EventEmitter {
     return new Promise((resolve, reject) => {
       // To be in good manner, we should have one request per site at once.
       const sitesToSubs = _.groupBy(this.subscriptions, "siteName");
-      const promises = _.map(sitesToSubs, (subs, siteName) => {
+      const pros = _.map(sitesToSubs, (subs, siteName) => {
         const logger = debug(`subscriber:${siteName}`);
         return this._updateSequence(subs, logger);
       });
-      Promise.all(promises)
+      Promise.all(pros)
       .then(() => { resolve(this); })
       .catch(reject);
     });
