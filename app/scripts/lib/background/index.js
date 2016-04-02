@@ -5,38 +5,54 @@ import Subscription from "../subscriptions/subscription";
 import Publisher from "../publications/publisher";
 import Options from "../app/options";
 import ChromeAlarm from "../util/chrome-alarm";
-const debug = require("debug")("Background");
 
 export default function () {
-  const updateAlarm = new ChromeAlarm("update");
+  const logger = debug("background");
+  const subscriberAlarm = new ChromeAlarm("subscriber");
+  let appOptions;
   let subscriber;
   let publisher;
 
-  chrome.runtime.onStartup.addListener(initialize);
-  chrome.runtime.onInstalled.addListener(initialize);
+  logger("Initializing");
+  Options.load().then((opts) => {
+    logger("Loaded AppOptions successfully", opts.options);
+    appOptions = opts;
+    appOptions.on("update", handleAppOptionUpdate);
+    handleAppOptionUpdate();
+  });
 
-  function initialize() {
-    Options.load().then(options => {
-      loadOptions(options);
-      options.observeUpdate(loadOptions);
-    });
-  }
+  function handleAppOptionUpdate() {
+    logger("Updating with new AppOptions", appOptions.options);
 
-  function loadOptions(options) {
-    const sites = SiteFactory.createMap(options.siteSettings);
-    const subscriptions = _.map(options.subscriptionSettings, sub => new Subscription(sub));
+    const sites = SiteFactory.createMap(appOptions.siteSettings);
+    const subscriptions = _.map(appOptions.subscriptionSettings, sub => new Subscription(sub));
     subscriber = new Subscriber(sites, { subscriptions });
     publisher = new Publisher(sites);
-    updateAlarm.startImmediate({
-      periodInMinutes: options.updatePeriodMinutes,
+
+    subscriberAlarm.start({
+      when: appOptions.nextWillUpdateAt,
+      periodInMinutes: appOptions.updatePeriodMinutes,
     });
   }
 
-  updateAlarm.on("alarm", () => {
-    debug("Starting subscriber.updateAll");
+  subscriberAlarm.on("alarm", () => {
+    logger("Starting subscriber.updateAll");
+
     subscriber.updateAll().then(() => {
-      debug("Finished subscriber.updateAll successfully");
-    }).catch((e) => {
+      logger("Finished subscriber.updateAll successfully");
+
+      appOptions.lastUpdatedAt = _.now();
+      appOptions.subscriptionSettings =
+        _.invokeMap(subscriber.subscriptions, "toObject");
+
+      appOptions.save().then(() => {
+        logger("Saved updated AppOptions successfully", appOptions.options);
+      })
+      .catch((e) => {
+        console.error("Error on saving AppOptions:", e);
+      });
+    })
+    .catch((e) => {
       console.error("Error in subscriber.updateAll:", e);
     });
   });
@@ -44,6 +60,7 @@ export default function () {
   chrome.runtime.onMessageExternal.addListener(
     externalEvents.buildHandler(e => ({
       [e.PUBLISH_NOVEL](message, sender) {
+        logger("Publishing novel", "message:", message);
         return publisher && publisher.publishAll(message.pubs).then(() => {
           if (message.close && sender.tab) {
             chrome.tabs.remove(sender.tab.id);

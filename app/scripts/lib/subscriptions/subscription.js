@@ -52,4 +52,8 @@ export default class Subscription extends EventEmitter {
   get lastUpdatedAt() {
     return this.settings.lastUpdatedAt;
   }
+
+  toObject() {
+    return _.clone(this.settings);
+  }
 }

@@ -1,27 +1,39 @@
+import EventEmitter from "eventemitter3";
 import jsonSchemaDefaults from "json-schema-defaults";
 import cutil from "../util/chrome-util";
 import optionsSchema from "./options-schema.json";
 
-const STORAGE_OPTIONS_KEY = "options";
+const OPTION_KEYS = _.keys(optionsSchema.properties);
 const DEFAULT_OPTIONS = jsonSchemaDefaults(optionsSchema);
 const MINIMUM_UPDATE_PERIOD_MINUTES =
   optionsSchema.properties.updatePeriodMinutes.minimum;
 
-export default class Options {
+export default class Options extends EventEmitter {
   static load() {
     return (new Options()).load();
   }
 
   constructor(options) {
+    super();
     this.options = {};
     this.overwrite(options);
+    this._bindEvents();
   }
 
   overwrite(options) {
     _(options)
-    .pick(_.keys(DEFAULT_OPTIONS))
+    .pick(OPTION_KEYS)
     .defaultsDeep(DEFAULT_OPTIONS)
     .each((v, k) => { this[k] = v; });
+  }
+
+  _bindEvents() {
+    chrome.storage.onChanged.addListener((changes) => {
+      _(changes).pick(OPTION_KEYS).each(({ newValue }, key) => {
+        this[key] = newValue;
+      });
+      this.emit("update", this);
+    });
   }
 
   get schema() {
@@ -68,24 +80,19 @@ export default class Options {
 
   load() {
     return new Promise((resolve, reject) => {
-      cutil.syncGetValue(STORAGE_OPTIONS_KEY).then((options) => {
+      cutil.localGet(OPTION_KEYS).then((options) => {
         this.overwrite(options);
+        this.emit("update", this);
         resolve(this);
       }).catch(reject);
     });
   }
 
   save() {
-    return cutil.syncSetValue(STORAGE_OPTIONS_KEY, this.options);
-  }
-
-  observeUpdate(callback) {
-    chrome.storage.onChanged.addListener((changes) => {
-      if (changes[STORAGE_OPTIONS_KEY]) {
-        const { newValue } = changes[STORAGE_OPTIONS_KEY];
-        this.overwrite(newValue);
-        if (callback) callback(this);
-      }
+    return new Promise((resolve, reject) => {
+      cutil.localSet(this.options)
+      .then(() => { resolve(this); })
+      .catch(reject);
     });
   }
 }
