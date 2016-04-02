@@ -1,4 +1,5 @@
 import EventEmitter from "eventemitter3";
+import promises from "../util/promises";
 
 /**
  * Subscriber holds subscription list and update them from remote sites.
@@ -12,10 +13,14 @@ export default class Subscriber extends EventEmitter {
    */
   constructor(sites, settings) {
     super();
-    settings = settings || {};
     this.sites = sites;
-    this.subscriptions = settings.subscriptions || [];
-    this.fetchInterval = settings.fetchInterval || 1000;
+
+    settings = _.extend({
+      subscriptions: [],
+      fetchInterval: 1000,
+    }, settings);
+    this.subscriptions = settings.subscriptions;
+    this.fetchInterval = settings.fetchInterval;
 
     this._handleSubscriptionUpdate = this._handleSubscriptionUpdate.bind(this);
     _.each(this.subscriptions, sub => sub.on("update", this._handleSubscriptionUpdate));
@@ -66,39 +71,25 @@ export default class Subscriber extends EventEmitter {
    * Update subscriptions in sequence.
    *
    * @param {Subscription[]} subscriptions
+   * @param {Function} logger
    * @return {Promise}
    * @private
    */
   _updateSequence(subscriptions, logger) {
-    if (subscriptions.length === 0) return Promise.resolve();
-    return new Promise((resolve, reject) => {
-      logger(`Updating ${subscriptions.length} subscriptions`);
-      const queue = _.clone(subscriptions);
-      const updateNext = () => {
-        const sub = queue.shift();
+    logger(`Updating ${subscriptions.length} subscriptions`);
+    return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
+      const site = this.sites[sub.siteName];
+      if (!site) {
+        return Promise.reject(`Unknown site name: ${sub.siteName}`);
+      }
 
-        if (!this.sites[sub.siteName]) {
-          reject(`Unknown site name: ${sub.siteName}`);
-        }
-
-        logger(`Fetching data for ${sub.id}`);
-        this.sites[sub.siteName].getItem(sub.itemType, sub.itemId)
-        .then((item) => {
-          logger(`Fetched data for ${sub.id}:`, item);
-          sub.item = item;
-
-          if (queue.length === 0) {
-            resolve();
-          } else {
-            setTimeout(updateNext, this.fetchInterval);
-          }
-        })
-        .catch((err) => {
-          logger(`Error occurred for ${sub.id}:`, err);
-          reject(err);
-        });
-      };
-      updateNext();
+      logger(`Fetching data for ${sub.id}`);
+      return site.getItem(sub.itemType, sub.itemId).then((item) => {
+        logger(`Fetched data for ${sub.id}:`, item);
+        sub.item = item;
+      }).catch((err) => {
+        logger(`Error occurred for ${sub.id}:`, err);
+      });
     });
   }
 
