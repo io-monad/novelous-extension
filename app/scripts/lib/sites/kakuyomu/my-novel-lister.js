@@ -1,5 +1,7 @@
 import kakuyomuMeta from "./meta.json";
+import KakuyomuNovelFetcher from "./novel-fetcher";
 import scrape from "../../util/scrape";
+import promises from "../../util/promises";
 import url from "url";
 
 /**
@@ -23,25 +25,64 @@ import url from "url";
  */
 
 /**
+ * @typedef {Object} KakuyomuMyDetailedNovel
+ * @extends {KakuyomuMyNovel}
+ * @property {string}   color - Theme color of the novel in CSS expression.
+ * @property {?string}  catchphrase - Catchphrase (tagline) of the novel.
+ * @property {string}   description - Description of the novel.
+ * @property {string[]} keywords - Keywords of the novel.
+ * @property {?string}  genre - Genre of the novel.
+ * @property {boolean}  isFunFiction - `true` if the novel is a fun-fiction.
+ * @property {?string}  originalTitle - Title of the original work of the novel.
+ * @property {number}   createdAt - Timestamp when the first episode was published.
+ * @property {number}   updatedAt - Timestamp when the latest episode was published.
+ * @property {KakuyomuReview[]} reviews - Recent reviews on the novel.
+ */
+
+/**
  * Listing my own novels in Kakuyomu.
  */
 export default class KakuyomuMyNovelLister {
   /**
-   * @param {Object} [options] - Options.
-   * @param {string} [options.baseUrl] - A base URL of Kakuyomu.
+   * @param {Object}  [options] - Options.
+   * @param {string}  [options.baseUrl] - A base URL of Kakuyomu.
+   * @param {boolean} [options.fetchDetails] - `true` if fetching details from server.
+   * @param {number}  [options.fetchInterval] - Interval between fetches from server.
+   * @param {KakuyomuNovelFetcher} [options.novelFetcher]
    */
   constructor(options) {
-    options = options || {};
-    this.baseUrl = options.baseUrl || kakuyomuMeta.baseUrl;
+    options = _.extend({
+      baseUrl: kakuyomuMeta.baseUrl,
+      fetchDetails: false,
+      fetchInterval: 1000,
+    }, options);
+    this.baseUrl = options.baseUrl;
+    this.fetchDetails = options.fetchDetails;
+    this.fetchInterval = options.fetchInterval;
+    this.novelFetcher = options.novelFetcher || new KakuyomuNovelFetcher(options);
   }
 
   /**
-   * @return {Promise.<KakuyomuMyNovel[]>}
+   * @return {Promise.<Array<KakuyomuMyNovel|KakuyomuMyDetailedNovel>}
+   *     If `fetchDetails` is set to `true`, returns a Promise of an array of
+   *     `KakuyomuMyDetailedNovel` for public novels and
+   *     `KakuyomuMyNovel` for private novels.
+   *     It fetches details for each novel from Kakuyomu server.
+   *
+   *     If `fetchDetails` is set to `false`, returns a Promise of an array of
+   *     `KakuyomuMyNovel` only. It never fetches details from the server.
    */
   listNovels() {
     return new Promise((resolve, reject) => {
       scrape.fetch(this._getURL())
-      .then($ => { resolve(this._parsePage($)); })
+      .then($ => {
+        const novels = this._parsePage($);
+        if (this.fetchDetails) {
+          this._decorateNovels(novels).then(resolve, reject);
+        } else {
+          resolve(novels);
+        }
+      })
       .catch(reject);
     });
   }
@@ -86,6 +127,16 @@ export default class KakuyomuMyNovelLister {
         resolve($item.find(".works-workEpisodes-labelTitle:last").attr("href"));
 
       return novel;
+    });
+  }
+
+  _decorateNovels(novels) {
+    return promises.map(novels, { interval: this.fetchInterval }, (novel) => {
+      if (novel.isPrivate) {
+        return novel;
+      }
+      return this.novelFetcher.fetchNovel(novel.id)
+        .then((details) => _.extend(novel, details));
     });
   }
 }

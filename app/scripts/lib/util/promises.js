@@ -47,7 +47,7 @@ function map(arr, options, fn) {
     const queue = _.clone(arr);
     const next = () => {
       const item = queue.shift();
-      fn(item).then((value) => {
+      Promise.resolve(fn(item)).then((value) => {
         mapped.push(value);
         if (queue.length === 0) {
           resolve(mapped);

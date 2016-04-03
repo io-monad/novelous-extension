@@ -1,0 +1,91 @@
+[
+  {
+    "authorName": "入出もなど",
+    "authorUrl": "https://kakuyomu.jp/users/io-monad",
+    "authorUserId": "io-monad",
+    "editUrl": "https://kakuyomu.jp/my/works/1177354054880772094",
+    "id": "1177354054880772094",
+    "newEpisodeUrl": "https://kakuyomu.jp/my/works/1177354054880772094/episodes/new",
+    "isFinished": false,
+    "isPrivate": true,
+    "title": "test",
+    "url": "https://kakuyomu.jp/works/1177354054880772094",
+    "episodeCount": 0,
+    "characterCount": 0,
+    "starCount": 0,
+    "followerCount": 0,
+    "reviewCount": 0,
+    "latestEpisodeUrl": null
+  },
+  {
+    "authorName": "入出もなど",
+    "authorUrl": "https://kakuyomu.jp/users/io-monad",
+    "authorUserId": "io-monad",
+    "editUrl": "https://kakuyomu.jp/my/works/4852201425154996024",
+    "id": "4852201425154996024",
+    "newEpisodeUrl": "https://kakuyomu.jp/my/works/4852201425154996024/episodes/new",
+    "isFinished": false,
+    "isPrivate": false,
+    "title": "マギハッカーの異世界ベンチャー起業術",
+    "url": "https://kakuyomu.jp/works/4852201425154996024",
+    "episodeCount": 48,
+    "characterCount": 253106,
+    "starCount": 43,
+    "followerCount": 50,
+    "reviewCount": 17,
+    "latestEpisodeUrl": "https://kakuyomu.jp/works/4852201425154996024/episodes/1177354054880744904",
+    "color": "rgb(255, 94, 35)",
+    "catchphrase": "ファンタジー小説の皮をかぶって技術用語の解説を連発!?",
+    "description": "★★毎日18時に更新中！★★\n【ファンタジー小説の皮をかぶって技術用語の解説を連発!?／インターネットの仕組み、アルゴリズムの意味、電話の仕組み、プログラミングの歴史、詳しくない方にもわかりやすく解説しています】\n\n　ハッカーと呼ばれる存在に憧れてプログラマとなり、天才ハッカーとまで呼ばれるようになった白石番兵は、過酷なデスマーチ中に力尽きる。次に目を覚ますとそこは、プログラミング言語で作られた魔法のような「マギサービス」が人々の生活を支えている異世界だった。\n　スマートフォンのようなマギデバイス、プログラミング言語のようなマギランゲージ。知れば知るほど魔法の仕組みに魅了されていく番兵は、次々と非常識な魔法を生み出し周囲を驚かせ、世界の謎を解き明かしていく。\n　マギサービスのベンチャー企業立ち上げを目論む女社長に巻き込まれ、最高技術責任者（CTO）として会社を経営に関わりながら、番兵は魔法の達人「マギハッカー」を目指して今日も魔法のコードを書きまくる！\n\n// 「小説家になろう」へ同時投稿しています。",
+    "isFunFiction": false,
+    "originalTitle": null,
+    "genre": "ファンタジー",
+    "keywords": [
+      "異世界転生",
+      "魔法",
+      "プログラミング",
+      "会社経営",
+      "ビジネス",
+      "企業",
+      "成り上がり",
+      "万人向け"
+    ],
+    "createdAt": 1456058760000,
+    "updatedAt": 1459414800000,
+    "reviews": [
+      {
+        "url": "https://kakuyomu.jp/works/4852201425154996024/reviews/1177354054880356760",
+        "id": "1177354054880356760",
+        "title": "プログラマーはウイザード",
+        "rating": "★★★",
+        "authorName": "@runx",
+        "authorUrl": "https://kakuyomu.jp/users/runx",
+        "authorUserId": "runx",
+        "body": "異世界転生したプログラマーは実はウイザードだったのです。\nこのフレーズが似合う作品です。\n\nウイザード級ハッカーが異世界でその能力で、異世…",
+        "createdAt": 1456978438000
+      },
+      {
+        "url": "https://kakuyomu.jp/works/4852201425154996024/reviews/1177354054880348313",
+        "id": "1177354054880348313",
+        "title": "異世界にてプログラムで発明！",
+        "rating": "★★",
+        "authorName": "@Tenpaku",
+        "authorUrl": "https://kakuyomu.jp/users/Tenpaku",
+        "authorUserId": "Tenpaku",
+        "body": "全部読みました、面白かったです。\n\n電話作成に関してもうちょっと具体的な部分を読みたかったです。\n\n各家電やＰＣ・インターネット、ボロ儲け…",
+        "createdAt": 1456933418000
+      },
+      {
+        "url": "https://kakuyomu.jp/works/4852201425154996024/reviews/1177354054880344378",
+        "id": "1177354054880344378",
+        "title": "魔法のプログラミング物語",
+        "rating": "★★★",
+        "authorName": "平行宇宙船",
+        "authorUrl": "https://kakuyomu.jp/users/parallel_spacecraft",
+        "authorUserId": "parallel_spacecraft",
+        "body": "１９話まで読みました。\nとても面白いです。\nプログラマが主役の話らしく、自然に専門用語や比喩が入っていて、しかもそれがわかりやすい。\nプロ…",
+        "createdAt": 1456926009000
+      }
+    ]
+  }
+]
