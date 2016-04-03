@@ -1,36 +1,36 @@
 import EventEmitter from "eventemitter3";
 import jsonSchemaDefaults from "json-schema-defaults";
 import cutil from "../util/chrome-util";
-import appOptionsSchema from "./app-options-schema.json";
+import appDataSchema from "./app-data-schema.json";
 import SiteFactory from "../sites/site-factory";
 import Subscription from "../subscriptions/subscription";
 
-const OPTION_KEYS = _.keys(appOptionsSchema.properties);
-const DEFAULT_OPTIONS = jsonSchemaDefaults(appOptionsSchema);
-const PROP_SCHEMA = appOptionsSchema.properties;
+const PROP_KEYS = _.keys(appDataSchema.properties);
+const DEFAULTS = jsonSchemaDefaults(appDataSchema);
+const PROP_SCHEMA = appDataSchema.properties;
 
-export default class AppOptions extends EventEmitter {
+export default class AppData extends EventEmitter {
   static load() {
-    return (new AppOptions()).load();
+    return (new AppData()).load();
   }
 
-  constructor(options) {
+  constructor(data) {
     super();
-    this.options = {};
-    this.overwrite(options);
+    this.data = {};
+    this.overwrite(data);
     this._bindEvents();
   }
 
-  overwrite(options) {
-    _(options)
-    .pick(OPTION_KEYS)
-    .defaults(DEFAULT_OPTIONS)
+  overwrite(data) {
+    _(data)
+    .pick(PROP_KEYS)
+    .defaults(DEFAULTS)
     .each((v, k) => { this[k] = v; });
   }
 
   _bindEvents() {
     chrome.storage.onChanged.addListener((changes) => {
-      _(changes).pick(OPTION_KEYS).each(({ newValue }, key) => {
+      _(changes).pick(PROP_KEYS).each(({ newValue }, key) => {
         this[key] = newValue;
       });
       this.emit("update", this);
@@ -38,26 +38,26 @@ export default class AppOptions extends EventEmitter {
   }
 
   get schema() {
-    return appOptionsSchema;
+    return appDataSchema;
   }
 
   get updatePeriodMinutes() {
-    return this.options.updatePeriodMinutes;
+    return this.data.updatePeriodMinutes;
   }
   set updatePeriodMinutes(minutes) {
     minutes = parseInt(minutes, 10);
     if (isNaN(minutes) || minutes < PROP_SCHEMA.updatePeriodMinutes.minimum) {
-      this.options.updatePeriodMinutes = DEFAULT_OPTIONS.updatePeriodMinutes;
+      this.data.updatePeriodMinutes = DEFAULTS.updatePeriodMinutes;
     } else {
-      this.options.updatePeriodMinutes = minutes;
+      this.data.updatePeriodMinutes = minutes;
     }
   }
 
   get lastUpdatedAt() {
-    return this.options.lastUpdatedAt;
+    return this.data.lastUpdatedAt;
   }
   set lastUpdatedAt(time) {
-    this.options.lastUpdatedAt = parseInt(time, 10) || null;
+    this.data.lastUpdatedAt = parseInt(time, 10) || null;
   }
 
   get nextWillUpdateAt() {
@@ -66,10 +66,10 @@ export default class AppOptions extends EventEmitter {
   }
 
   get siteSettings() {
-    return this.options.siteSettings;
+    return this.data.siteSettings;
   }
   set siteSettings(siteSettings) {
-    this.options.siteSettings = _.defaultsDeep(siteSettings, DEFAULT_OPTIONS.siteSettings);
+    this.data.siteSettings = _.defaultsDeep(siteSettings, DEFAULTS.siteSettings);
     this._sites = null;
   }
   get sites() {
@@ -80,14 +80,14 @@ export default class AppOptions extends EventEmitter {
   }
 
   get subscriptionSettings() {
-    return this.options.subscriptionSettings;
+    return this.data.subscriptionSettings;
   }
   set subscriptionSettings(settings) {
     settings = settings || [];
 
     // Fill missing keys with default values
     settings = _.uniqWith(
-      settings.concat(DEFAULT_OPTIONS.subscriptionSettings),
+      settings.concat(DEFAULTS.subscriptionSettings),
       (a, b) => (
         a.siteName === b.siteName &&
         a.itemType === b.itemType &&
@@ -95,7 +95,7 @@ export default class AppOptions extends EventEmitter {
       )
     );
 
-    this.options.subscriptionSettings = settings;
+    this.data.subscriptionSettings = settings;
     this._subscriptions = null;
   }
   get subscriptions() {
@@ -110,8 +110,8 @@ export default class AppOptions extends EventEmitter {
 
   load() {
     return new Promise((resolve, reject) => {
-      cutil.localGet(OPTION_KEYS).then((options) => {
-        this.overwrite(options);
+      cutil.localGet(PROP_KEYS).then((data) => {
+        this.overwrite(data);
         this.emit("update", this);
         resolve(this);
       }).catch(reject);
@@ -120,7 +120,7 @@ export default class AppOptions extends EventEmitter {
 
   save() {
     return new Promise((resolve, reject) => {
-      cutil.localSet(this.options)
+      cutil.localSet(this.data)
       .then(() => { resolve(this); })
       .catch(reject);
     });

@@ -1,35 +1,35 @@
 import externalEvents from "./external-events";
 import Subscriber from "../subscriptions/subscriber";
 import Publisher from "../publications/publisher";
-import AppOptions from "../app/app-options";
+import AppData from "../app/app-data";
 import ChromeAlarm from "../util/chrome-alarm";
 
 export default function () {
   const logger = debug("background");
   const subscriberAlarm = new ChromeAlarm("subscriber");
-  let appOptions;
+  let appData;
   let subscriber;
   let publisher;
 
   logger("Initializing");
-  AppOptions.load().then((opts) => {
-    logger("Loaded AppOptions successfully", opts.options);
-    appOptions = opts;
-    appOptions.on("update", handleAppOptionUpdate);
-    handleAppOptionUpdate();
+  AppData.load().then((loaded) => {
+    logger("Loaded AppData successfully", loaded.data);
+    appData = loaded;
+    appData.on("update", handleAppDataUpdate);
+    handleAppDataUpdate();
   });
 
-  function handleAppOptionUpdate() {
-    logger("Updating with new AppOptions", appOptions.options);
+  function handleAppDataUpdate() {
+    logger("Updating with new AppData", appData.data);
 
-    subscriber = new Subscriber(appOptions.sites, {
-      subscriptions: appOptions.subscriptions,
+    subscriber = new Subscriber(appData.sites, {
+      subscriptions: appData.subscriptions,
     });
-    publisher = new Publisher(appOptions.sites);
+    publisher = new Publisher(appData.sites);
 
     subscriberAlarm.start({
-      when: appOptions.nextWillUpdateAt,
-      periodInMinutes: appOptions.updatePeriodMinutes,
+      when: appData.nextWillUpdateAt,
+      periodInMinutes: appData.updatePeriodMinutes,
     });
   }
 
@@ -39,14 +39,14 @@ export default function () {
     subscriber.updateAll().then(() => {
       logger("Finished subscriber.updateAll successfully");
 
-      appOptions.lastUpdatedAt = _.now();
-      appOptions.subscriptions = subscriber.subscriptions;
+      appData.lastUpdatedAt = _.now();
+      appData.subscriptions = subscriber.subscriptions;
 
-      appOptions.save().then(() => {
-        logger("Saved updated AppOptions successfully", appOptions.options);
+      appData.save().then(() => {
+        logger("Saved updated AppData successfully", appData.data);
       })
       .catch((e) => {
-        console.error("Error on saving AppOptions:", e);
+        console.error("Error on saving AppData:", e);
       });
     })
     .catch((e) => {
