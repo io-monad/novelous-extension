@@ -3,8 +3,8 @@ import scrape from "../../util/scrape";
 
 /**
  * @typedef {Object} NarouMyReview
+ * @property {string}  id - ID of the review.
  * @property {string}  title - Title of the review.
- * @property {string}  url - URL of the review.
  * @property {string}  body - Body of the review.
  * @property {string}  novelTitle - Title of the reviewed novel.
  * @property {string}  novelUrl - URL of the reviewed novel.
@@ -45,8 +45,9 @@ export default class NarouMyReviewLister {
     return _.map($(".novelcomment_list"), (item) => {
       const $item = $(item);
       const review = {};
+      const deleteUrl = $item.find(".novelcomment_info > a.delete").attr("href");
+      review.id = deleteUrl.match(/reviewid\/([^\/]+)/)[1];
       review.title = $.text($item.find(".review_title"));
-      review.url = $item.find(".review_title > a").attr("href");
       review.body = $.text($item.find(".novelcomment"));
       review.novelTitle = $.text($item.find(".novelmain_info"));
       review.novelUrl = $item.find(".novelmain_info > a").attr("href");

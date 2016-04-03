@@ -3,6 +3,7 @@ import scrape from "../../util/scrape";
 
 /**
  * @typedef {Object} NarouMyComment
+ * @property {string}  id - ID of the comment.
  * @property {string}  body - Body of the comment.
  * @property {string}  replyUrl - URL of the reply form to the comment.
  * @property {string}  novelTitle - Title of the commented novel.
@@ -50,6 +51,7 @@ export default class NarouMyCommentLister {
       comment.novelTitle = $.text($item.find(".novelmain_info"));
       comment.novelUrl = $item.find(".novelmain_info > a").attr("href");
       comment.novelCommentsUrl = $item.find(".novel_title > a").attr("href");
+      comment.id = comment.replyUrl.match(/kanrino\/([^\/]+)/)[1];
 
       const $link = $item.find(".novelcomment_info > a:not(.delete)");
       if ($link.length === 0) {

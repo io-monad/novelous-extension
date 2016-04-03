@@ -2,6 +2,7 @@
   {
     "title": "テストのメッセージ1",
     "url": "http://syosetu.com/messagebox/view/meskey/99999999/",
+    "id": "99999999",
     "userName": "テストユーザー1",
     "userUrl": "http://mypage.syosetu.com/99999999/",
     "createdAt": 1459481640000
@@ -9,6 +10,7 @@
   {
     "title": "テストのメッセージ2",
     "url": "http://syosetu.com/messagebox/view/meskey/99999998/",
+    "id": "99999998",
     "userName": "テストユーザー2",
     "userUrl": "http://mypage.syosetu.com/99999998/",
     "createdAt": 1459477320000
@@ -16,6 +18,7 @@
   {
     "title": "テストのメッセージ3",
     "url": "http://syosetu.com/messagebox/view/meskey/99999997/",
+    "id": "99999997",
     "userName": "テストユーザー3",
     "userUrl": "http://mypage.syosetu.com/99999997/",
     "createdAt": 1459437060000
