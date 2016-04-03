@@ -7,23 +7,44 @@ import promises from "../util/promises";
 export default class Subscriber extends EventEmitter {
   /**
    * @param {Object.<string, Site>} sites - A map of site name and Site object.
+   * @param {Subscription[]} subscriptions
    * @param {Object} settings - Settings.
-   * @param {Subscription[]} settings.subscriptions
    * @param {number} settings.fetchInterval
    */
-  constructor(sites, settings) {
+  constructor(sites, subscriptions, settings) {
     super();
-    this.sites = sites;
-
     settings = _.extend({
-      subscriptions: [],
       fetchInterval: 1000,
     }, settings);
-    this.subscriptions = settings.subscriptions;
-    this.fetchInterval = settings.fetchInterval;
 
     this._handleSubscriptionUpdate = this._handleSubscriptionUpdate.bind(this);
-    _.each(this.subscriptions, sub => sub.on("update", this._handleSubscriptionUpdate));
+    this.sites = sites;
+    this.subscriptions = subscriptions;
+    this.fetchInterval = settings.fetchInterval;
+  }
+
+  /**
+   * @return {Subscription[]}
+   */
+  get subscriptions() {
+    return this._subscriptions;
+  }
+
+  /**
+   * @param {Subscription[]} subscriptions
+   */
+  set subscriptions(subscriptions) {
+    if (subscriptions === this._subscriptions) return;
+    if (this._subscriptions) {
+      _.each(this._subscriptions, sub => {
+        this._unbindEventsFromSubscription(sub);
+      });
+    }
+    this._subscriptions = _.clone(subscriptions || []);
+    _.each(this._subscriptions, sub => {
+      this._bindEventsToSubscription(sub);
+    });
+    this.emit("update");
   }
 
   /**
@@ -33,7 +54,7 @@ export default class Subscriber extends EventEmitter {
    */
   subscribe(subscription) {
     this.subscriptions.push(subscription);
-    subscription.on("update", this._handleSubscriptionUpdate);
+    this._bindEventsToSubscription(subscription);
     this.emit("update");
   }
 
@@ -43,9 +64,18 @@ export default class Subscriber extends EventEmitter {
    * @param {Subscription} subscription
    */
   unsubscribe(subscription) {
-    subscription.removeListener("update", this._handleSubscriptionUpdate);
+    this._unbindEventsFromSubscription(subscription);
     _.pull(this.subscriptions, subscription);
     this.emit("update");
+  }
+
+  _bindEventsToSubscription(subscription) {
+    subscription.removeListener("update", this._handleSubscriptionUpdate);
+    subscription.on("update", this._handleSubscriptionUpdate);
+  }
+
+  _unbindEventsFromSubscription(subscription) {
+    subscription.removeListener("update", this._handleSubscriptionUpdate);
   }
 
   /**

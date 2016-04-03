@@ -1,69 +1,105 @@
 import externalEvents from "./external-events";
 import Subscriber from "../subscriptions/subscriber";
+import Watcher from "../watchers/watcher";
 import Publisher from "../publications/publisher";
 import AppData from "../app/app-data";
 import ChromeAlarm from "../util/chrome-alarm";
+import Badge from "./badge";
 
 export default function () {
   const logger = debug("background");
   const subscriberAlarm = new ChromeAlarm("subscriber");
-  let appData;
+  const badge = new Badge();
+  const appData = new AppData();
   let subscriber;
+  let watcher;
   let publisher;
 
   logger("Initializing");
-  AppData.load().then((loaded) => {
-    logger("Loaded AppData successfully", loaded.data);
-    appData = loaded;
-    appData.on("update", handleAppDataUpdate);
-    handleAppDataUpdate();
+  const initialized = new Promise((resolve, reject) => {
+    appData.on("update", () => {
+      setupPublisher();
+      setupSubscriber();
+      setupWatcher();
+
+      subscriberAlarm.start({
+        when: appData.nextWillUpdateAt,
+        periodInMinutes: appData.updatePeriodMinutes,
+      });
+    });
+    appData.load().then(resolve, reject);
+  })
+  .catch((e) => {
+    console.error("Error while initialization", e);
   });
 
-  function handleAppDataUpdate() {
-    logger("Updating with new AppData", appData.data);
-
-    subscriber = new Subscriber(appData.sites, {
-      subscriptions: appData.subscriptions,
-    });
-    publisher = new Publisher(appData.sites);
-
-    subscriberAlarm.start({
-      when: appData.nextWillUpdateAt,
-      periodInMinutes: appData.updatePeriodMinutes,
-    });
+  function setupPublisher() {
+    if (publisher) {
+      publisher.sites = appData.sites;
+    } else {
+      publisher = new Publisher(appData.sites);
+    }
   }
 
-  subscriberAlarm.on("alarm", () => {
+  function setupSubscriber() {
+    if (subscriber) {
+      subscriber.subscriptions = appData.subscriptions;
+    } else {
+      subscriber = new Subscriber(appData.sites, appData.subscriptions);
+
+      subscriber.on("updateSubscription", (subscription) => {
+        watcher.notifyUpdate(subscription.id, subscription.item);
+      });
+    }
+  }
+
+  function setupWatcher() {
+    if (watcher) {
+      watcher.settings = appData.watchSettings;
+    } else {
+      watcher = new Watcher(appData.watchSettings);
+
+      const saveWatcher = _.debounce(() => {
+        appData.watchSettings = watcher.settings;
+        appData.save(["watchSettings"]);
+      }, 3000);
+      watcher.on("update", ({ id, count }) => {
+        badge.setCount(id, count);
+        saveWatcher();
+      });
+      watcher.on("seen", () => {
+        badge.clear();
+        saveWatcher();
+      });
+    }
+  }
+
+  subscriberAlarm.on("alarm", () => initialized.then(() => {
     logger("Starting subscriber.updateAll");
 
-    subscriber.updateAll().then(() => {
+    subscriber.updateAll()
+    .then(() => {
       logger("Finished subscriber.updateAll successfully");
 
       appData.lastUpdatedAt = _.now();
       appData.subscriptions = subscriber.subscriptions;
-
-      appData.save().then(() => {
-        logger("Saved updated AppData successfully", appData.data);
-      })
-      .catch((e) => {
-        console.error("Error on saving AppData:", e);
-      });
+      appData.save(["lastUpdatedAt", "subscriptions"]);
     })
     .catch((e) => {
       console.error("Error in subscriber.updateAll:", e);
     });
-  });
+  }));
 
   chrome.runtime.onMessageExternal.addListener(
     externalEvents.buildHandler(e => ({
-      [e.PUBLISH_NOVEL](message, sender) {
+      [e.PUBLISH_NOVEL]: (message, sender) => initialized.then(() => {
         logger("Publishing novel", "message:", message);
-        return publisher && publisher.publishAll(message.pubs).then(() => {
+        return publisher.publishAll(message.pubs).then(() => {
           if (message.close && sender.tab) {
             chrome.tabs.remove(sender.tab.id);
           }
         });
-      },
+      }),
     }))
   );
 }

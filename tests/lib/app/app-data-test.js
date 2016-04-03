@@ -5,6 +5,7 @@ import appDataSchema from "../../../app/scripts/lib/app/app-data-schema.json";
 import Site from "../../../app/scripts/lib/sites/site";
 import Subscription from "../../../app/scripts/lib/subscriptions/subscription";
 
+const PROP_KEYS = _.keys(appDataSchema.properties);
 const DEFAULTS = jsonSchemaDefaults(appDataSchema);
 
 test.beforeEach(t => {
@@ -101,9 +102,15 @@ test("#subscriptions setter updates subscriptionSettings but keeps defaults", t 
 
 test("#subscriptions setter not duplicating defaults", t => {
   const { appData } = t.context;
-  const newSub = new Subscription({ siteName: "narou", itemType: "myNovels" });
+  const newSub = new Subscription(DEFAULTS.subscriptionSettings[0]);
   appData.subscriptions = [newSub];
   t.is(appData.subscriptions.length, DEFAULTS.subscriptionSettings.length);
+});
+
+test("#watchSettings returns default value", t => {
+  const { appData } = t.context;
+  t.ok(_.isArray(appData.watchSettings));
+  t.same(appData.watchSettings, DEFAULTS.watchSettings);
 });
 
 test.serial(".load returns appData Promise", t => {
@@ -124,9 +131,10 @@ test.serial("#load returns appData Promise", t => {
 test.serial("#load emits update event", t => {
   const { appData } = t.context;
   chrome.storage.local.get.callsArgWithAsync(1, {});
-  t.plan(1);
-  appData.on("update", (opts) => {
+  t.plan(2);
+  appData.on("update", (opts, keys) => {
     t.is(opts, appData);
+    t.same(keys, PROP_KEYS);
   });
   return appData.load();
 });
@@ -142,10 +150,11 @@ test.serial("#save saves values into storage", t => {
 
 test.serial.cb("emits update event for storage change", t => {
   const { appData } = t.context;
-  t.plan(2);
-  appData.on("update", (opts) => {
+  t.plan(3);
+  appData.on("update", (opts, keys) => {
     t.ok(opts instanceof AppData);
     t.is(opts.updatePeriodMinutes, 20);
+    t.same(keys, ["updatePeriodMinutes"]);
     t.end();
   });
   chrome.storage.onChanged.trigger(
@@ -156,11 +165,12 @@ test.serial.cb("emits update event for storage change", t => {
 
 test.serial.cb("uses default value if storage value is undefined", t => {
   const { appData } = t.context;
-  t.plan(3);
-  appData.on("update", (opts) => {
+  t.plan(4);
+  appData.on("update", (opts, keys) => {
     t.ok(opts instanceof AppData);
-    t.is(opts.updatePeriodMinutes, 15);
+    t.is(opts.updatePeriodMinutes, DEFAULTS.updatePeriodMinutes);
     t.ok(_.isObject(opts.siteSettings));
+    t.same(keys, ["updatePeriodMinutes", "siteSettings"]);
     t.end();
   });
   chrome.storage.onChanged.trigger(

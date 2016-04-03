@@ -4,7 +4,7 @@ import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 
 test.beforeEach(t => {
   const sites = SiteFactory.createMap({ narou: true, kakuyomu: true });
-  t.context.subscriber = new Subscriber(sites, { fetchInterval: 0 });
+  t.context.subscriber = new Subscriber(sites, [], { fetchInterval: 0 });
 });
 
 test("new Subscriber", t => {

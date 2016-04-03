@@ -5,7 +5,8 @@
   "required": [
     "updatePeriodMinutes",
     "siteSettings",
-    "subscriptionSettings"
+    "subscriptionSettings",
+    "watchSettings"
   ],
   "properties": {
     "updatePeriodMinutes": {
@@ -25,28 +26,16 @@
         "narou": {
           "title": "小説家になろう",
           "oneOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "object",
-              "properties": {
-              }
-            }
+            { "type": "boolean" },
+            { "type": "object" }
           ],
           "default": true
         },
         "kakuyomu": {
           "title": "カクヨム",
           "oneOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "object",
-              "properties": {
-              }
-            }
+            { "type": "boolean" },
+            { "type": "object" }
           ],
           "default": true
         }
@@ -56,11 +45,10 @@
       "title": "subscriptionSettings",
       "type": "array",
       "default": [
-        { "siteName": "narou", "itemType": "myNovels" },
-        { "siteName": "narou", "itemType": "myMessages" },
-        { "siteName": "narou", "itemType": "myComments" },
-        { "siteName": "narou", "itemType": "myReviews" },
-        { "siteName": "kakuyomu", "itemType": "myNovels" }
+        { "siteName": "narou", "itemType": "myMessages", "enabled": true },
+        { "siteName": "narou", "itemType": "myComments", "enabled": true },
+        { "siteName": "narou", "itemType": "myReviews", "enabled": true },
+        { "siteName": "kakuyomu", "itemType": "myNovels", "enabled": true }
       ],
       "additionalItems": false,
       "items": {
@@ -73,27 +61,14 @@
           "enabled"
         ],
         "properties": {
-          "siteName": {
-            "type": "string",
-            "enum": ["narou", "kakuyomu"]
-          },
-          "itemType": {
-            "type": "string",
-            "minLength": 1
-          },
-          "itemId": {
-            "type": "string",
-            "minLength": 1
-          },
-          "item": {
-            "oneOf": [
-              { "type": "object" },
-              { "type": "null" }
-            ]
-          },
+          "siteName": { "$ref": "#/definitions/siteName" },
+          "itemType": { "$ref": "#/definitions/itemType" },
+          "itemId": { "$ref": "#/definitions/itemId" },
           "enabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": true
           },
+          "item": {},
           "lastUpdatedAt": {
             "oneOf": [
               { "type": "integer" },
@@ -102,6 +77,51 @@
           }
         }
       }
+    },
+    "watchSettings": {
+      "type": "array",
+      "default": [
+        { "id": "narou-myMessages", "valueType": "set", "valueKey": "*.id" },
+        { "id": "narou-myComments", "valueType": "set", "valueKey": "*.id" },
+        { "id": "narou-myReviews", "valueType": "set", "valueKey": "*.id" },
+        { "id": "kakuyomu-myNovels", "valueType": "set", "valueKey": "*.reviews.*.id" }
+      ],
+      "additionalItems": false,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "valueType"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "valueType": {
+            "enum": ["any", "number", "set", "count"],
+            "default": "any"
+          },
+          "valueKey": {
+            "type": "string",
+            "pattern": "^(\\*|[a-zA-Z0-9_]+)(\\.(\\*|[a-zA-Z0-9_]+))*$"
+          },
+          "seenValue": {},
+          "lastValue": {}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "siteName": {
+      "type": "string",
+      "enum": ["narou", "kakuyomu"]
+    },
+    "itemType": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_]+$"
+    },
+    "itemId": {
+      "type": "string",
+      "minLength": 1
     }
   }
 }

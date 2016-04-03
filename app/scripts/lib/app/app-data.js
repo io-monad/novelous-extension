@@ -4,6 +4,7 @@ import cutil from "../util/chrome-util";
 import appDataSchema from "./app-data-schema.json";
 import SiteFactory from "../sites/site-factory";
 import Subscription from "../subscriptions/subscription";
+const logger = debug("app-data");
 
 const PROP_KEYS = _.keys(appDataSchema.properties);
 const DEFAULTS = jsonSchemaDefaults(appDataSchema);
@@ -30,10 +31,14 @@ export default class AppData extends EventEmitter {
 
   _bindEvents() {
     chrome.storage.onChanged.addListener((changes) => {
-      _(changes).pick(PROP_KEYS).each(({ newValue }, key) => {
-        this[key] = newValue;
-      });
-      this.emit("update", this);
+      const changedValues = _(changes).pick(PROP_KEYS).mapValues("newValue").value();
+      const changedKeys = _.keys(changedValues);
+      if (changedKeys.length > 0) {
+        _.extend(this, changedValues);
+
+        logger("Updated by storage change successfully", this.data, changedKeys);
+        this.emit("update", this, changedKeys);
+      }
     });
   }
 
@@ -108,21 +113,28 @@ export default class AppData extends EventEmitter {
     this.subscriptionSettings = _.invokeMap(subscriptions, "toObject");
   }
 
+  get watchSettings() {
+    return this.data.watchSettings;
+  }
+  set watchSettings(settings) {
+    this.data.watchSettings = settings || DEFAULTS.watchSettings;
+  }
+
   load() {
-    return new Promise((resolve, reject) => {
-      cutil.localGet(PROP_KEYS).then((data) => {
-        this.overwrite(data);
-        this.emit("update", this);
-        resolve(this);
-      }).catch(reject);
+    return cutil.localGet(PROP_KEYS).then((data) => {
+      this.overwrite(data);
+      logger("Loaded successfully", this.data);
+
+      this.emit("update", this, PROP_KEYS);
+      return this;
     });
   }
 
-  save() {
-    return new Promise((resolve, reject) => {
-      cutil.localSet(this.data)
-      .then(() => { resolve(this); })
-      .catch(reject);
+  save(keys) {
+    const savedData = keys ? _.pick(this.data, keys) : this.data;
+    return cutil.localSet(savedData).then(() => {
+      logger("Saved successfully", keys, this.data);
+      return this;
     });
   }
 }
