@@ -26,6 +26,20 @@ import scrape from "../../util/scrape";
  * @property {number}   starCount - Count of stars on the novel.
  * @property {number}   createdAt - Timestamp when the first episode was published.
  * @property {number}   updatedAt - Timestamp when the latest episode was published.
+ * @property {KakuyomuReview[]} reviews - Recent reviews on the novel.
+ */
+
+/**
+ * @typedef {Object} KakuyomuReview
+ * @property {string}   id - ID of the review.
+ * @property {string}   title - Title of the review.
+ * @property {string}   url - URL of the review.
+ * @property {string}   rating - Rating of the review. A string of stars (★).
+ * @property {string}   authorUserId - User ID of the author of the review.
+ * @property {string}   authorName - Name of the author of the review.
+ * @property {string}   authorUrl - URL of the author's page.
+ * @property {string}   body - Body of the review.
+ * @property {number}   createdAt - Timestamp when the review was posted.
  */
 
 /**
@@ -93,6 +107,21 @@ export default class KakuyomuNovelFetcher {
     novel.updatedAt = $.localTime(data["最終更新日"]);
     novel.reviewCount = $.number(data["おすすめレビュー"]);
     novel.followerCount = $.number(data["小説フォロー数"]);
+
+    novel.reviews = _.map($("#reviews [itemscope][itemtype$='/Review']"), (item) => {
+      const $props = $(item).find("[itemprop]");
+      const review = {};
+      review.url = resolve($props.filter("[itemprop=url]").attr("href"));
+      review.id = review.url.match(/reviews\/([^\/]+)/)[1];
+      review.title = $.text($props.filter("[itemprop=name]"));
+      review.rating = $.text($props.filter("[itemprop=reviewRating]").find("span:first"));
+      review.authorName = $.text($props.filter("[itemprop=author]"));
+      review.authorUrl = resolve($props.filter("[itemprop=author]").parents("a").attr("href"));
+      review.authorUserId = review.authorUrl.match(/users\/([^\/]+)/)[1];
+      review.body = $.text($props.filter("[itemprop=reviewBody]").find("a").remove().end());
+      review.createdAt = Date.parse($props.filter("[itemprop=datePublished]").attr("datetime"));
+      return review;
+    });
 
     return novel;
   }

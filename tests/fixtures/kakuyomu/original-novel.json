@@ -29,5 +29,40 @@
   "createdAt": 1456058760000,
   "updatedAt": 1459414800000,
   "reviewCount": 17,
-  "followerCount": 50
+  "followerCount": 50,
+  "reviews": [
+    {
+      "url": "https://kakuyomu.jp/works/4852201425154996024/reviews/1177354054880356760",
+      "id": "1177354054880356760",
+      "title": "プログラマーはウイザード",
+      "rating": "★★★",
+      "authorName": "@runx",
+      "authorUrl": "https://kakuyomu.jp/users/runx",
+      "authorUserId": "runx",
+      "body": "異世界転生したプログラマーは実はウイザードだったのです。\nこのフレーズが似合う作品です。\n\nウイザード級ハッカーが異世界でその能力で、異世…",
+      "createdAt": 1456978438000
+    },
+    {
+      "url": "https://kakuyomu.jp/works/4852201425154996024/reviews/1177354054880348313",
+      "id": "1177354054880348313",
+      "title": "異世界にてプログラムで発明！",
+      "rating": "★★",
+      "authorName": "@Tenpaku",
+      "authorUrl": "https://kakuyomu.jp/users/Tenpaku",
+      "authorUserId": "Tenpaku",
+      "body": "全部読みました、面白かったです。\n\n電話作成に関してもうちょっと具体的な部分を読みたかったです。\n\n各家電やＰＣ・インターネット、ボロ儲け…",
+      "createdAt": 1456933418000
+    },
+    {
+      "url": "https://kakuyomu.jp/works/4852201425154996024/reviews/1177354054880344378",
+      "id": "1177354054880344378",
+      "title": "魔法のプログラミング物語",
+      "rating": "★★★",
+      "authorName": "平行宇宙船",
+      "authorUrl": "https://kakuyomu.jp/users/parallel_spacecraft",
+      "authorUserId": "parallel_spacecraft",
+      "body": "１９話まで読みました。\nとても面白いです。\nプログラマが主役の話らしく、自然に専門用語や比喩が入っていて、しかもそれがわかりやすい。\nプロ…",
+      "createdAt": 1456926009000
+    }
+  ]
 }
