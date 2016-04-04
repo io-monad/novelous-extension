@@ -12,8 +12,8 @@
     "updatePeriodMinutes": {
       "title": "updatePeriodMinutes",
       "type": "integer",
-      "minimum": 5,
-      "default": 15
+      "minimum": 15,
+      "default": 30
     },
     "lastUpdatedAt": {
       "type": "integer"
