@@ -8,12 +8,14 @@ import bluebird from "bluebird";
 import requireDir from "require-dir";
 import sourceMapSupport from "source-map-support";
 import fixture from "./test-utils/fixture-loader";
-import jsdom from "./test-utils/init-jsdom";
+import fakeSererRequest from "./test-utils/fake-server-request";
+import fakeServerConf from "./fake-server.conf";
 import FactoryAdapter from "./test-utils/factory-adapter";
 
 sourceMapSupport.install();
 requireDir("./factories");
 
+global.XMLHttpRequest = fakeSererRequest(fakeServerConf);
 global.chrome = chrome;
 global._ = lodash;
 global.debug = debug;
@@ -30,7 +32,6 @@ module.exports = {
   test,
   sinon,
   sinonsb,
-  jsdom,
   fixture,
   factory: factory.promisify(bluebird),
 };

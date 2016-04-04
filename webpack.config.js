@@ -33,7 +33,6 @@ module.exports = function webpackConfig(opts) {
         {
           test: /\.json$/,
           loader: "json",
-          exclude: /node_modules/,
         },
       ],
     },

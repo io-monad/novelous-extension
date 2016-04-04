@@ -1,4 +1,5 @@
 import cheerio from "cheerio";
+import request from "./request";
 
 /**
  * Simple scraping utility using cheerio
@@ -10,17 +11,13 @@ export default function scrape(html) {
 }
 
 scrape.fetch = (url) => {
-  return new Promise((resolve, reject) => {
-    jQuery.ajax(url)
-    .done((html) => resolve(scrape(html)))
-    .fail((xhr, status) => reject(status));
-  });
+  return request(url).then(scrape);
 };
 
 function stringify(str) {
   if (str && typeof str.text === "function") str = str.text();
   if (_.isElement(str) || (_.isObject(str) && str.type === "tag")) {
-    str = $(str).text();
+    str = cheerio(str).text();
   }
   return _.toString(str);
 }

@@ -1,5 +1,6 @@
 import narouMeta from "./meta.json";
 import querystring from "querystring";
+import request from "../../util/request";
 
 /**
  * @typedef {Object} NarouNovel
@@ -87,11 +88,8 @@ export default class NarouNovelAPI {
    * @return {Promise.<?NarouNovel>}
    */
   queryOne(query) {
-    return new Promise((resolve, reject) => {
-      this.query(_.extend({ lim: 1 }, query))
-      .then((data) => { resolve(data.items[0] || null); })
-      .catch(reject);
-    });
+    return this.query(_.extend({ lim: 1 }, query))
+      .then(data => data.items[0] || null);
   }
 
   /**
@@ -99,11 +97,7 @@ export default class NarouNovelAPI {
    * @return {Promise.<NarouNovel[]>}
    */
   queryMany(query) {
-    return new Promise((resolve, reject) => {
-      this.query(query)
-      .then((data) => { resolve(data.items); })
-      .catch(reject);
-    });
+    return this.query(query).then(data => data.items);
   }
 
   /**
@@ -111,16 +105,10 @@ export default class NarouNovelAPI {
    * @return {Promise.<NarouNovelQueryResult>}
    */
   query(query) {
-    return new Promise((resolve, reject) => {
-      query = _.extend({ out: "json" }, query);
-      $.getJSON(this._getURL(query))
-      .done(response => {
-        resolve(this._parseResponse(response, query));
-      })
-      .fail((xhr, status, error) => {
-        reject(error || status);
-      });
-    });
+    query = _.extend({ out: "json" }, query);
+    return request.json(this._getURL(query)).then(
+      response => this._parseResponse(response, query)
+    );
   }
 
   /**
