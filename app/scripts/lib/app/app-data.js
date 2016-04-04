@@ -131,6 +131,7 @@ export default class AppData extends EventEmitter {
   }
 
   load() {
+    logger("Loading");
     return cutil.localGet(PROP_KEYS).then((data) => {
       this.overwrite(data);
       logger("Loaded successfully", this.data);
@@ -145,6 +146,7 @@ export default class AppData extends EventEmitter {
       keys = _(keys).map(key => SAVE_DEPENDENCIES[key] || key).uniq().value();
     }
     const savedData = keys ? _.pick(this.data, keys) : this.data;
+    logger("Saving", savedData);
     return cutil.localSet(savedData).then(() => {
       logger("Saved successfully", keys, this.data);
       return this;

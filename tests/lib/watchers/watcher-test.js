@@ -20,15 +20,23 @@ test("#getSettingById", t => {
   t.ok(_.isUndefined(watcher.getSettingById("unknown")));
 });
 
-test("#notifyUpdate on first just sets seen value", t => {
+test.cb("#notifyUpdate emits `seen` and set as seen for first value", t => {
   const { watcher } = t.context;
   watcher.on("update", t.fail);
+
+  watcher.on("seen", (data) => {
+    const updatedSetting = watcher.getSettingById("w1");
+    t.is(updatedSetting.seenValue, 3);
+    t.is(updatedSetting.lastValue, 3);
+
+    t.is(data.id, "w1");
+    t.is(data.seenValue, 3);
+
+    t.end();
+  });
+
   const updated = watcher.notifyUpdate("w1", { foo: { a: 1 }, bar: { a: 2 } });
   t.false(updated);
-
-  const updatedSetting = watcher.getSettingById("w1");
-  t.is(updatedSetting.seenValue, 3);
-  t.is(updatedSetting.lastValue, 3);
 });
 
 test.cb("#notifyUpdate emits `update` for new value", t => {
@@ -127,8 +135,8 @@ test("#markAsSeen sets seenValue of all settings", t => {
   t.same(w2.seenValue, [1, 2]);
 });
 
-test.cb("#markAsSeen emits `seen` event", t => {
+test.cb("#markAsSeen emits `seenAll` event", t => {
   const { watcher } = t.context;
-  watcher.on("seen", t.end);
+  watcher.on("seenAll", t.end);
   watcher.markAsSeen();
 });

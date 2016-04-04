@@ -65,17 +65,22 @@ export default function () {
     } else {
       watcher = new Watcher(appData.watchSettings);
 
-      const saveWatcher = _.debounce(() => {
+      const appDataSave = _.debounce(() => appData.save(["watchSettings"]), 3000);
+      const appDataChange = () => {
         appData.watchSettings = watcher.settings;
-        appData.save(["watchSettings"]);
-      }, 3000);
+        appDataSave();
+      };
       watcher.on("update", ({ id, count }) => {
+        appDataChange();
         badge.setCount(id, count);
-        saveWatcher();
       });
-      watcher.on("seen", () => {
+      watcher.on("seen", ({ id }) => {
+        appDataChange();
+        badge.setCount(id, 0);
+      });
+      watcher.on("seenAll", () => {
+        appDataChange();
         badge.clear();
-        saveWatcher();
       });
       logger("Initialized Watcher", watcher);
     }

@@ -81,8 +81,9 @@ export default class Watcher extends EventEmitter {
     if (_.isUndefined(setting.seenValue)) {
       // Never seen update must be initialization.
       // So we set seenValue here and just ignore update.
-      setting.seenValue = newValue;
+      setting.seenValue = _.clone(newValue);
       logger(`Set initial value for ${id}`, target, setting);
+      this.emit("seen", { id, seenValue: newValue });
       return false;
     }
 
@@ -115,7 +116,7 @@ export default class Watcher extends EventEmitter {
     _.each(this._settings, (setting) => {
       setting.seenValue = setting.lastValue;
     });
-    this.emit("seen");
+    this.emit("seenAll");
   }
 
   _applyValueType(target, setting) {
