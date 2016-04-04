@@ -10,6 +10,12 @@ const PROP_KEYS = _.keys(appDataSchema.properties);
 const DEFAULTS = jsonSchemaDefaults(appDataSchema);
 const PROP_SCHEMA = appDataSchema.properties;
 
+const SAVE_DEPENDENCIES = {
+  subscriptions: "subscriptionSettings",
+  sites: "siteSettings",
+};
+const LOAD_DEPENDENCIES = _.invert(SAVE_DEPENDENCIES);
+
 export default class AppData extends EventEmitter {
   static load() {
     return (new AppData()).load();
@@ -32,7 +38,11 @@ export default class AppData extends EventEmitter {
   _bindEvents() {
     chrome.storage.onChanged.addListener((changes) => {
       const changedValues = _(changes).pick(PROP_KEYS).mapValues("newValue").value();
-      const changedKeys = _.keys(changedValues);
+      const changedKeys = _.transform(changedValues, (keys, val, key) => {
+        keys.push(key);
+        if (LOAD_DEPENDENCIES[key]) keys.push(LOAD_DEPENDENCIES[key]);
+      }, []);
+
       if (changedKeys.length > 0) {
         _.extend(this, changedValues);
 
@@ -125,12 +135,15 @@ export default class AppData extends EventEmitter {
       this.overwrite(data);
       logger("Loaded successfully", this.data);
 
-      this.emit("update", this, PROP_KEYS);
+      this.emit("update", this, PROP_KEYS.concat(_.values(LOAD_DEPENDENCIES)));
       return this;
     });
   }
 
   save(keys) {
+    if (keys) {
+      keys = _(keys).map(key => SAVE_DEPENDENCIES[key] || key).uniq().value();
+    }
     const savedData = keys ? _.pick(this.data, keys) : this.data;
     return cutil.localSet(savedData).then(() => {
       logger("Saved successfully", keys, this.data);

@@ -134,7 +134,7 @@ test.serial("#load emits update event", t => {
   t.plan(2);
   appData.on("update", (opts, keys) => {
     t.is(opts, appData);
-    t.same(keys, PROP_KEYS);
+    t.same(keys.sort(), PROP_KEYS.concat(["subscriptions", "sites"]).sort());
   });
   return appData.load();
 });
@@ -144,6 +144,20 @@ test.serial("#save saves values into storage", t => {
   chrome.storage.local.set.callsArgAsync(1);
   return appData.save().then(() => {
     t.ok(chrome.storage.local.set.called);
+    t.same(chrome.storage.local.set.args[0][0], appData.data);
+    t.pass();
+  });
+});
+
+test.serial("#save accepts keys to filter saved values", t => {
+  const { appData } = t.context;
+  chrome.storage.local.set.callsArgAsync(1);
+  return appData.save(["updatePeriodMinutes", "subscriptions"]).then(() => {
+    t.ok(chrome.storage.local.set.called);
+    t.same(chrome.storage.local.set.args[0][0], {
+      updatePeriodMinutes: appData.updatePeriodMinutes,
+      subscriptionSettings: appData.subscriptionSettings,
+    });
     t.pass();
   });
 });
@@ -170,7 +184,7 @@ test.serial.cb("uses default value if storage value is undefined", t => {
     t.ok(opts instanceof AppData);
     t.is(opts.updatePeriodMinutes, DEFAULTS.updatePeriodMinutes);
     t.ok(_.isObject(opts.siteSettings));
-    t.same(keys, ["updatePeriodMinutes", "siteSettings"]);
+    t.same(keys, ["updatePeriodMinutes", "siteSettings", "sites"]);
     t.end();
   });
   chrome.storage.onChanged.trigger(
