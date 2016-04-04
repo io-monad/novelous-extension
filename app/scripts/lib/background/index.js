@@ -65,6 +65,9 @@ export default function () {
     } else {
       watcher = new Watcher(appData.watchSettings);
 
+      // Set counts from last session
+      _.each(watcher.getCounts(), (count, id) => badge.setCount(id, count));
+
       const appDataSave = _.debounce(() => appData.save(["watchSettings"]), 3000);
       const appDataChange = () => {
         appData.watchSettings = watcher.settings;

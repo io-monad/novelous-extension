@@ -20,6 +20,14 @@ test("#getSettingById", t => {
   t.ok(_.isUndefined(watcher.getSettingById("unknown")));
 });
 
+test("#getCounts", t => {
+  const { watcher } = t.context;
+  t.same(watcher.getCounts(), { w1: 0, w2: 0 });
+  watcher.notifyUpdate("w1", { foo: { a: 1 }, bar: { a: 2 } });
+  watcher.notifyUpdate("w1", { foo: { a: 3 }, bar: { a: 2 } });
+  t.same(watcher.getCounts(), { w1: 2, w2: 0 });
+});
+
 test.cb("#notifyUpdate emits `seen` and set as seen for first value", t => {
   const { watcher } = t.context;
   watcher.on("update", t.fail);

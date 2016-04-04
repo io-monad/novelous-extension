@@ -19,7 +19,7 @@ export default {
       return _.sum(_.castArray(value));
     },
     diffCount(newValue, oldValue) {
-      return Math.max(0, newValue - oldValue);
+      return Math.max(0, (newValue || 0) - (oldValue || 0));
     },
   },
 
@@ -28,7 +28,7 @@ export default {
       return _.uniq(_.castArray(value));
     },
     diffCount(newValue, oldValue) {
-      return _.difference(newValue, oldValue).length;
+      return _.difference(newValue || [], oldValue || []).length;
     },
   },
 
@@ -37,7 +37,7 @@ export default {
       return _.castArray(value).length;
     },
     diffCount(newValue, oldValue) {
-      return Math.max(0, newValue - oldValue);
+      return Math.max(0, (newValue || 0) - (oldValue || 0));
     },
   },
 };

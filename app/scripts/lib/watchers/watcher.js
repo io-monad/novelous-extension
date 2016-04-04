@@ -57,6 +57,18 @@ export default class Watcher extends EventEmitter {
   }
 
   /**
+   * Get current counts of new updates in the settings.
+   *
+   * @return {Map.<string, number>}  Map of counts. Keys are `setting.id`.
+   */
+  getCounts() {
+    return _.transform(this.settings, (counts, setting) => {
+      const valueType = this._getValueType(setting.valueType);
+      counts[setting.id] = valueType.diffCount(setting.lastValue, setting.seenValue);
+    }, {});
+  }
+
+  /**
    * Notify update of target to find updates.
    *
    * @param {string} id - ID of the target.
