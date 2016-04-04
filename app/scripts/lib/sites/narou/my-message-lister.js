@@ -51,7 +51,7 @@ export default class NarouMyMessageLister {
       message.id = message.url.match(/meskey\/([^\/]+)/)[1];
       message.userName = $.text($item.find("td.name"));
       message.userUrl = $item.find("td.name > a").attr("href");
-      message.createdAt = $.localTime($item.find("td:last"));
+      message.createdAt = $.localTime($item.find("td").last());
       return message;
     });
   }

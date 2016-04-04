@@ -1,16 +1,17 @@
+import cheerio from "cheerio";
+
 /**
- * Simple scraping utility using jQuery
+ * Simple scraping utility using cheerio
  */
 export default function scrape(html) {
-  const $page = jQuery("<div/>").html($.parseHTML(html));
-  const $scope = (selector) => $(selector, $page);
-  _.extend($scope, scrape.parsers);
-  return $scope;
+  const $page = cheerio.load(html);
+  _.extend($page, scrape.parsers);
+  return $page;
 }
 
 scrape.fetch = (url) => {
   return new Promise((resolve, reject) => {
-    $.ajax(url)
+    jQuery.ajax(url)
     .done((html) => resolve(scrape(html)))
     .fail((xhr, status) => reject(status));
   });
@@ -18,7 +19,9 @@ scrape.fetch = (url) => {
 
 function stringify(str) {
   if (str && typeof str.text === "function") str = str.text();
-  if (_.isElement(str)) str = $(str).text();
+  if (_.isElement(str) || (_.isObject(str) && str.type === "tag")) {
+    str = $(str).text();
+  }
   return _.toString(str);
 }
 

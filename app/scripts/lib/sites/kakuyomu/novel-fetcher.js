@@ -1,5 +1,6 @@
 import kakuyomuMeta from "./meta.json";
 import url from "url";
+import colorString from "color-string";
 import scrape from "../../util/scrape";
 
 /**
@@ -76,7 +77,8 @@ export default class KakuyomuNovelFetcher {
     const novel = {};
     const resolve = (path) => url.resolve(this.baseUrl, path);
 
-    novel.color = $("#workColor").css("background-color");
+    const colorValue = $("#workColor").css("background-color");
+    novel.color = colorString.to.rgb(colorString.get.rgb(colorValue));
     novel.title = $.text($("#workTitle"));
     novel.url = resolve($("#workTitle > a").attr("href"));
     novel.id = novel.url.match(/\/works\/(\d+)/)[1];
@@ -90,7 +92,7 @@ export default class KakuyomuNovelFetcher {
     novel.description = $.text($("#introduction"));
 
     novel.latestEpisodeUrl = resolve(
-      $("#table-of-contents .widget-toc-episode:last a").attr("href"));
+      $("#table-of-contents .widget-toc-episode a").last().attr("href"));
 
     const dts = $("#information dl.widget-credit > dt");
     const dds = $("#information dl.widget-credit > dd");
@@ -114,7 +116,7 @@ export default class KakuyomuNovelFetcher {
       review.url = resolve($props.filter("[itemprop=url]").attr("href"));
       review.id = review.url.match(/reviews\/([^\/]+)/)[1];
       review.title = $.text($props.filter("[itemprop=name]"));
-      review.rating = $.text($props.filter("[itemprop=reviewRating]").find("span:first"));
+      review.rating = $.text($props.filter("[itemprop=reviewRating]").find("span").first());
       review.authorName = $.text($props.filter("[itemprop=author]"));
       review.authorUrl = resolve($props.filter("[itemprop=author]").parents("a").attr("href"));
       review.authorUserId = review.authorUrl.match(/users\/([^\/]+)/)[1];

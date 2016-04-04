@@ -58,8 +58,8 @@ export default class NarouUserNovelLister {
 
   _parsePage($) {
     const novelCount = $.number($(".allcount"));
-    const pageCount = $.number($(".pager_kazu:first"), /([\d,]+ページ中)/) || 1;
-    const currentPage = $.number($(".pager_kazu:first"), /([\d,]+)ページ目/) || 1;
+    const pageCount = $.number($(".pager_kazu").first(), /([\d,]+ページ中)/) || 1;
+    const currentPage = $.number($(".pager_kazu").first(), /([\d,]+)ページ目/) || 1;
     const hasNextPage = currentPage < pageCount;
 
     const novels = _.map($("#novellist > ul"), (ul) => {

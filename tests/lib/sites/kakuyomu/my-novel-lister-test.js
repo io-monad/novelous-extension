@@ -9,7 +9,7 @@ test.serial("#listNovels with fetchDetails = false", async t => {
   });
 
   const expected = JSON.parse(fixture("kakuyomu/my-novel-list.json"));
-  const myNovelLister = new KakuyomuMyNovelLister;
+  const myNovelLister = new KakuyomuMyNovelLister({ fetchDetails: false });
   return myNovelLister.listNovels().then((novels) => {
     t.same(novels, expected);
   });

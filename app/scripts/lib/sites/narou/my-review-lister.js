@@ -51,8 +51,8 @@ export default class NarouMyReviewLister {
       review.body = $.text($item.find(".novelcomment"));
       review.novelTitle = $.text($item.find(".novelmain_info"));
       review.novelUrl = $item.find(".novelmain_info > a").attr("href");
-      review.userName = $.text($item.find(".novelcomment_info > a:first"));
-      review.userUrl = $item.find(".novelcomment_info > a:first").attr("href");
+      review.userName = $.text($item.find(".novelcomment_info > a").first());
+      review.userUrl = $item.find(".novelcomment_info > a").first().attr("href");
       review.createdAt = $.localTime($item.find(".novelcomment_info > span"));
       return review;
     });

@@ -1,6 +1,7 @@
 import kakuyomuMeta from "./meta.json";
 import scrape from "../../util/scrape";
 import url from "url";
+import colorString from "color-string";
 
 /**
  * @typedef {Object} KakuyomuUserNovel
@@ -59,7 +60,8 @@ export default class KakuyomuUserNovelLister {
       const resolve = (path) => url.resolve(this.baseUrl, path);
       const $props = $item.find("[itemprop]:not([itemscope] [itemscope] *)");
 
-      novel.color = $item.find(".widget-workCard-workColor").css("background-color");
+      const colorValue = $item.find(".widget-workCard-workColor").css("background-color");
+      novel.color = colorString.to.rgb(colorString.get.rgb(colorValue));
       novel.title = $.text($props.filter("[itemprop=name]"));
       novel.url = resolve($props.filter("[itemprop=name]").attr("href"));
       novel.id = novel.url.match(/\/works\/(\d+)/)[1];

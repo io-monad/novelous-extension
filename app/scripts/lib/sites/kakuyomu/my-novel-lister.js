@@ -93,20 +93,20 @@ export default class KakuyomuMyNovelLister {
 
   _parsePage($) {
     const resolve = (path) => (path ? url.resolve(this.baseUrl, path) : null);
-    const authorName = $.text($("#profile > h2:first"));
-    const authorUrl = resolve($("#profile > h2:first > a").attr("href"));
+    const authorName = $.text($("#profile > h2").first());
+    const authorUrl = resolve($("#profile > h2").first().children("a").attr("href"));
     const authorUserId = authorUrl.match(/\/users\/([^\/]+)/)[1];
 
     return _.map($("#works-hasWorks > ul > li"), (item) => {
       const $item = $(item);
       const novel = { authorName, authorUrl, authorUserId };
 
-      novel.editUrl = resolve($item.find("h3 > a:last").attr("href"));
+      novel.editUrl = resolve($item.find("h3 > a").last().attr("href"));
       novel.id = novel.editUrl.match(/\/works\/(\d+)/)[1];
       novel.newEpisodeUrl = `${novel.editUrl}/episodes/new`;
 
-      const status = $item.find("span[class*='label-workStatus-']:first")
-        .prop("className").replace(/^.*label-workStatus-(\w+).*$/, "$1");
+      const status = $item.find("span[class*='label-workStatus-']").first()
+        .attr("class").replace(/^.*label-workStatus-(\w+).*$/, "$1");
       novel.isFinished = status === "isCompleted";
       novel.isPrivate = status === "isUnpublished" || status === "isHidden";
 
@@ -124,7 +124,7 @@ export default class KakuyomuMyNovelLister {
       novel.reviewCount = $.number(reviewTooltip);
 
       novel.latestEpisodeUrl =
-        resolve($item.find(".works-workEpisodes-labelTitle:last").attr("href"));
+        resolve($item.find(".works-workEpisodes-labelTitle").last().attr("href"));
 
       return novel;
     });

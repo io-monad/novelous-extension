@@ -46,8 +46,8 @@ export default class NarouMyCommentLister {
     return _.map($(".novelcomment_list"), (item) => {
       const $item = $(item);
       const comment = {};
-      comment.body = $.text($item.find(".novelcomment:first > p"));
-      comment.replyUrl = $item.find(".novelcomment:last > a").attr("href");
+      comment.body = $.text($item.find(".novelcomment").first().children("p"));
+      comment.replyUrl = $item.find(".novelcomment").last().children("a").attr("href");
       comment.novelTitle = $.text($item.find(".novelmain_info"));
       comment.novelUrl = $item.find(".novelmain_info > a").attr("href");
       comment.novelCommentsUrl = $item.find(".novel_title > a").attr("href");

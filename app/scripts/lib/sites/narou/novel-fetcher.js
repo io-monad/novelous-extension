@@ -73,12 +73,12 @@ export default class NarouNovelFetcher {
     } else {
       novel.isShortStory = false;
       novel.isFinished = novelType === "完結済";
-      novel.latestEpisodeUrl = $("#pre_info a:last").attr("href") || null;
+      novel.latestEpisodeUrl = $("#pre_info a").last().attr("href") || null;
       novel.episodeCount = $.number($("#pre_info"), /全([\d,]+)部/);
     }
 
-    const ths = $("#noveltable1 tbody > tr > th, #noveltable2 tbody > tr > th");
-    const tds = $("#noveltable1 tbody > tr > td, #noveltable2 tbody > tr > td");
+    const ths = $("#noveltable1 tr > th, #noveltable2 tr > th");
+    const tds = $("#noveltable1 tr > td, #noveltable2 tr > td");
     const data = _.zipObject(
       _.map(ths, th => $.text(th)),
       _.map(tds, td => ({ text: $.text(td), el: td }))

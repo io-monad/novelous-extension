@@ -52,7 +52,7 @@ export default class NarouMyNovelLister {
   }
 
   _parsePage($) {
-    return _.map($("#novellist tr:not(:first)"), (item) => {
+    return _.map($("#novellist tr").slice(1), (item) => {
       const $item = $(item);
       const novel = {};
       const resolve = (path) => url.resolve(this.baseUrl, path);
