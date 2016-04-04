@@ -1,2 +1,2 @@
-import content from "./lib/content/index";
+import content from "./lib/content";
 content();

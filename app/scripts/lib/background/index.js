@@ -17,10 +17,11 @@ export default function () {
 
   logger("Initializing");
   const initialized = new Promise((resolve, reject) => {
-    appData.on("update", () => {
-      setupPublisher();
-      setupSubscriber();
-      setupWatcher();
+    appData.on("update", (data, keys) => {
+      const updated = _.keyBy(keys);
+      if (updated.sites) setupPublisher();
+      if (updated.subscriptions) setupSubscriber();
+      if (updated.watchSettings) setupWatcher();
 
       subscriberAlarm.start({
         when: appData.nextWillUpdateAt,
@@ -36,26 +37,31 @@ export default function () {
   function setupPublisher() {
     if (publisher) {
       publisher.sites = appData.sites;
+      logger("Updated Publisher", publisher);
     } else {
       publisher = new Publisher(appData.sites);
+      logger("Initialized Publisher", publisher);
     }
   }
 
   function setupSubscriber() {
     if (subscriber) {
       subscriber.subscriptions = appData.subscriptions;
+      logger("Updated Subscriber", subscriber);
     } else {
       subscriber = new Subscriber(appData.sites, appData.subscriptions);
 
       subscriber.on("updateSubscription", (subscription) => {
         watcher.notifyUpdate(subscription.id, subscription.item);
       });
+      logger("Initialized Subscriber", subscriber);
     }
   }
 
   function setupWatcher() {
     if (watcher) {
       watcher.settings = appData.watchSettings;
+      logger("Updated Watcher", watcher);
     } else {
       watcher = new Watcher(appData.watchSettings);
 
@@ -71,6 +77,7 @@ export default function () {
         badge.clear();
         saveWatcher();
       });
+      logger("Initialized Watcher", watcher);
     }
   }
 
@@ -102,4 +109,6 @@ export default function () {
       }),
     }))
   );
+
+  return initialized;
 }
