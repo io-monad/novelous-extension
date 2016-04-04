@@ -53,7 +53,7 @@ export default class KakuyomuMyNovelLister {
   constructor(options) {
     options = _.extend({
       baseUrl: kakuyomuMeta.baseUrl,
-      fetchDetails: false,
+      fetchDetails: true,
       fetchInterval: 1000,
     }, options);
     this.baseUrl = options.baseUrl;
