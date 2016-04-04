@@ -126,7 +126,7 @@ export default class Watcher extends EventEmitter {
   markAsSeen() {
     logger("Marking all targets as seen");
     _.each(this._settings, (setting) => {
-      setting.seenValue = setting.lastValue;
+      setting.seenValue = _.clone(setting.lastValue);
     });
     this.emit("seenAll");
   }
