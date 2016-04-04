@@ -34,22 +34,6 @@
     "page": "pages/options.html",
     "chrome_style": true
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "css": [
-        "styles/contentscript.css"
-      ],
-      "js": [
-        "scripts/contentscript.js"
-      ],
-      "run_at": "document_end",
-      "all_frames": false
-    }
-  ],
   "externally_connectable": {
     "matches": [
       "http://localhost/*",
@@ -58,13 +42,6 @@
       "http://127.0.0.1:*/*"
     ]
   },
-  "web_accessible_resources": [
-    "fonts/font-awesome/fontawesome-webfont.eot",
-    "fonts/font-awesome/fontawesome-webfont.svg",
-    "fonts/font-awesome/fontawesome-webfont.ttf",
-    "fonts/font-awesome/fontawesome-webfont.woff",
-    "fonts/font-awesome/fontawesome-webfont.woff2"
-  ],
   "__moz__applications": {
     "gecko": {
       "id": "novelous@example.com"

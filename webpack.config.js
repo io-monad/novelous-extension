@@ -7,7 +7,6 @@ module.exports = function webpackConfig(opts) {
   var config = {
     entry: {
       background: __dirname + "/app/scripts/background.js",
-      contentscript: __dirname + "/app/scripts/contentscript.js",
       options: __dirname + "/app/scripts/options.js",
       popup: __dirname + "/app/scripts/popup.js",
     },
