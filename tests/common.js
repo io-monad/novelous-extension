@@ -6,13 +6,11 @@ import debug from "debug";
 import factory from "factory-girl";
 import bluebird from "bluebird";
 import requireDir from "require-dir";
-import sourceMapSupport from "source-map-support";
 import fixture from "./test-utils/fixture-loader";
 import fakeSererRequest from "./test-utils/fake-server-request";
 import fakeServerConf from "./fake-server.conf";
 import FactoryAdapter from "./test-utils/factory-adapter";
 
-sourceMapSupport.install();
 requireDir("./factories");
 
 global.XMLHttpRequest = fakeSererRequest(fakeServerConf);
