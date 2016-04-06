@@ -1,8 +1,7 @@
-import { test, sinonsb } from "../../common";
+import { test, sinonsb, factory } from "../../common";
 import BackgroundController from "../../../app/scripts/lib/background/controller";
 import AppData from "../../../app/scripts/lib/app/app-data";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
-import Watcher from "../../../app/scripts/lib/watchers/watcher";
 import Publisher from "../../../app/scripts/lib/publications/publisher";
 import cutil from "../../../app/scripts/lib/util/chrome-util";
 
@@ -10,12 +9,9 @@ test.beforeEach(t => {
   t.context.controller = new BackgroundController;
 });
 
-function stubAppData(data) {
-  sinonsb.stub(cutil, "localGet").returns(Promise.resolve(data));
-}
 function startController(t, appData) {
   const { controller } = t.context;
-  stubAppData(appData || {});
+  sinonsb.stub(cutil, "localGet").returns(Promise.resolve(appData || {}));
   return controller.start();
 }
 
@@ -33,22 +29,15 @@ test.serial("#start initializes members", t => {
   return startController(t).then(controller => {
     t.true(controller.appData instanceof AppData);
     t.true(controller.subscriber instanceof Subscriber);
-    t.true(controller.watcher instanceof Watcher);
     t.true(controller.publisher instanceof Publisher);
   });
 });
 
 test.serial("#start updates badge counter", t => {
   return startController(t, {
-    watchSettings: [{
-      id: "narou-myMessages",
-      valueType: "set",
-      valueKey: "*.id",
-      seenValue: ["a", "b"],
-      lastValue: ["a", "b", "c", "d"],
-    }],
+    subscriptionSettings: [factory.buildSync("subscriptionSettings")],
   }).then(() => {
-    t.same(chrome.browserAction.setBadgeText.lastCall.args[0], { text: "2" });
+    t.same(chrome.browserAction.setBadgeText.lastCall.args[0], { text: "" });
   });
 });
 
@@ -89,14 +78,6 @@ test.serial("#getSubscriber returns Promise of Subscriber", t => {
   });
 });
 
-test.serial("#getWatcher returns Promise of Watcher", t => {
-  return startController(t).then(controller => {
-    return controller.getWatcher().then(watcher => {
-      t.true(watcher instanceof Watcher);
-    });
-  });
-});
-
 test.serial("#getPublisher returns Promise of Publisher", t => {
   return startController(t).then(controller => {
     return controller.getPublisher().then(publisher => {
@@ -105,11 +86,17 @@ test.serial("#getPublisher returns Promise of Publisher", t => {
   });
 });
 
-test.serial("#markBadgeAsSeen calls watcher.markAsSeen", t => {
+test.serial("#markBadgeAsSeen calls subscriber.clearNewItems", t => {
   return startController(t).then(controller => {
-    const stub = sinonsb.stub(controller.watcher, "markAsSeen");
+    const stubClear = sinonsb.stub(controller.subscriber, "clearNewItems");
+
+    const stubSave = sinonsb.stub(controller.appData, "save");
+    stubSave.returns(Promise.resolve());
+
     return controller.markBadgeAsSeen().then(() => {
-      t.true(stub.calledOnce);
+      t.true(stubClear.calledOnce);
+      t.true(stubSave.calledOnce);
+      t.same(stubSave.args[0][0], ["subscriptions"]);
     });
   });
 });

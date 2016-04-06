@@ -1,10 +1,8 @@
-import { test, factory, sinonsb } from "../../common";
-import SiteFactory from "../../../app/scripts/lib/sites/site-factory";
+import { test, factory, sinon } from "../../common";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 
 test.beforeEach(t => {
-  const sites = SiteFactory.createMap({ narou: true, kakuyomu: true });
-  t.context.subscriber = new Subscriber(sites, [], { fetchInterval: 0 });
+  t.context.subscriber = new Subscriber([], { fetchInterval: 0 });
 });
 
 test("new Subscriber", t => {
@@ -31,31 +29,27 @@ test.cb("#unsubscribe", t => {
 
 test("#updateAll", async t => {
   const { subscriber } = t.context;
-  const narouStub = stubGetItem(subscriber, "narou");
-  const kakuyomuStub = stubGetItem(subscriber, "kakuyomu");
-
-  const narouSubs = await factory.buildMany("subscription", 3);
-  const kakuyomuSubs = await factory.buildMany("kakuyomuSubscription", 3);
-  const subs = _.flatten(_.zip(narouSubs, kakuyomuSubs));
-  _.each(subs, sub => subscriber.subscribe(sub));
+  const subs = await factory.buildMany("subscription", 3);
+  const updateStub = sinon.stub().returns(Promise.resolve(true));
+  _.each(subs, sub => { sub.update = updateStub; });
+  subscriber.subscriptions = subs;
 
   return subscriber.updateAll().then(() => {
-    t.is(narouStub.callCount, narouSubs.length);
-    for (let i = 0; i < narouSubs.length; i++) {
-      t.is(narouStub.args[i][0], narouSubs[i].itemType);
-      t.is(narouStub.args[i][1], narouSubs[i].itemId);
-    }
-    t.is(kakuyomuStub.callCount, kakuyomuSubs.length);
-    for (let i = 0; i < kakuyomuSubs.length; i++) {
-      t.is(kakuyomuStub.args[i][0], kakuyomuSubs[i].itemType);
-      t.is(kakuyomuStub.args[i][1], kakuyomuSubs[i].itemId);
-    }
+    t.is(updateStub.callCount, subs.length);
   });
 });
 
-function stubGetItem(subscriber, siteName) {
-  const stub = sinonsb.stub();
-  subscriber.sites[siteName] = { getItem: stub };
-  stub.returns(Promise.resolve(factory.buildSync(`${siteName}Novel`)));
-  return stub;
-}
+test.cb("#clearNewItems", t => {
+  const { subscriber } = t.context;
+  const N = 3;
+  subscriber.subscriptions = _.range(N).map(() => factory.buildSync("subscription"));
+
+  const clearStub = sinon.stub();
+  _.each(subscriber.subscriptions, sub => { sub.clearNewItems = clearStub; });
+
+  subscriber.on("clear", () => {
+    t.is(clearStub.callCount, N);
+    t.end();
+  });
+  subscriber.clearNewItems();
+});

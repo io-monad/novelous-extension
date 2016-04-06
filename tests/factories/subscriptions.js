@@ -2,19 +2,27 @@ import factory from "factory-girl";
 import Subscription from "../../app/scripts/lib/subscriptions/subscription";
 
 const subscriptionSchema = {
-  siteName: "narou",
-  itemType: "novel",
-  itemId: factory.seq(n => `n${n}`),
-  item: () => factory.buildSync("narouNovel"),
+  feedName: "narou-messages",
+  feedData() {
+    const items = _.range(5).map(() => factory.buildSync("narouMessage"));
+    return {
+      items,
+      watch: _.transform(items, (ids, item) => { ids[item.id] = 1; }, {}),
+    };
+  },
   enabled: true,
   lastUpdatedAt: null,
 };
 
 const kakuyomuSubscriptionSchema = {
-  siteName: "kakuyomu",
-  itemType: "novel",
-  itemId: factory.seq(n => `${n}`),
-  item: () => factory.buildSync("kakuyomuNovel"),
+  feedName: "kakuyomu-reviews",
+  feedData() {
+    const items = _.range(5).map(() => factory.buildSync("kakuyomuReviewFeedItem"));
+    return {
+      items,
+      watch: _.transform(items, (ids, item) => { ids[item.id] = 1; }, {}),
+    };
+  },
   enabled: true,
   lastUpdatedAt: null,
 };

@@ -48,13 +48,13 @@ export default class NarouNovelFetcher {
    */
   fetchNovel(novelId) {
     return new Promise((resolve, reject) => {
-      scrape.fetch(this._getURL(novelId))
+      scrape.fetch(this.getURL(novelId))
       .then($ => { resolve(this._parsePage($)); })
       .catch(reject);
     });
   }
 
-  _getURL(novelId) {
+  getURL(novelId) {
     const encodedId = encodeURIComponent(novelId.toLowerCase());
     return `${this.ncodeBaseUrl}/novelview/infotop/ncode/${encodedId}/`;
   }

@@ -16,18 +16,6 @@ export default class Site {
   }
 
   /**
-   * Get latest item data from remote site.
-   *
-   * @param {string} itemType
-   * @param {string} itemId
-   * @return {Promise}
-   * @abstract
-   */
-  getItem(itemType, itemId) {  // eslint-disable-line
-    throw new Error("`getItem` must be overridden");
-  }
-
-  /**
    * Publish an article to the site by opening new article page.
    *
    * @param {Publication} pub - Publication to be made.

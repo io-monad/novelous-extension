@@ -42,13 +42,13 @@ export default class KakuyomuUserNovelLister {
    */
   listNovelsOfUser(userId) {
     return new Promise((resolve, novels) => {
-      scrape.fetch(this._getURL(userId))
+      scrape.fetch(this.getURL(userId))
       .then($ => { resolve(this._parsePage($)); })
       .catch(novels);
     });
   }
 
-  _getURL(userId) {
+  getURL(userId) {
     const encodedId = encodeURIComponent(userId);
     return `${this.baseUrl}/users/${encodedId}/works`;
   }

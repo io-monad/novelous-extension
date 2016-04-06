@@ -1,9 +1,11 @@
-import { test } from "../../common";
+import { test, factory, sinonsb } from "../../common";
 import jsonSchemaDefaults from "json-schema-defaults";
 import AppData from "../../../app/scripts/lib/app/app-data";
 import appDataSchema from "../../../app/scripts/lib/app/app-data-schema.json";
 import Site from "../../../app/scripts/lib/sites/site";
 import Subscription from "../../../app/scripts/lib/subscriptions/subscription";
+import FeedFactory from "../../../app/scripts/lib/feeds/feed-factory";
+import NarouMessagesFeed from "../../../app/scripts/lib/feeds/narou-messages";
 
 const PROP_KEYS = _.keys(appDataSchema.properties);
 const DEFAULTS = jsonSchemaDefaults(appDataSchema);
@@ -92,12 +94,14 @@ test("#subscriptions returns array of Subscription", t => {
 
 test("#subscriptions setter updates subscriptionSettings but keeps defaults", t => {
   const { appData } = t.context;
-  const newSub = new Subscription({ siteName: "test", itemType: "foo" });
+  sinonsb.stub(FeedFactory, "create").returns(new NarouMessagesFeed);
+  const newSub = new Subscription({ feedName: "test-feed" });
   appData.subscriptions = [newSub];
+
   t.ok(_.isArray(appData.subscriptions));
   t.ok(_.every(appData.subscriptions, sub => sub instanceof Subscription));
   t.is(appData.subscriptions.length, DEFAULTS.subscriptionSettings.length + 1);
-  t.same(appData.subscriptions[0], newSub);
+  t.is(appData.subscriptions[0].id, newSub.id);
 });
 
 test("#subscriptions setter not duplicating defaults", t => {
@@ -105,12 +109,6 @@ test("#subscriptions setter not duplicating defaults", t => {
   const newSub = new Subscription(DEFAULTS.subscriptionSettings[0]);
   appData.subscriptions = [newSub];
   t.is(appData.subscriptions.length, DEFAULTS.subscriptionSettings.length);
-});
-
-test("#watchSettings returns default value", t => {
-  const { appData } = t.context;
-  t.ok(_.isArray(appData.watchSettings));
-  t.same(appData.watchSettings, DEFAULTS.watchSettings);
 });
 
 test.serial(".load returns appData Promise", t => {

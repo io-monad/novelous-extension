@@ -1,24 +1,23 @@
 import EventEmitter from "eventemitter3";
 import promises from "../util/promises";
+const logger = debug("subscriber");
 
 /**
  * Subscriber holds subscription list and update them from remote sites.
  */
 export default class Subscriber extends EventEmitter {
   /**
-   * @param {Object.<string, Site>} sites - A map of site name and Site object.
    * @param {Subscription[]} subscriptions
    * @param {Object} settings - Settings.
    * @param {number} settings.fetchInterval
    */
-  constructor(sites, subscriptions, settings) {
+  constructor(subscriptions, settings) {
     super();
     settings = _.extend({
       fetchInterval: 1000,
     }, settings);
 
     this._handleSubscriptionUpdate = this._handleSubscriptionUpdate.bind(this);
-    this.sites = sites;
     this.subscriptions = subscriptions;
     this.fetchInterval = settings.fetchInterval;
   }
@@ -84,43 +83,26 @@ export default class Subscriber extends EventEmitter {
    * @return {Promise.<Subscriber>}
    */
   updateAll() {
-    return new Promise((resolve, reject) => {
-      // To be in good manner, we should have one request per site at once.
-      const sitesToSubs = _.groupBy(this.subscriptions, "siteName");
-      const pros = _.map(sitesToSubs, (subs, siteName) => {
-        const logger = debug(`subscriber:${siteName}`);
-        return this._updateSequence(subs, logger);
+    logger("Updating all subscriptions");
+    const subscriptions = _.filter(this.subscriptions, "enabled");
+    return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
+      logger(`Fetching feed for ${sub.id}`, sub);
+      return sub.update().then(updated => {
+        logger(`Fetched feed for ${sub.id}`, sub, updated);
+      }).catch((err) => {
+        console.error(`Error occurred for ${sub.id}`, err);
       });
-      Promise.all(pros)
-      .then(() => { resolve(this); })
-      .catch(reject);
     });
   }
 
   /**
-   * Update subscriptions in sequence.
-   *
-   * @param {Subscription[]} subscriptions
-   * @param {Function} logger
-   * @return {Promise}
-   * @private
+   * Clear all new items in subscriptions.
    */
-  _updateSequence(subscriptions, logger) {
-    logger(`Updating ${subscriptions.length} subscriptions`);
-    return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
-      const site = this.sites[sub.siteName];
-      if (!site) {
-        return Promise.reject(`Unknown site name: ${sub.siteName}`);
-      }
-
-      logger(`Fetching data for ${sub.id}`);
-      return site.getItem(sub.itemType, sub.itemId).then((item) => {
-        logger(`Fetched data for ${sub.id}:`, item);
-        sub.item = item;
-      }).catch((err) => {
-        logger(`Error occurred for ${sub.id}:`, err);
-      });
+  clearNewItems() {
+    _.each(this.subscriptions, sub => {
+      sub.clearNewItems();
     });
+    this.emit("clear");
   }
 
   /**

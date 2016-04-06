@@ -1,9 +1,6 @@
 import Site from "../site";
 import kakuyomuMeta from "./meta.json";
-import KakuyomuMyNovelLister from "./my-novel-lister";
-import KakuyomuNovelFetcher from "./novel-fetcher";
 import KakuyomuFormOpener from "./form-opener";
-import KakuyomuItemType from "./item-type";
 
 /**
  * Site "Kakuyomu" (kakuyomu.jp)
@@ -18,27 +15,7 @@ export default class Kakuyomu extends Site {
   constructor(settings) {
     settings = _.defaults(settings, kakuyomuMeta);
     super(settings);
-    this.myNovelLister = settings.myNovelLister || new KakuyomuMyNovelLister(settings);
-    this.novelFetcher = settings.novelFetcher || new KakuyomuNovelFetcher(settings);
     this.formOpener = settings.formOpener || new KakuyomuFormOpener(this.baseUrl);
-  }
-
-  /**
-   * Get latest item data from Narou.
-   *
-   * @param {string} itemType - Item type from `KakuyomuItemType`.
-   * @param {string} itemId - Item ID.
-   * @return {Promise}
-   */
-  getItem(itemType, itemId) {
-    switch (itemType) {
-      case KakuyomuItemType.MY_NOVELS:
-        return this.myNovelLister.listNovels();
-      case KakuyomuItemType.NOVEL:
-        return this.novelFetcher.fetchNovel(itemId);
-      default:
-        return Promise.reject(`Unknown item type ${itemType}`);
-    }
   }
 
   /**
@@ -54,4 +31,3 @@ export default class Kakuyomu extends Site {
 }
 
 Kakuyomu.meta = kakuyomuMeta;
-Kakuyomu.ItemType = KakuyomuItemType;

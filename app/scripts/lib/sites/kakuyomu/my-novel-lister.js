@@ -74,7 +74,7 @@ export default class KakuyomuMyNovelLister {
    */
   listNovels() {
     return new Promise((resolve, reject) => {
-      scrape.fetch(this._getURL())
+      scrape.fetch(this.getURL())
       .then($ => {
         const novels = this._parsePage($);
         if (this.fetchDetails) {
@@ -87,7 +87,7 @@ export default class KakuyomuMyNovelLister {
     });
   }
 
-  _getURL() {
+  getURL() {
     return `${this.baseUrl}/my`;
   }
 

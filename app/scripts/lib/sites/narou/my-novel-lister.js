@@ -35,7 +35,7 @@ export default class NarouMyNovelLister {
    */
   listNovels() {
     return new Promise((resolve, reject) => {
-      scrape.fetch(this._getURL())
+      scrape.fetch(this.getURL())
       .then($ => {
         const novels = this._parsePage($);
         this._decorateNovelsByAPI(novels).then((decorated) => {
@@ -47,7 +47,7 @@ export default class NarouMyNovelLister {
     });
   }
 
-  _getURL() {
+  getURL() {
     return `${this.baseUrl}/usernovel/list/`;
   }
 

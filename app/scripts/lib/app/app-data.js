@@ -20,6 +20,9 @@ export default class AppData extends EventEmitter {
   static load() {
     return (new AppData()).load();
   }
+  static get schema() {
+    return appDataSchema;
+  }
 
   constructor(data) {
     super();
@@ -98,17 +101,10 @@ export default class AppData extends EventEmitter {
     return this.data.subscriptionSettings;
   }
   set subscriptionSettings(settings) {
-    settings = settings || [];
-
     // Fill missing keys with default values
-    settings = _.uniqWith(
-      settings.concat(DEFAULTS.subscriptionSettings),
-      (a, b) => (
-        a.siteName === b.siteName &&
-        a.itemType === b.itemType &&
-        ((!a.itemId && !b.itemId) || (a.itemId === b.itemId))
-      )
-    );
+    settings = _(settings || [])
+      .concat(DEFAULTS.subscriptionSettings)
+      .uniqBy("feedName").value();
 
     this.data.subscriptionSettings = settings;
     this._subscriptions = null;
@@ -121,13 +117,6 @@ export default class AppData extends EventEmitter {
   }
   set subscriptions(subscriptions) {
     this.subscriptionSettings = _.invokeMap(subscriptions, "toObject");
-  }
-
-  get watchSettings() {
-    return this.data.watchSettings;
-  }
-  set watchSettings(settings) {
-    this.data.watchSettings = settings || DEFAULTS.watchSettings;
   }
 
   load() {

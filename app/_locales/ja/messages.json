@@ -11,6 +11,34 @@
     "message": "「小説家になろう」「カクヨム」などの小説サイトでの執筆作業をサポートします",
     "description": "The description of the application"
   },
+
+  "narouSiteName": {
+    "message": "小説家になろう"
+  },
+  "kakuyomuSiteName": {
+    "message": "カクヨム"
+  },
+
+  "narouMessagesFeed": {
+    "message": "小説家になろう: 受信メッセージ"
+  },
+  "narouCommentsFeed": {
+    "message": "小説家になろう: 書かれた感想"
+  },
+  "narouReviewsFeed": {
+    "message": "小説家になろう: 書かれたレビュー"
+  },
+  "kakuyomuReviewsFeed": {
+    "message": "カクヨム: 書かれたレビュー"
+  },
+
+  "narouCommentTitle": {
+    "message": "$authorName$さんが書いた感想",
+    "placeholders": {
+      "authorName": { "content": "$1" }
+    }
+  },
+
   "enableThisSite": {
     "message": "このサイトを有効にする"
   },

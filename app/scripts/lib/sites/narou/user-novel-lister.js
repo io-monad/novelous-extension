@@ -40,13 +40,13 @@ export default class NarouUserNovelLister {
    */
   listNovelsOfUser(userId, page = 1) {
     return new Promise((resolve, reject) => {
-      scrape.fetch(this._getURL(userId, page))
+      scrape.fetch(this.getURL(userId, page))
       .then($ => { resolve(this._parsePage($)); })
       .catch(reject);
     });
   }
 
-  _getURL(userId, page) {
+  getURL(userId, page) {
     const encodedId = encodeURIComponent(userId);
     let url = `${this.mypageBaseUrl}/mypage/novellist/userid/${encodedId}/`;
     if (page > 1) {

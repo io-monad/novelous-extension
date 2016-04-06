@@ -31,13 +31,13 @@ export default class NarouMyReviewLister {
    */
   listReceivedReviews() {
     return new Promise((resolve, reject) => {
-      scrape.fetch(this._getURL())
+      scrape.fetch(this.getURL())
       .then($ => { resolve(this._parsePage($)); })
       .catch(reject);
     });
   }
 
-  _getURL() {
+  getURL() {
     return `${this.baseUrl}/usernovelreview/passivelist/`;
   }
 

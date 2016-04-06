@@ -9,31 +9,6 @@ test("new Kakuyomu", t => {
   t.ok(_.isString(kakuyomu.baseUrl));
 });
 
-test("#getItem with MY_NOVELS item type", t => {
-  const kakuyomu = new Kakuyomu;
-  const items = [];
-  const stub = sinonsb.stub(kakuyomu.myNovelLister, "listNovels");
-  stub.returns(Promise.resolve(items));
-
-  return kakuyomu.getItem(Kakuyomu.ItemType.MY_NOVELS, null).then((given) => {
-    t.ok(stub.calledOnce);
-    t.is(given, items);
-  });
-});
-
-test("#getItem with NOVEL item type", t => {
-  const kakuyomu = new Kakuyomu;
-  const item = factory.buildSync("kakuyomuNovel");
-  const stub = sinonsb.stub(kakuyomu.novelFetcher, "fetchNovel");
-  stub.returns(Promise.resolve(item));
-
-  return kakuyomu.getItem(Kakuyomu.ItemType.NOVEL, "TEST").then((given) => {
-    t.ok(stub.calledOnce);
-    t.is(stub.args[0][0], "TEST");
-    t.is(given, item);
-  });
-});
-
 test("#publish", t => {
   const kakuyomu = new Kakuyomu;
   const pub = factory.buildSync("publication", { sites: { kakuyomu: "123" } });

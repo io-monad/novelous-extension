@@ -1,6 +1,5 @@
 import ExternalMessageReceiver from "./external-message-receiver";
 import Subscriber from "../subscriptions/subscriber";
-import Watcher from "../watchers/watcher";
 import Publisher from "../publications/publisher";
 import AppData from "../app/app-data";
 import ChromeAlarm from "../util/chrome-alarm";
@@ -17,7 +16,6 @@ export default class BackgroundController {
     this.badge = new Badge();
     this.appData = null;
     this.subscriber = null;
-    this.watcher = null;
     this.publisher = null;
     this.initializePromise = null;
   }
@@ -49,7 +47,7 @@ export default class BackgroundController {
   _setupWithAppData() {
     this._setupPublisher();
     this._setupSubscriber();
-    this._setupWatcher();
+    this._updateBadge();
     this._startAlarm();
   }
 
@@ -59,32 +57,19 @@ export default class BackgroundController {
   }
 
   _setupSubscriber() {
-    this.subscriber = new Subscriber(this.appData.sites, this.appData.subscriptions);
+    this.subscriber = new Subscriber(this.appData.subscriptions);
 
-    this.subscriber.on("updateSubscription", (subscription) => {
-      this.watcher.notifyUpdate(subscription.id, subscription.item);
+    this.subscriber.on("updateSubscription", sub => {
+      this.badge.setCount(sub.id, sub.updateCount);
+    });
+    this.subscriber.on("clear", () => {
+      this.badge.clear();
     });
     logger("Initialized Subscriber", this.subscriber);
   }
 
-  _setupWatcher() {
-    this.watcher = new Watcher(this.appData.watchSettings);
-    this._updateBadge();
-
-    const appDataSave = _.debounce(() => this.appData.save(["watchSettings"]), 3000);
-    const h = (fn) => (...args) => {
-      this.appData.watchSettings = this.watcher.settings;
-      appDataSave();
-      return fn.apply(this, args);
-    };
-    this.watcher.on("update", h(({ id, count }) => this.badge.setCount(id, count)));
-    this.watcher.on("seen", h(({ id }) => this.badge.setCount(id, 0)));
-    this.watcher.on("seenAll", h(() => this.badge.clear()));
-    logger("Initialized Watcher", this.watcher);
-  }
-
   /**
-   * Called when AppData is loaded or updated by chrome.storage.
+   * Called when AppData is updated by chrome.storage.
    */
   _handleAppDataUpdate(appData, keys) {
     const updated = _.keyBy(keys);
@@ -94,21 +79,18 @@ export default class BackgroundController {
     }
     if (updated.subscriptions) {
       this.subscriber.subscriptions = this.appData.subscriptions;
+      this._updateBadge();
       logger("Updated Subscriber", this.subscriber);
     }
-    if (updated.watchSettings) {
-      this.watcher.settings = this.appData.watchSettings;
-      logger("Updated Watcher", this.watcher);
-    }
-    if (updated.lastUpdatedAt) {
+    if (updated.lastUpdatedAt || updated.updatePeriodMinutes) {
       this._startAlarm();
     }
   }
 
   _updateBadge() {
     this.badge.clear();
-    _.each(this.watcher.getCounts(), (count, id) => {
-      this.badge.setCount(id, count);
+    _.each(this.subscriber.subscriptions, sub => {
+      this.badge.setCount(sub.id, sub.updateCount);
     });
   }
 
@@ -141,13 +123,6 @@ export default class BackgroundController {
   }
 
   /**
-   * @return {Promise.<Watcher>}
-   */
-  getWatcher() {
-    return this.initialized().then(() => this.watcher);
-  }
-
-  /**
    * @return {Promise.<Publisher>}
    */
   getPublisher() {
@@ -160,8 +135,11 @@ export default class BackgroundController {
    * @return {Promise}
    */
   markBadgeAsSeen() {
-    return this.getWatcher().then(watcher => {
-      watcher.markAsSeen();
+    return this.getSubscriber().then(subscriber => {
+      logger("Clearing badge count");
+      subscriber.clearNewItems();
+      this.appData.subscriptions = subscriber.subscriptions;
+      return this.appData.save(["subscriptions"]);
     });
   }
 
@@ -173,11 +151,11 @@ export default class BackgroundController {
   updateSubscriptions() {
     return this.getSubscriber().then(subscriber => {
       logger("Updating all subscriptions");
-      subscriber.updateAll().then(() => {
+      return subscriber.updateAll().then(() => {
         logger("Updated all subscriptions successfully");
         this.appData.lastUpdatedAt = _.now();
         this.appData.subscriptions = subscriber.subscriptions;
-        this.appData.save(["lastUpdatedAt", "subscriptions"]);
+        return this.appData.save(["lastUpdatedAt", "subscriptions"]);
       }).catch((e) => {
         console.error("Error in subscriber.updateAll:", e);
         throw e;

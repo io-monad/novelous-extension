@@ -1,4 +1,5 @@
 import EventEmitter from "eventemitter3";
+import FeedFactory from "../feeds/feed-factory";
 
 /**
  * Subscription of novel sites.
@@ -6,57 +7,36 @@ import EventEmitter from "eventemitter3";
 export default class Subscription extends EventEmitter {
   /**
    * @param {Object}  settings - Settings.
-   * @param {string}  settings.siteName - Site name.
-   * @param {string}  settings.itemType - Item type. This depends on the site.
-   * @param {string}  [settings.itemId] - Item ID. This depends on the site.
-   * @param {Object}  [settings.item] - Item object. This depends on the site.
+   * @param {string}  settings.feedName - Feed name.
+   * @param {Object}  [settings.feedData] - Feed data.
    * @param {boolean} [settings.enabled=true] - `false` if disabled.
    * @param {number}  [settings.lastUpdatedAt] - Timestamp of last update.
    */
   constructor(settings = {}) {
     super();
     this.settings = _.defaults(settings, {
-      siteName: null,
-      itemType: null,
-      itemId: null,
-      item: null,
+      feedName: null,
+      feedData: null,
       enabled: true,
       lastUpdatedAt: null,
     });
+    this._feed = FeedFactory.create(this.settings.feedName, this.settings.feedData);
+  }
+
+  toObject() {
+    const obj = _.clone(this.settings);
+    obj.feedData = this.feed.getData();
+    return obj;
   }
 
   get id() {
-    if (this.itemId) {
-      return `${this.siteName}-${this.itemType}-${this.itemId}`;
-    }
-    return `${this.siteName}-${this.itemType}`;
+    return this.settings.feedName;
   }
-  get siteName() {
-    return this.settings.siteName;
+  get feedName() {
+    return this.settings.feedName;
   }
-  get itemType() {
-    return this.settings.itemType;
-  }
-  get itemId() {
-    return this.settings.itemId;
-  }
-  get item() {
-    return this.settings.item;
-  }
-  set item(newItem) {
-    const updated = !_.isEqual(this.settings.item, newItem);
-    this.settings.item = newItem;
-    if (updated) {
-      this.settings.lastUpdatedAt = _.now();
-      this.emit("update", this);
-    }
-  }
-  set enabled(enabled) {
-    enabled = !!enabled;
-    if (enabled !== this.settings.enabled) {
-      this.settings.enabled = enabled;
-      this.emit("update", this);
-    }
+  get feed() {
+    return this._feed;
   }
   get enabled() {
     return this.settings.enabled;
@@ -64,8 +44,28 @@ export default class Subscription extends EventEmitter {
   get lastUpdatedAt() {
     return this.settings.lastUpdatedAt;
   }
+  get updateCount() {
+    return this.feed.updateCount;
+  }
 
-  toObject() {
-    return _.clone(this.settings);
+  /**
+   * Update feed by fetching from the server.
+   */
+  update() {
+    return this.feed.update().then(updated => {
+      if (updated) {
+        this.settings.lastUpdatedAt = _.now();
+        this.emit("update", this);
+      }
+      return updated;
+    });
+  }
+
+  /**
+   * Clear new items in feed to mark them as have seen.
+   */
+  clearNewItems() {
+    this.feed.clearNewItems();
+    this.emit("clear", this);
   }
 }
