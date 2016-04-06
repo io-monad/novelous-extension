@@ -90,9 +90,13 @@ module.exports = {
     }
   },
 
-  translate(key, fallback) {
+  translate(key, substitutions, fallback) {
+    if (_.isString(substitutions)) {
+      fallback = substitutions;
+      substitutions = undefined;
+    }
     key = _.camelCase(key);
-    const translated = chrome.i18n.getMessage(key);
+    const translated = chrome.i18n.getMessage(key, substitutions);
     return translated || fallback;
   },
 
