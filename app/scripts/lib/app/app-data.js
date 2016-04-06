@@ -2,19 +2,10 @@ import EventEmitter from "eventemitter3";
 import jsonSchemaDefaults from "json-schema-defaults";
 import cutil from "../util/chrome-util";
 import appDataSchema from "./app-data-schema.json";
-import SiteFactory from "../sites/site-factory";
-import Subscription from "../subscriptions/subscription";
 const logger = debug("app-data");
 
 const PROP_KEYS = _.keys(appDataSchema.properties);
 const DEFAULTS = jsonSchemaDefaults(appDataSchema);
-const PROP_SCHEMA = appDataSchema.properties;
-
-const SAVE_DEPENDENCIES = {
-  subscriptions: "subscriptionSettings",
-  sites: "siteSettings",
-};
-const LOAD_DEPENDENCIES = _.invert(SAVE_DEPENDENCIES);
 
 export default class AppData extends EventEmitter {
   static load() {
@@ -23,11 +14,22 @@ export default class AppData extends EventEmitter {
   static get schema() {
     return appDataSchema;
   }
+  static get defaults() {
+    return DEFAULTS;
+  }
 
-  constructor(data) {
+  constructor(data, options) {
     super();
+    options = _.extend({ saveDelay: 1000 }, options);
+
     this.data = {};
+    this.changedKeys = {};
+    this.savePromise = null;
+    this.saveDelay = options.saveDelay;
+
     this.overwrite(data);
+    this.changedKeys = {};  // Reset changed keys
+
     this._bindEvents();
   }
 
@@ -41,10 +43,7 @@ export default class AppData extends EventEmitter {
   _bindEvents() {
     chrome.storage.onChanged.addListener((changes) => {
       const changedValues = _(changes).pick(PROP_KEYS).mapValues("newValue").value();
-      const changedKeys = _.transform(changedValues, (keys, val, key) => {
-        keys.push(key);
-        if (LOAD_DEPENDENCIES[key]) keys.push(LOAD_DEPENDENCIES[key]);
-      }, []);
+      const changedKeys = _.keys(changedValues);
 
       if (changedKeys.length > 0) {
         _.extend(this, changedValues);
@@ -63,11 +62,10 @@ export default class AppData extends EventEmitter {
     return this.data.updatePeriodMinutes;
   }
   set updatePeriodMinutes(minutes) {
-    minutes = parseInt(minutes, 10);
-    if (isNaN(minutes) || minutes < PROP_SCHEMA.updatePeriodMinutes.minimum) {
-      this.data.updatePeriodMinutes = DEFAULTS.updatePeriodMinutes;
-    } else {
+    minutes = parseInt(minutes, 10) || DEFAULTS.updatePeriodMinutes;
+    if (minutes !== this.data.updatePeriodMinutes) {
       this.data.updatePeriodMinutes = minutes;
+      this.changedKeys.updatePeriodMinutes = true;
     }
   }
 
@@ -75,26 +73,22 @@ export default class AppData extends EventEmitter {
     return this.data.lastUpdatedAt;
   }
   set lastUpdatedAt(time) {
-    this.data.lastUpdatedAt = parseInt(time, 10) || null;
-  }
-
-  get nextWillUpdateAt() {
-    if (!this.lastUpdatedAt) return _.now();
-    return this.lastUpdatedAt + this.updatePeriodMinutes * 60 * 1000;
+    time = parseInt(time, 10) || null;
+    if (time !== this.data.lastUpdatedAt) {
+      this.data.lastUpdatedAt = time;
+      this.changedKeys.lastUpdatedAt = true;
+    }
   }
 
   get siteSettings() {
     return this.data.siteSettings;
   }
   set siteSettings(siteSettings) {
-    this.data.siteSettings = _.defaultsDeep(siteSettings, DEFAULTS.siteSettings);
-    this._sites = null;
-  }
-  get sites() {
-    if (!this._sites) {
-      this._sites = SiteFactory.createMap(this.siteSettings);
+    siteSettings = _.defaultsDeep(siteSettings, DEFAULTS.siteSettings);
+    if (!_.isEqual(siteSettings, this.data.siteSettings)) {
+      this.data.siteSettings = siteSettings;
+      this.changedKeys.siteSettings = true;
     }
-    return this._sites;
   }
 
   get subscriptionSettings() {
@@ -104,19 +98,12 @@ export default class AppData extends EventEmitter {
     // Fill missing keys with default values
     settings = _(settings || [])
       .concat(DEFAULTS.subscriptionSettings)
-      .uniqBy("feedName").value();
+      .uniqBy("feedUrl").value();
 
-    this.data.subscriptionSettings = settings;
-    this._subscriptions = null;
-  }
-  get subscriptions() {
-    if (!this._subscriptions) {
-      this._subscriptions = _.map(this.subscriptionSettings, sub => new Subscription(sub));
+    if (!_.isEqual(settings, this.data.subscriptionSettings)) {
+      this.data.subscriptionSettings = settings;
+      this.changedKeys.subscriptionSettings = true;
     }
-    return this._subscriptions;
-  }
-  set subscriptions(subscriptions) {
-    this.subscriptionSettings = _.invokeMap(subscriptions, "toObject");
   }
 
   load() {
@@ -125,20 +112,31 @@ export default class AppData extends EventEmitter {
       this.overwrite(data);
       logger("Loaded successfully", this.data);
 
-      this.emit("update", this, PROP_KEYS.concat(_.values(LOAD_DEPENDENCIES)));
+      this.emit("update", this, PROP_KEYS);
       return this;
     });
   }
 
-  save(keys) {
-    if (keys) {
-      keys = _(keys).map(key => SAVE_DEPENDENCIES[key] || key).uniq().value();
-    }
-    const savedData = keys ? _.pick(this.data, keys) : this.data;
-    logger("Saving", savedData);
-    return cutil.localSet(savedData).then(() => {
-      logger("Saved successfully", keys, this.data);
-      return this;
+  save() {
+    if (this.savePromise) return this.savePromise;
+    if (_.isEmpty(this.changedKeys)) return Promise.resolve(this);
+
+    this.savePromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const keys = _.keys(this.changedKeys);
+        const savedData = _.pick(this.data, keys);
+
+        this.savePromise = null;
+        this.changedKeys = {};
+
+        logger("Saving", savedData);
+        cutil.localSet(savedData).then(() => {
+          logger("Saved successfully", keys, this.data);
+          resolve(this);
+        })
+        .catch(reject);
+      }, this.saveDelay);
     });
+    return this.savePromise;
   }
 }

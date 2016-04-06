@@ -1,4 +1,5 @@
 import EventEmitter from "eventemitter3";
+import Subscription from "./subscription";
 import promises from "../util/promises";
 const logger = debug("subscriber");
 
@@ -7,19 +8,32 @@ const logger = debug("subscriber");
  */
 export default class Subscriber extends EventEmitter {
   /**
-   * @param {Subscription[]} subscriptions
+   * @param {Object[]} subscriptionSettings
    * @param {Object} settings - Settings.
    * @param {number} settings.fetchInterval
    */
-  constructor(subscriptions, settings) {
+  constructor(subscriptionSettings, settings) {
     super();
     settings = _.extend({
       fetchInterval: 1000,
     }, settings);
 
-    this._handleSubscriptionUpdate = this._handleSubscriptionUpdate.bind(this);
-    this.subscriptions = subscriptions;
+    this.subscriptionSettings = subscriptionSettings;
     this.fetchInterval = settings.fetchInterval;
+  }
+
+  /**
+   * @return {Object[]}
+   */
+  get subscriptionSettings() {
+    return _.invokeMap(this.subscriptions, "toObject");
+  }
+
+  /**
+   * @param {Object[]} subscriptionSettings
+   */
+  set subscriptionSettings(subscriptionSettings) {
+    this._subscriptions = _.map(subscriptionSettings || [], sub => new Subscription(sub));
   }
 
   /**
@@ -34,47 +48,28 @@ export default class Subscriber extends EventEmitter {
    */
   set subscriptions(subscriptions) {
     if (subscriptions === this._subscriptions) return;
-    if (this._subscriptions) {
-      _.each(this._subscriptions, sub => {
-        this._unbindEventsFromSubscription(sub);
-      });
-    }
     this._subscriptions = _.clone(subscriptions || []);
-    _.each(this._subscriptions, sub => {
-      this._bindEventsToSubscription(sub);
-    });
     this.emit("update");
   }
 
   /**
    * Subscribe a new subscription.
    *
-   * @param {Subscription} subscription
+   * @param {Subscription|Subscription[]} subscription
    */
   subscribe(subscription) {
-    this.subscriptions.push(subscription);
-    this._bindEventsToSubscription(subscription);
+    this._subscriptions = this._subscriptions.concat(subscription);
     this.emit("update");
   }
 
   /**
    * Unsubscribe a subscription.
    *
-   * @param {Subscription} subscription
+   * @param {Subscription|Subscription[]} subscription
    */
   unsubscribe(subscription) {
-    this._unbindEventsFromSubscription(subscription);
-    _.pull(this.subscriptions, subscription);
+    _.pullAll(this._subscriptions, _.castArray(subscription));
     this.emit("update");
-  }
-
-  _bindEventsToSubscription(subscription) {
-    subscription.removeListener("update", this._handleSubscriptionUpdate);
-    subscription.on("update", this._handleSubscriptionUpdate);
-  }
-
-  _unbindEventsFromSubscription(subscription) {
-    subscription.removeListener("update", this._handleSubscriptionUpdate);
   }
 
   /**
@@ -87,11 +82,14 @@ export default class Subscriber extends EventEmitter {
     const subscriptions = _.filter(this.subscriptions, "enabled");
     return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
       logger(`Fetching feed for ${sub.id}`, sub);
-      return sub.update().then(updated => {
-        logger(`Fetched feed for ${sub.id}`, sub, updated);
+      return sub.update().then(() => {
+        logger(`Fetched feed for ${sub.id}`, sub);
       }).catch((err) => {
         console.error(`Error occurred for ${sub.id}`, err);
       });
+    }).then(() => {
+      logger("Updated all subscriptions");
+      this.emit("update");
     });
   }
 
@@ -102,15 +100,15 @@ export default class Subscriber extends EventEmitter {
     _.each(this.subscriptions, sub => {
       sub.clearNewItems();
     });
-    this.emit("clear");
+    this.emit("update");
   }
 
   /**
-   * Handle update event from subscription.
+   * Get total count of new items in subscriptions.
    *
-   * @private
+   * @return {number} Total new items count.
    */
-  _handleSubscriptionUpdate(sub) {
-    this.emit("updateSubscription", sub);
+  getNewItemsCount() {
+    return _.sumBy(this.subscriptions, "newItemsCount");
   }
 }

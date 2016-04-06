@@ -1,17 +1,9 @@
-import { test, factory, sinonsb } from "../../common";
-import jsonSchemaDefaults from "json-schema-defaults";
+import { test } from "../../common";
 import AppData from "../../../app/scripts/lib/app/app-data";
 import appDataSchema from "../../../app/scripts/lib/app/app-data-schema.json";
-import Site from "../../../app/scripts/lib/sites/site";
-import Subscription from "../../../app/scripts/lib/subscriptions/subscription";
-import FeedFactory from "../../../app/scripts/lib/feeds/feed-factory";
-import NarouMessagesFeed from "../../../app/scripts/lib/feeds/narou-messages";
-
-const PROP_KEYS = _.keys(appDataSchema.properties);
-const DEFAULTS = jsonSchemaDefaults(appDataSchema);
 
 test.beforeEach(t => {
-  t.context.appData = new AppData();
+  t.context.appData = new AppData({}, { saveDelay: 0 });
 });
 
 test("new AppData", t => {
@@ -47,7 +39,7 @@ test("#schema returns schema", t => {
 
 test("#updatePeriodMinutes returns default value", t => {
   const { appData } = t.context;
-  t.is(appData.updatePeriodMinutes, DEFAULTS.updatePeriodMinutes);
+  t.is(appData.updatePeriodMinutes, AppData.defaults.updatePeriodMinutes);
 });
 
 test("#updatePeriodMinutes setter converts string into number", t => {
@@ -59,56 +51,39 @@ test("#updatePeriodMinutes setter converts string into number", t => {
 test("#updatePeriodMinutes setter uses default for NaN", t => {
   const { appData } = t.context;
   appData.updatePeriodMinutes = "foobar";
-  t.is(appData.updatePeriodMinutes, DEFAULTS.updatePeriodMinutes);
+  t.is(appData.updatePeriodMinutes, AppData.defaults.updatePeriodMinutes);
 });
 
-test("#updatePeriodMinutes setter uses default for interval less than minimum", t => {
+test("#lastUpdatedAt setter uses null for NaN", t => {
   const { appData } = t.context;
-  appData.updatePeriodMinutes = 1;
-  t.is(appData.updatePeriodMinutes, DEFAULTS.updatePeriodMinutes);
+  appData.lastUpdatedAt = "foobar";
+  t.is(appData.lastUpdatedAt, null);
 });
 
 test("#siteSettings returns default value", t => {
   const { appData } = t.context;
-  t.same(appData.siteSettings, DEFAULTS.siteSettings);
-});
-
-test("#sites returns a map of Site", t => {
-  const { appData } = t.context;
-  t.ok(_.isObject(appData.sites));
-  t.ok(_.every(appData.sites, site => site instanceof Site));
-  t.is(_.size(appData.sites), _.size(DEFAULTS.siteSettings));
+  t.same(appData.siteSettings, AppData.defaults.siteSettings);
 });
 
 test("#subscriptionSettings returns default value", t => {
   const { appData } = t.context;
-  t.same(appData.subscriptionSettings, DEFAULTS.subscriptionSettings);
+  t.same(appData.subscriptionSettings, AppData.defaults.subscriptionSettings);
 });
 
-test("#subscriptions returns array of Subscription", t => {
+test("#subscriptionSettings setter keeps defaults", t => {
   const { appData } = t.context;
-  t.ok(_.isArray(appData.subscriptions));
-  t.ok(_.every(appData.subscriptions, sub => sub instanceof Subscription));
-  t.is(appData.subscriptions.length, DEFAULTS.subscriptionSettings.length);
+  appData.subscriptionSettings = [{ feedUrl: "test-feed://test" }];
+
+  t.ok(_.isArray(appData.subscriptionSettings));
+  t.is(appData.subscriptionSettings.length, AppData.defaults.subscriptionSettings.length + 1);
+  t.is(appData.subscriptionSettings[0].feedUrl, "test-feed://test");
 });
 
-test("#subscriptions setter updates subscriptionSettings but keeps defaults", t => {
+test("#subscriptionSettings setter not duplicating defaults", t => {
   const { appData } = t.context;
-  sinonsb.stub(FeedFactory, "create").returns(new NarouMessagesFeed);
-  const newSub = new Subscription({ feedName: "test-feed" });
-  appData.subscriptions = [newSub];
+  appData.subscriptionSettings = [AppData.defaults.subscriptionSettings[0]];
 
-  t.ok(_.isArray(appData.subscriptions));
-  t.ok(_.every(appData.subscriptions, sub => sub instanceof Subscription));
-  t.is(appData.subscriptions.length, DEFAULTS.subscriptionSettings.length + 1);
-  t.is(appData.subscriptions[0].id, newSub.id);
-});
-
-test("#subscriptions setter not duplicating defaults", t => {
-  const { appData } = t.context;
-  const newSub = new Subscription(DEFAULTS.subscriptionSettings[0]);
-  appData.subscriptions = [newSub];
-  t.is(appData.subscriptions.length, DEFAULTS.subscriptionSettings.length);
+  t.is(appData.subscriptionSettings.length, AppData.defaults.subscriptionSettings.length);
 });
 
 test.serial(".load returns appData Promise", t => {
@@ -128,35 +103,54 @@ test.serial("#load returns appData Promise", t => {
 
 test.serial("#load emits update event", t => {
   const { appData } = t.context;
+  const propKeys = _.keys(AppData.schema.properties);
   chrome.storage.local.get.callsArgWithAsync(1, {});
   t.plan(2);
   appData.on("update", (opts, keys) => {
     t.is(opts, appData);
-    t.same(keys.sort(), PROP_KEYS.concat(["subscriptions", "sites"]).sort());
+    t.same(keys.sort(), propKeys.sort());
   });
   return appData.load();
 });
 
-test.serial("#save saves values into storage", t => {
+test.serial("#save saves nothing when nothing updated", t => {
   const { appData } = t.context;
-  chrome.storage.local.set.callsArgAsync(1);
   return appData.save().then(() => {
-    t.ok(chrome.storage.local.set.called);
-    t.same(chrome.storage.local.set.args[0][0], appData.data);
-    t.pass();
+    t.false(chrome.storage.local.set.called);
   });
 });
 
-test.serial("#save accepts keys to filter saved values", t => {
+test.serial("#save saves only changed values into storage", t => {
   const { appData } = t.context;
   chrome.storage.local.set.callsArgAsync(1);
-  return appData.save(["updatePeriodMinutes", "subscriptions"]).then(() => {
-    t.ok(chrome.storage.local.set.called);
+  appData.updatePeriodMinutes = 60;
+  appData.lastUpdatedAt = 1234567890;
+  return appData.save().then(() => {
+    t.true(chrome.storage.local.set.calledOnce);
     t.same(chrome.storage.local.set.args[0][0], {
-      updatePeriodMinutes: appData.updatePeriodMinutes,
-      subscriptionSettings: appData.subscriptionSettings,
+      updatePeriodMinutes: 60,
+      lastUpdatedAt: 1234567890,
     });
-    t.pass();
+  });
+});
+
+test.serial("#save buffers changes by delaying to save", t => {
+  const { appData } = t.context;
+  chrome.storage.local.set.callsArgAsync(1);
+
+  appData.updatePeriodMinutes = 60;
+  const promise1 = appData.save();
+
+  appData.lastUpdatedAt = 1234567890;
+  const promise2 = appData.save();
+
+  t.is(promise1, promise2);
+  return promise1.then(() => {
+    t.true(chrome.storage.local.set.calledOnce);
+    t.same(chrome.storage.local.set.args[0][0], {
+      updatePeriodMinutes: 60,
+      lastUpdatedAt: 1234567890,
+    });
   });
 });
 
@@ -180,9 +174,9 @@ test.serial.cb("uses default value if storage value is undefined", t => {
   t.plan(4);
   appData.on("update", (opts, keys) => {
     t.ok(opts instanceof AppData);
-    t.is(opts.updatePeriodMinutes, DEFAULTS.updatePeriodMinutes);
+    t.is(opts.updatePeriodMinutes, AppData.defaults.updatePeriodMinutes);
     t.ok(_.isObject(opts.siteSettings));
-    t.same(keys, ["updatePeriodMinutes", "siteSettings", "sites"]);
+    t.same(keys.sort(), ["siteSettings", "updatePeriodMinutes"]);
     t.end();
   });
   chrome.storage.onChanged.trigger(

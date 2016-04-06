@@ -1,63 +1,93 @@
-import EventEmitter from "eventemitter3";
-import FeedFactory from "../feeds/feed-factory";
+import Feed from "../feeds/feed";
+import FetcherFactory from "../feeds/fetcher-factory";
+import WatchStrategies from "./watch-strategies";
 
 /**
- * Subscription of novel sites.
+ * Subscription of a feed.
+ *
+ * It holds a feed and checks new items in the feed.
  */
-export default class Subscription extends EventEmitter {
+export default class Subscription {
   /**
-   * @param {Object}  settings - Settings.
-   * @param {string}  settings.feedName - Feed name.
-   * @param {Object}  [settings.feedData] - Feed data.
-   * @param {boolean} [settings.enabled=true] - `false` if disabled.
-   * @param {number}  [settings.lastUpdatedAt] - Timestamp of last update.
+   * @param {Object}  data - Subscription data.
+   * @param {string}  data.feedUrl - Feed URL.
+   * @param {Object}  [data.feedData] - Feed data (feed.toObject)
+   * @param {Object}  [data.fetchOptions] - Options for feed fetcher.
+   * @param {string}  [data.watch="set"] - Watch strategy name.
+   * @param {Object}  [data.watchState] - Watch strategy state.
+   * @param {Object}  [data.watchOptions] - Options for watch strategy.
+   * @param {boolean} [data.enabled=true] - `false` if disabled.
+   * @param {number}  [data.lastUpdatedAt] - Timestamp of last update.
    */
-  constructor(settings = {}) {
-    super();
-    this.settings = _.defaults(settings, {
-      feedName: null,
+  constructor(data = {}) {
+    this.data = _.defaults(data, {
+      feedUrl: null,
       feedData: null,
+      fetchOptions: null,
+      watch: "set",
+      watchState: null,
+      watchOptions: null,
       enabled: true,
       lastUpdatedAt: null,
     });
-    this._feed = FeedFactory.create(this.settings.feedName, this.settings.feedData);
+    this._feed = this.data.feedData && new Feed(this.data.feedData);
+    this._feedFetcher = FetcherFactory.create(this.data.feedUrl, this.data.fetchOptions);
+    this._watchStrategy = WatchStrategies.create(this.data.watch, this.data.watchOptions);
   }
 
   toObject() {
-    const obj = _.clone(this.settings);
-    obj.feedData = this.feed.getData();
-    return obj;
+    return _.clone(this.data);
   }
 
   get id() {
-    return this.settings.feedName;
+    return this.data.feedUrl;
   }
-  get feedName() {
-    return this.settings.feedName;
+  get feedUrl() {
+    return this.data.feedUrl;
   }
+  get enabled() {
+    return this.data.enabled;
+  }
+  get lastUpdatedAt() {
+    return this.data.lastUpdatedAt;
+  }
+
   get feed() {
     return this._feed;
   }
-  get enabled() {
-    return this.settings.enabled;
+  set feed(newFeed) {
+    if (this._feed !== newFeed) {
+      this._feed = newFeed;
+      this.data.feedData = newFeed ? newFeed.toObject() : null;
+      this._newItems = null;  // Clear cache
+    }
   }
-  get lastUpdatedAt() {
-    return this.settings.lastUpdatedAt;
+
+  get newItems() {
+    if (!this._newItems) {
+      if (!this.feed) {
+        this._newItems = [];
+      } else {
+        this._newItems = this._watchStrategy.filterNewItems(this.feed.items, this.data.watchState);
+      }
+    }
+    return this._newItems;
   }
-  get updateCount() {
-    return this.feed.updateCount;
+  get newItemsCount() {
+    return this.newItems.length;
   }
 
   /**
    * Update feed by fetching from the server.
+   *
+   * @return Promise
    */
   update() {
-    return this.feed.update().then(updated => {
-      if (updated) {
-        this.settings.lastUpdatedAt = _.now();
-        this.emit("update", this);
-      }
-      return updated;
+    return this._feedFetcher.fetchFeed(this.feedUrl).then(feed => {
+      const isFirstFetch = !this.data.feedData;
+      this.feed = feed;
+      this.data.lastUpdatedAt = _.now();
+      if (isFirstFetch) this.clearNewItems();
     });
   }
 
@@ -65,7 +95,9 @@ export default class Subscription extends EventEmitter {
    * Clear new items in feed to mark them as have seen.
    */
   clearNewItems() {
-    this.feed.clearNewItems();
-    this.emit("clear", this);
+    if (this.feed) {
+      this.data.watchState = this._watchStrategy.getClearedState(this.feed.items);
+    }
+    this._newItems = null;
   }
 }

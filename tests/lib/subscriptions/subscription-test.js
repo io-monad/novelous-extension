@@ -13,42 +13,67 @@ test("new Subscription", t => {
 
 test("has properties", t => {
   const { sub, settings } = t.context;
-  t.is(sub.feedName, settings.feedName);
+  t.is(sub.id, settings.feedUrl);
+  t.is(sub.feedUrl, settings.feedUrl);
   t.is(sub.enabled, settings.enabled);
   t.is(sub.lastUpdatedAt, settings.lastUpdatedAt);
   t.ok(sub.feed instanceof Feed);
+  t.same(sub.newItems, []);
+  t.is(sub.newItemsCount, 0);
 });
 
-test("#update calls feed.update and emits update event if updated", t => {
+test.serial("#update updates holding feed", t => {
   const { sub } = t.context;
-  const stub = sinonsb.stub(sub.feed, "update").returns(Promise.resolve(true));
+  const feed = factory.buildSync("feed");
+  const stub = sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(feed));
   sinonsb.stub(_, "now").returns(1234567890);
-  t.plan(3);
 
-  sub.on("update", (given) => {
-    t.is(given, sub);
-  });
   return sub.update().then(() => {
     t.true(stub.calledOnce);
-    t.is(sub.settings.lastUpdatedAt, _.now());
+    t.is(sub.feed, feed);
+    t.is(sub.lastUpdatedAt, _.now());
   });
 });
 
-test("#update does not emit update event unless updated", t => {
+test("#update clears all new items on first time", t => {
   const { sub } = t.context;
-  sinonsb.stub(sub.feed, "update").returns(Promise.resolve(false));
-  sub.on("update", t.fail);
-  return sub.update();
+  const feed = factory.buildSync("feed");
+  sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(feed));
+
+  sub.feed = null;
+  return sub.update().then(() => {
+    t.is(sub.feed, feed);
+    t.same(sub.newItems, []);
+  });
 });
 
-test.cb("#clearNewItems calls feed.clearNewItems and emits clear event", t => {
+test("#update does not clear new items not on first time", async t => {
   const { sub } = t.context;
-  const stub = sinonsb.stub(sub.feed, "clearNewItems");
 
-  sub.on("clear", (given) => {
-    t.is(given, sub);
-    t.true(stub.calledOnce);
-    t.end();
+  const newFeedItem = factory.buildSync("feedItem");
+  const newFeed = new Feed(_.cloneDeep(sub.feed.toObject()));
+  newFeed.items.push(newFeedItem);
+
+  sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(newFeed));
+  return sub.update().then(() => {
+    t.is(sub.feed, newFeed);
+    t.same(sub.newItems, [newFeedItem]);
   });
+});
+
+test("#clearNewItems clears new items", t => {
+  const { sub } = t.context;
+  t.same(sub.newItems, []);
+  t.is(sub.newItemsCount, 0);
+
+  const newFeedItem = factory.buildSync("feedItem");
+  const newFeed = new Feed(_.cloneDeep(sub.feed.toObject()));
+  newFeed.items.push(newFeedItem);
+  sub.feed = newFeed;
+  t.same(sub.newItems, [newFeedItem]);
+  t.is(sub.newItemsCount, 1);
+
   sub.clearNewItems();
+  t.same(sub.newItems, []);
+  t.is(sub.newItemsCount, 0);
 });

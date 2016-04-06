@@ -1,16 +1,19 @@
 import Publication from "./publication";
+import SiteFactory from "../sites/site-factory";
 
 /**
  * Publisher that publishes article to novel sites.
  */
 export default class Publisher {
   /**
-   * @param {Object.<string, Site>} sites - A map of site name and Site object.
-   * @param {Object} [settings] - Settings.
+   * @param {Object.<string, Object>} siteSettings - A map of site name and Site settings.
    */
-  constructor(sites, settings) {
-    settings = settings || {};
-    this.sites = sites;
+  constructor(siteSettings) {
+    this.siteSettings = siteSettings;
+  }
+
+  set siteSettings(siteSettings) {
+    this.sites = SiteFactory.createMap(siteSettings || {});
   }
 
   /**

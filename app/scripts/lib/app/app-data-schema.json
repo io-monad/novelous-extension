@@ -44,38 +44,41 @@
       "title": "subscriptionSettings",
       "type": "array",
       "default": [
-        { "feedName": "narou-messages", "enabled": true },
-        { "feedName": "narou-comments", "enabled": true },
-        { "feedName": "narou-reviews", "enabled": true },
-        { "feedName": "kakuyomu-reviews", "enabled": true }
+        { "feedUrl": "novelous-feed://narou/messages" },
+        { "feedUrl": "novelous-feed://narou/comments" },
+        { "feedUrl": "novelous-feed://narou/reviews" },
+        { "feedUrl": "novelous-feed://kakuyomu/reviews" }
       ],
       "additionalItems": false,
       "items": {
         "title": "subscription",
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "feedName",
-          "enabled"
-        ],
+        "required": ["feedUrl"],
         "properties": {
-          "feedName": {
+          "feedUrl": {
             "type": "string",
             "minLength": 1
+          },
+          "feedData": {
+            "type": "object"
+          },
+          "fetchOptions": {
+            "type": "object"
+          },
+          "watch": {
+            "enum": ["set", "number"],
+            "default": "set"
+          },
+          "watchState": {
+            "type": "object"
+          },
+          "watchOptions": {
+            "type": "object"
           },
           "enabled": {
             "type": "boolean",
             "default": true
-          },
-          "feedData": {
-            "type": "object",
-            "properties": {
-              "items": {
-                "type": "array",
-                "items": { "type": "object" }
-              },
-              "watch": {}
-            }
           },
           "lastUpdatedAt": {
             "oneOf": [

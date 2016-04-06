@@ -1,10 +1,8 @@
 import { test, sinonsb, factory } from "../../common";
-import SiteFactory from "../../../app/scripts/lib/sites/site-factory";
 import Publisher from "../../../app/scripts/lib/publications/publisher";
 
 test.beforeEach(t => {
-  const sites = SiteFactory.createMap({ narou: true });
-  t.context.publisher = new Publisher(sites);
+  t.context.publisher = new Publisher({ narou: true });
 });
 
 function stubPublish(publisher, siteName) {
@@ -16,6 +14,16 @@ function stubPublish(publisher, siteName) {
 
 test("new Publisher", t => {
   t.ok(t.context.publisher instanceof Publisher);
+});
+
+test("#siteSettings setter updates sites", t => {
+  const { publisher } = t.context;
+  t.ok(publisher.sites.narou);
+  t.ok(!publisher.sites.kakuyomu);
+
+  publisher.siteSettings = { kakuyomu: true };
+  t.ok(!publisher.sites.narou);
+  t.ok(publisher.sites.kakuyomu);
 });
 
 test("#publishToSite calls site.publish", t => {

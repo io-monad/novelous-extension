@@ -2,7 +2,7 @@ import ExternalMessageReceiver from "./external-message-receiver";
 import Subscriber from "../subscriptions/subscriber";
 import Publisher from "../publications/publisher";
 import AppData from "../app/app-data";
-import ChromeAlarm from "../util/chrome-alarm";
+import UpdateTimer from "./update-timer";
 import Badge from "./badge";
 const logger = debug("background");
 
@@ -12,11 +12,11 @@ const logger = debug("background");
 export default class BackgroundController {
   constructor() {
     this.externalMessageReceiver = new ExternalMessageReceiver(this);
-    this.subscriberAlarm = new ChromeAlarm("subscriber");
     this.badge = new Badge();
     this.appData = null;
     this.subscriber = null;
     this.publisher = null;
+    this.updateTimer = null;
     this.initializePromise = null;
   }
 
@@ -26,13 +26,10 @@ export default class BackgroundController {
   start() {
     logger("Initializing");
     this.externalMessageReceiver.register();
-    this.subscriberAlarm.on("alarm", this.updateSubscriptions.bind(this));
 
     // Start initialization process by loading AppData.
     this.initializePromise = AppData.load().then(appData => {
-      this.appData = appData;
-      this.appData.on("update", this._handleAppDataUpdate.bind(this));
-      this._setupWithAppData();
+      this._setupWithAppData(appData);
       return this;
     }).catch((e) => {
       console.error("Error while initialization in BackgroundController", e);
@@ -44,28 +41,50 @@ export default class BackgroundController {
   /**
    * Called when AppData is loaded first time.
    */
-  _setupWithAppData() {
+  _setupWithAppData(appData) {
+    this.appData = appData;
+    this.appData.on("update", () => { this._handleAppDataUpdate(); });
+
     this._setupPublisher();
     this._setupSubscriber();
-    this._updateBadge();
-    this._startAlarm();
+    this._setupUpdateTimer();
   }
 
   _setupPublisher() {
-    this.publisher = new Publisher(this.appData.sites);
+    this.publisher = new Publisher(this.appData.siteSettings);
     logger("Initialized Publisher", this.publisher);
   }
 
   _setupSubscriber() {
-    this.subscriber = new Subscriber(this.appData.subscriptions);
-
-    this.subscriber.on("updateSubscription", sub => {
-      this.badge.setCount(sub.id, sub.updateCount);
+    this.subscriber = new Subscriber(this.appData.subscriptionSettings);
+    this.subscriber.on("update", () => {
+      logger("Updated Subscriber", this.subscriber);
+      this.badge.setCount(this.subscriber.getNewItemsCount());
+      this.appData.subscriptionSettings = this.subscriber.subscriptionSettings;
+      this.appData.save();
     });
-    this.subscriber.on("clear", () => {
-      this.badge.clear();
-    });
+    this.badge.setCount(this.subscriber.getNewItemsCount());
     logger("Initialized Subscriber", this.subscriber);
+  }
+
+  _setupUpdateTimer() {
+    this.updateTimer = new UpdateTimer(
+      this.appData.updatePeriodMinutes,
+      this.appData.lastUpdatedAt
+    );
+    this.updateTimer.on("timer", () => {
+      this._updateSubscriptions();
+      this.appData.lastUpdatedAt = this.updateTimer.lastUpdatedAt;
+      this.appData.save();
+    });
+    this.updateTimer.on("update", () => {
+      logger("Updated UpdateTimer", this.updateTimer);
+      this.appData.lastUpdatedAt = this.updateTimer.lastUpdatedAt;
+      this.appData.updatePeriodMinutes = this.updateTimer.updatePeriodMinutes;
+      this.appData.save();
+    });
+    this.updateTimer.start();
+    logger("Initialized UpdateTimer", this.updateTimer);
   }
 
   /**
@@ -73,32 +92,18 @@ export default class BackgroundController {
    */
   _handleAppDataUpdate(appData, keys) {
     const updated = _.keyBy(keys);
-    if (updated.sites) {
-      this.publisher.sites = this.appData.sites;
-      logger("Updated Publisher", this.publisher);
+    if (updated.siteSettings) {
+      this.publisher.siteSettings = this.appData.siteSettings;
     }
-    if (updated.subscriptions) {
-      this.subscriber.subscriptions = this.appData.subscriptions;
-      this._updateBadge();
-      logger("Updated Subscriber", this.subscriber);
+    if (updated.subscriptionSettings) {
+      this.subscriber.subscriptionSettings = this.appData.subscriptionSettings;
     }
-    if (updated.lastUpdatedAt || updated.updatePeriodMinutes) {
-      this._startAlarm();
+    if (updated.lastUpdatedAt) {
+      this.updateTimer.lastUpdatedAt = this.appData.lastUpdatedAt;
     }
-  }
-
-  _updateBadge() {
-    this.badge.clear();
-    _.each(this.subscriber.subscriptions, sub => {
-      this.badge.setCount(sub.id, sub.updateCount);
-    });
-  }
-
-  _startAlarm() {
-    this.subscriberAlarm.start({
-      when: this.appData.nextWillUpdateAt,
-      periodInMinutes: this.appData.updatePeriodMinutes,
-    });
+    if (updated.updatePeriodMinutes) {
+      this.updateTimer.updatePeriodMinutes = this.appData.updatePeriodMinutes;
+    }
   }
 
   /**
@@ -136,10 +141,8 @@ export default class BackgroundController {
    */
   markBadgeAsSeen() {
     return this.getSubscriber().then(subscriber => {
-      logger("Clearing badge count");
+      logger("Clearing new items");
       subscriber.clearNewItems();
-      this.appData.subscriptions = subscriber.subscriptions;
-      return this.appData.save(["subscriptions"]);
     });
   }
 
@@ -149,14 +152,12 @@ export default class BackgroundController {
    * @return {Promise}
    */
   updateSubscriptions() {
+    this.updateTimer.reset();
+    return this._updateSubscriptions();
+  }
+  _updateSubscriptions() {
     return this.getSubscriber().then(subscriber => {
-      logger("Updating all subscriptions");
-      return subscriber.updateAll().then(() => {
-        logger("Updated all subscriptions successfully");
-        this.appData.lastUpdatedAt = _.now();
-        this.appData.subscriptions = subscriber.subscriptions;
-        return this.appData.save(["lastUpdatedAt", "subscriptions"]);
-      }).catch((e) => {
+      return subscriber.updateAll().catch((e) => {
         console.error("Error in subscriber.updateAll:", e);
         throw e;
       });

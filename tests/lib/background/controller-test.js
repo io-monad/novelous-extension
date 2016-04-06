@@ -3,6 +3,7 @@ import BackgroundController from "../../../app/scripts/lib/background/controller
 import AppData from "../../../app/scripts/lib/app/app-data";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import Publisher from "../../../app/scripts/lib/publications/publisher";
+import UpdateTimer from "../../../app/scripts/lib/background/update-timer";
 import cutil from "../../../app/scripts/lib/util/chrome-util";
 
 test.beforeEach(t => {
@@ -30,28 +31,33 @@ test.serial("#start initializes members", t => {
     t.true(controller.appData instanceof AppData);
     t.true(controller.subscriber instanceof Subscriber);
     t.true(controller.publisher instanceof Publisher);
+    t.true(controller.updateTimer instanceof UpdateTimer);
   });
 });
 
 test.serial("#start updates badge counter", t => {
+  const settings = factory.buildSync("subscriptionSettings");
+  const newFeedItem = factory.buildSync("feedItem");
+  settings.feedData.items.push(newFeedItem);
+
   return startController(t, {
-    subscriptionSettings: [factory.buildSync("subscriptionSettings")],
+    subscriptionSettings: [settings],
   }).then(() => {
-    t.same(chrome.browserAction.setBadgeText.lastCall.args[0], { text: "" });
+    t.same(chrome.browserAction.setBadgeText.lastCall.args[0], { text: "1" });
   });
 });
 
-test.serial("#start sets subscriber alarm", t => {
+test.serial("#start starts update timer", t => {
   sinonsb.useFakeTimers();
   return startController(t, {
     lastUpdatedAt: _.now(),
     updatePeriodMinutes: 30,
   }).then(controller => {
     t.true(chrome.alarms.create.calledOnce);
-    t.is(chrome.alarms.create.args[0][0], "subscriber");
+    t.is(chrome.alarms.create.args[0][0], "update");
     t.same(chrome.alarms.create.args[0][1], {
-      when: controller.appData.nextWillUpdateAt,
-      periodInMinutes: controller.appData.updatePeriodMinutes,
+      when: controller.updateTimer.nextWillUpdateAt,
+      periodInMinutes: controller.updateTimer.updatePeriodMinutes,
     });
   });
 });
@@ -89,14 +95,8 @@ test.serial("#getPublisher returns Promise of Publisher", t => {
 test.serial("#markBadgeAsSeen calls subscriber.clearNewItems", t => {
   return startController(t).then(controller => {
     const stubClear = sinonsb.stub(controller.subscriber, "clearNewItems");
-
-    const stubSave = sinonsb.stub(controller.appData, "save");
-    stubSave.returns(Promise.resolve());
-
     return controller.markBadgeAsSeen().then(() => {
       t.true(stubClear.calledOnce);
-      t.true(stubSave.calledOnce);
-      t.same(stubSave.args[0][0], ["subscriptions"]);
     });
   });
 });
@@ -105,14 +105,8 @@ test.serial("#updateSubscriptions calls subscriber.updateAll", t => {
   return startController(t).then(controller => {
     const stubUpdate = sinonsb.stub(controller.subscriber, "updateAll");
     stubUpdate.returns(Promise.resolve());
-
-    const stubSave = sinonsb.stub(controller.appData, "save");
-    stubSave.returns(Promise.resolve());
-
     return controller.updateSubscriptions().then(() => {
       t.true(stubUpdate.calledOnce);
-      t.true(stubSave.calledOnce);
-      t.same(stubSave.args[0][0], ["lastUpdatedAt", "subscriptions"]);
     });
   });
 });
