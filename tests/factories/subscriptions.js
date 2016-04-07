@@ -22,6 +22,8 @@ factory.define("feedItem", Object, {
 const subscriptionSchema = {
   feedUrl: "novelous-feed://narou/messages",
   feedData: () => factory.buildSync("feed").toObject(),
+  fetchOptions: null,
+  watch: "set",
   watchState() {
     return _.transform(
       this.feedData.items,
@@ -29,6 +31,7 @@ const subscriptionSchema = {
       {}
     );
   },
+  watchOptions: null,
   enabled: true,
   lastUpdatedAt: null,
 };

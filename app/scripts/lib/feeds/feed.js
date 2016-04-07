@@ -39,7 +39,7 @@ export default class Feed {
    * @return {Object}
    */
   toObject() {
-    return _.clone(this.data);
+    return this.data;
   }
 
   /**

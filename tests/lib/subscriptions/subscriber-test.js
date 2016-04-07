@@ -24,13 +24,10 @@ test("#subscriptionSettings setter", t => {
   const newSettings = _.range(5).map(() => factory.buildSync("subscriptionSettings"));
   subscriber.subscriptionSettings = newSettings;
 
-  t.is(subscriber.subscriptions.length, 5);
-  t.true(
-    _.every(
-      _.zip(newSettings, subscriber.subscriptions),
-      ([setting, subscription]) => _.isEqual(setting, subscription.toObject()),
-    )
-  );
+  t.is(subscriber.subscriptions.length, newSettings.length);
+  _.each(subscriber.subscriptions, (subscription, i) => {
+    t.same(subscription.toObject(), newSettings[i]);
+  });
 });
 
 test.cb("#subscribe", t => {

@@ -20,7 +20,7 @@ export default class Subscription {
    * @param {number}  [data.lastUpdatedAt] - Timestamp of last update.
    */
   constructor(data = {}) {
-    this.data = _.defaults(data, {
+    this.data = _.extend({
       feedUrl: null,
       feedData: null,
       fetchOptions: null,
@@ -29,7 +29,7 @@ export default class Subscription {
       watchOptions: null,
       enabled: true,
       lastUpdatedAt: null,
-    });
+    }, data);
     this._feed = this.data.feedData && new Feed(this.data.feedData);
     this._feedFetcher = FetcherFactory.create(this.data.feedUrl, this.data.fetchOptions);
     this._watchStrategy = WatchStrategies.create(this.data.watch, this.data.watchOptions);
