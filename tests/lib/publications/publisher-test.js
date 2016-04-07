@@ -13,17 +13,17 @@ function stubPublish(publisher, siteName) {
 }
 
 test("new Publisher", t => {
-  t.ok(t.context.publisher instanceof Publisher);
+  t.truthy(t.context.publisher instanceof Publisher);
 });
 
 test("#siteSettings setter updates sites", t => {
   const { publisher } = t.context;
-  t.ok(publisher.sites.narou);
-  t.ok(!publisher.sites.kakuyomu);
+  t.truthy(publisher.sites.narou);
+  t.truthy(!publisher.sites.kakuyomu);
 
   publisher.siteSettings = { kakuyomu: true };
-  t.ok(!publisher.sites.narou);
-  t.ok(publisher.sites.kakuyomu);
+  t.truthy(!publisher.sites.narou);
+  t.truthy(publisher.sites.kakuyomu);
 });
 
 test("#publishToSite calls site.publish", t => {
@@ -32,7 +32,7 @@ test("#publishToSite calls site.publish", t => {
 
   const pub = factory.buildSync("publication");
   return publisher.publishToSite(pub, "narou").then(() => {
-    t.ok(stub.calledOnce);
+    t.truthy(stub.calledOnce);
     t.is(stub.args[0][0], pub);
   });
 });
@@ -43,7 +43,7 @@ test("#publish calls site.publish", t => {
 
   const pub = factory.buildSync("publication");
   return publisher.publish(pub).then(() => {
-    t.ok(stub.calledOnce);
+    t.truthy(stub.calledOnce);
     t.is(stub.args[0][0], pub);
   });
 });

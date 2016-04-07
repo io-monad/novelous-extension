@@ -5,6 +5,6 @@ test("#listReceivedReviews", t => {
   const expected = fixture.json("narou/my-review-list.json");
   const myReviewLister = new NarouMyReviewLister;
   return myReviewLister.listReceivedReviews().then((reviews) => {
-    t.same(reviews, expected);
+    t.deepEqual(reviews, expected);
   });
 });

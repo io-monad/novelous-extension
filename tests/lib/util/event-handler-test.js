@@ -11,8 +11,8 @@ test.before(() => {
 });
 
 test("returns export object", t => {
-  t.ok(_.isObject(testEvents));
-  t.ok(_.isFunction(testEvents.buildHandler));
+  t.truthy(_.isObject(testEvents));
+  t.truthy(_.isFunction(testEvents.buildHandler));
   t.is(testEvents.HELLO, "HELLO");
   t.is(testEvents.PING, "PING");
 });
@@ -24,11 +24,11 @@ test("#buildHandler builds handler function", t => {
     { [testEvents.HELLO]: hello[1] },
   ].forEach((builder, i) => {
     const handler = testEvents.buildHandler(builder);
-    t.ok(_.isFunction(handler));
+    t.truthy(_.isFunction(handler));
 
     const message = { type: "HELLO", foo: "bar" };
     handler(message);
-    t.ok(hello[i].calledOnce);
+    t.truthy(hello[i].calledOnce);
     t.is(hello[i].firstCall.args[0], message);
   });
 });
@@ -67,7 +67,7 @@ test.cb("Built handler handles returned Promise", t => {
 
   const message = { type: "HELLO", foo: "bar" };
   const ret = handler(message, {}, (result) => {
-    t.same(result, { test: "bar" });
+    t.deepEqual(result, { test: "bar" });
     t.end();
   });
   t.true(ret);
@@ -82,7 +82,7 @@ test.cb("Built handler handles error callback", t => {
 
   const message = { type: "HELLO", foo: "bar" };
   const ret = handler(message, {}, (result) => {
-    t.same(result, { error: "bar" });
+    t.deepEqual(result, { error: "bar" });
     t.end();
   });
   t.true(ret);

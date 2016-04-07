@@ -8,7 +8,7 @@ test.beforeEach(t => {
 });
 
 test("new Subscription", t => {
-  t.ok(t.context.sub instanceof Subscription);
+  t.truthy(t.context.sub instanceof Subscription);
 });
 
 test("has properties", t => {
@@ -17,8 +17,8 @@ test("has properties", t => {
   t.is(sub.feedUrl, settings.feedUrl);
   t.is(sub.enabled, settings.enabled);
   t.is(sub.lastUpdatedAt, settings.lastUpdatedAt);
-  t.ok(sub.feed instanceof Feed);
-  t.same(sub.newItems, []);
+  t.truthy(sub.feed instanceof Feed);
+  t.deepEqual(sub.newItems, []);
   t.is(sub.newItemsCount, 0);
 });
 
@@ -43,7 +43,7 @@ test("#update clears all new items on first time", t => {
   sub.feed = null;
   return sub.update().then(() => {
     t.is(sub.feed, feed);
-    t.same(sub.newItems, []);
+    t.deepEqual(sub.newItems, []);
   });
 });
 
@@ -57,23 +57,23 @@ test("#update does not clear new items not on first time", async t => {
   sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(newFeed));
   return sub.update().then(() => {
     t.is(sub.feed, newFeed);
-    t.same(sub.newItems, [newFeedItem]);
+    t.deepEqual(sub.newItems, [newFeedItem]);
   });
 });
 
 test("#clearNewItems clears new items", t => {
   const { sub } = t.context;
-  t.same(sub.newItems, []);
+  t.deepEqual(sub.newItems, []);
   t.is(sub.newItemsCount, 0);
 
   const newFeedItem = factory.buildSync("feedItem");
   const newFeed = new Feed(_.cloneDeep(sub.feed.toObject()));
   newFeed.items.push(newFeedItem);
   sub.feed = newFeed;
-  t.same(sub.newItems, [newFeedItem]);
+  t.deepEqual(sub.newItems, [newFeedItem]);
   t.is(sub.newItemsCount, 1);
 
   sub.clearNewItems();
-  t.same(sub.newItems, []);
+  t.deepEqual(sub.newItems, []);
   t.is(sub.newItemsCount, 0);
 });

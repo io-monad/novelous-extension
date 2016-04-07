@@ -7,14 +7,14 @@ test.beforeEach(t => {
 });
 
 test("new Publication", t => {
-  t.ok(t.context.pub instanceof Publication);
+  t.truthy(t.context.pub instanceof Publication);
 });
 
 test("has properties", t => {
   const { pub, settings } = t.context;
   t.is(pub.title, settings.title);
   t.is(pub.body, settings.body);
-  t.ok(pub.time instanceof Date);
+  t.truthy(pub.time instanceof Date);
   t.is(pub.time.toISOString(), settings.time);
-  t.same(pub.sites, settings.sites);
+  t.deepEqual(pub.sites, settings.sites);
 });

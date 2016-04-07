@@ -8,7 +8,7 @@ test.beforeEach(t => {
 });
 
 test("new Subscriber", t => {
-  t.ok(t.context.subscriber instanceof Subscriber);
+  t.truthy(t.context.subscriber instanceof Subscriber);
 });
 
 test("#subscriptionSettings getter", t => {
@@ -26,7 +26,7 @@ test("#subscriptionSettings setter", t => {
 
   t.is(subscriber.subscriptions.length, newSettings.length);
   _.each(subscriber.subscriptions, (subscription, i) => {
-    t.same(subscription.toObject(), newSettings[i]);
+    t.deepEqual(subscription.toObject(), newSettings[i]);
   });
 });
 

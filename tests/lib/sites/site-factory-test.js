@@ -4,20 +4,20 @@ import Narou from "../../../app/scripts/lib/sites/narou";
 
 test("#create returns Site for settings Object", t => {
   const site = SiteFactory.create("narou", {});
-  t.ok(site instanceof Narou);
+  t.truthy(site instanceof Narou);
 });
 test("#create returns Site for true", t => {
   const site = SiteFactory.create("narou", true);
-  t.ok(site instanceof Narou);
+  t.truthy(site instanceof Narou);
 });
 test("#create returns Site instance for itself", t => {
   const narou = new Narou();
   const site = SiteFactory.create("narou", narou);
-  t.ok(site === narou);
+  t.truthy(site === narou);
 });
 test("#create returns null for false", t => {
   const site = SiteFactory.create("narou", false);
-  t.ok(site === null);
+  t.truthy(site === null);
 });
 test("#create throws Error for unknown site name", t => {
   t.throws(

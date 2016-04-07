@@ -37,11 +37,11 @@ test.beforeEach(t => {
 });
 
 test(".getMessageTypes", t => {
-  t.same(TestMessageReceiver.getMessageTypes(),
+  t.deepEqual(TestMessageReceiver.getMessageTypes(),
     ["SYNC", "ASYNC", "PROMISE", "NOHANDLER"]);
 });
 test(".getMessageTypeMap", t => {
-  t.same(TestMessageReceiver.getMessageTypeMap(),
+  t.deepEqual(TestMessageReceiver.getMessageTypeMap(),
     { SYNC: "SYNC", ASYNC: "ASYNC", PROMISE: "PROMISE", NOHANDLER: "NOHANDLER" });
 });
 
@@ -98,7 +98,7 @@ test("#receive respond with error for invalid message", t => {
   const { receiver } = t.context;
   sinonsb.stub(console, "error");
   receiver.receive({ foo: "BAR" }, {}, (res) => {
-    t.ok(_.isObject(res));
+    t.truthy(_.isObject(res));
     t.is(res.error, "Unknown message format");
   });
 });
@@ -107,7 +107,7 @@ test("#receive respond with error for unknown message type", t => {
   const { receiver } = t.context;
   sinonsb.stub(console, "error");
   receiver.receive({ type: "WHAT" }, {}, (res) => {
-    t.ok(_.isObject(res));
+    t.truthy(_.isObject(res));
     t.is(res.error, "Unknown message type");
   });
 });

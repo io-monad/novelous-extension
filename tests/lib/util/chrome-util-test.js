@@ -6,7 +6,7 @@ test.cb("#withActiveTab", t => {
   const tabs = [{ id: 123 }];
   chrome.tabs.query.callsArgWithAsync(1, tabs);
   cutil.withActiveTab((given) => {
-    t.same(given, tabs[0]);
+    t.deepEqual(given, tabs[0]);
     t.end();
   });
 });
@@ -15,5 +15,5 @@ test("#withTab", t => {
   const tab = { id: 123 };
   const spy = sinon.spy();
   cutil.withTab(tab.id, spy);
-  t.ok(chrome.tabs.get.called);
+  t.truthy(chrome.tabs.get.called);
 });

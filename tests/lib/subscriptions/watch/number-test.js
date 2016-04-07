@@ -7,7 +7,7 @@ test("#filterNewItems", t => {
   const state = { 1: 0, 2: 0, 3: 1 };
   const newItems = strategy.filterNewItems(items, state);
 
-  t.same(newItems, [items[0], items[2]]);
+  t.deepEqual(newItems, [items[0], items[2]]);
 });
 
 test("with greaterOnly = true", t => {
@@ -15,7 +15,7 @@ test("with greaterOnly = true", t => {
   const items = [{ id: "1", v: 4 }];
   const state = { 1: 5 };
 
-  t.same(strategy.filterNewItems(items, state), []);
+  t.deepEqual(strategy.filterNewItems(items, state), []);
 });
 
 test("with greaterOnly = false", t => {
@@ -23,7 +23,7 @@ test("with greaterOnly = false", t => {
   const items = [{ id: "1", v: 4 }];
   const state = { 1: 5 };
 
-  t.same(strategy.filterNewItems(items, state), items);
+  t.deepEqual(strategy.filterNewItems(items, state), items);
 });
 
 test("#getClearedState", t => {
@@ -31,5 +31,5 @@ test("#getClearedState", t => {
   const items = [{ id: "1", v: 2 }, { id: "2", v: 0 }, { id: "3", v: 2 }];
   const state = strategy.getClearedState(items);
 
-  t.same(strategy.filterNewItems(items, state), []);
+  t.deepEqual(strategy.filterNewItems(items, state), []);
 });

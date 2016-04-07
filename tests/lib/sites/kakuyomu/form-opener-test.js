@@ -14,12 +14,12 @@ test("#openForm", t => {
 
   return formOpener.openForm(pub).then(() => {
     t.true(chrome.tabs.create.calledOnce);
-    t.same(chrome.tabs.create.args[0][0], {
+    t.deepEqual(chrome.tabs.create.args[0][0], {
       url: `https://kakuyomu.jp/my/works/${pub.sites.kakuyomu.novelId}/episodes/new`,
     });
     t.true(chrome.tabs.executeScript.calledOnce);
     t.is(chrome.tabs.executeScript.args[0][0], 123);
-    t.ok(_.isString(chrome.tabs.executeScript.args[0][1].code));
+    t.truthy(_.isString(chrome.tabs.executeScript.args[0][1].code));
 
     const code = chrome.tabs.executeScript.args[0][1].code;
     const formValue = (name) => {

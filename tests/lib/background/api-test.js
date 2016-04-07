@@ -17,6 +17,6 @@ test("builds API", t => {
 
   api.getAppData(1, 2, 3);
   t.true(method.called);
-  t.same(method.args[0], [1, 2, 3]);
+  t.deepEqual(method.args[0], [1, 2, 3]);
   t.is(method.thisValues[0], controller);
 });

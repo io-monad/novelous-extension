@@ -24,7 +24,7 @@ export default function fetcherTestCases(settings) {
       t.true(_.isArray(feed.items));
 
       t.is(feed.items.length, itemsFixture.length);
-      t.same(_.map(feed.items, "id"), _.map(itemsFixture, "id"));
+      t.deepEqual(_.map(feed.items, "id"), _.map(itemsFixture, "id"));
     });
   });
 }

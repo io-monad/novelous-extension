@@ -73,6 +73,6 @@ test.serial("#map resolves a Promise with mapped values", t => {
   return promises.map(arr, (val) => {
     return Promise.resolve(val * 10);
   }).then((mapped) => {
-    t.same(mapped, [10, 20, 30, 40, 50]);
+    t.deepEqual(mapped, [10, 20, 30, 40, 50]);
   });
 });

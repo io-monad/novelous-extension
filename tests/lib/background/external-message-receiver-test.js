@@ -31,7 +31,7 @@ test.beforeEach(t => {
 
 test("new ExternalMessageReceiver", t => {
   const { receiver } = t.context;
-  t.ok(receiver instanceof ExternalMessageReceiver);
+  t.truthy(receiver instanceof ExternalMessageReceiver);
 });
 
 test.serial("#register registers handler to onMessageExternal", t => {

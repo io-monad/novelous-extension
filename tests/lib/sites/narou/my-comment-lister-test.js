@@ -5,6 +5,6 @@ test("#listReceivedComments", t => {
   const expected = fixture.json("narou/my-comment-list.json");
   const myCommentLister = new NarouMyCommentLister;
   return myCommentLister.listReceivedComments().then((comments) => {
-    t.same(comments, expected);
+    t.deepEqual(comments, expected);
   });
 });

@@ -7,7 +7,7 @@ test.beforeEach(t => {
 });
 
 test("new AppData", t => {
-  t.ok(t.context.appData instanceof AppData);
+  t.truthy(t.context.appData instanceof AppData);
 });
 
 test("#overwrite updates values with default values", t => {
@@ -34,7 +34,7 @@ test("#overwrite calls setter for each value", t => {
 
 test("#schema returns schema", t => {
   const { appData } = t.context;
-  t.same(appData.schema, appDataSchema);
+  t.deepEqual(appData.schema, appDataSchema);
 });
 
 test("#updatePeriodMinutes returns default value", t => {
@@ -62,19 +62,19 @@ test("#lastUpdatedAt setter uses null for NaN", t => {
 
 test("#siteSettings returns default value", t => {
   const { appData } = t.context;
-  t.same(appData.siteSettings, AppData.defaults.siteSettings);
+  t.deepEqual(appData.siteSettings, AppData.defaults.siteSettings);
 });
 
 test("#subscriptionSettings returns default value", t => {
   const { appData } = t.context;
-  t.same(appData.subscriptionSettings, AppData.defaults.subscriptionSettings);
+  t.deepEqual(appData.subscriptionSettings, AppData.defaults.subscriptionSettings);
 });
 
 test("#subscriptionSettings setter keeps defaults", t => {
   const { appData } = t.context;
   appData.subscriptionSettings = [{ feedUrl: "test-feed://test" }];
 
-  t.ok(_.isArray(appData.subscriptionSettings));
+  t.truthy(_.isArray(appData.subscriptionSettings));
   t.is(appData.subscriptionSettings.length, AppData.defaults.subscriptionSettings.length + 1);
   t.is(appData.subscriptionSettings[0].feedUrl, "test-feed://test");
 });
@@ -89,7 +89,7 @@ test("#subscriptionSettings setter not duplicating defaults", t => {
 test.serial(".load returns appData Promise", t => {
   chrome.storage.local.get.callsArgWithAsync(1, {});
   return AppData.load().then((opts) => {
-    t.ok(opts instanceof AppData);
+    t.truthy(opts instanceof AppData);
   });
 });
 
@@ -97,7 +97,7 @@ test.serial("#load returns appData Promise", t => {
   const { appData } = t.context;
   chrome.storage.local.get.callsArgWithAsync(1, {});
   return appData.load().then((opts) => {
-    t.ok(opts instanceof AppData);
+    t.truthy(opts instanceof AppData);
   });
 });
 
@@ -108,7 +108,7 @@ test.serial("#load emits update event", t => {
   t.plan(2);
   appData.on("update", (opts, keys) => {
     t.is(opts, appData);
-    t.same(keys.sort(), propKeys.sort());
+    t.deepEqual(keys.sort(), propKeys.sort());
   });
   return appData.load();
 });
@@ -127,7 +127,7 @@ test.serial("#save saves only changed values into storage", t => {
   appData.lastUpdatedAt = 1234567890;
   return appData.save().then(() => {
     t.true(chrome.storage.local.set.calledOnce);
-    t.same(chrome.storage.local.set.args[0][0], {
+    t.deepEqual(chrome.storage.local.set.args[0][0], {
       updatePeriodMinutes: 60,
       lastUpdatedAt: 1234567890,
     });
@@ -147,7 +147,7 @@ test.serial("#save buffers changes by delaying to save", t => {
   t.is(promise1, promise2);
   return promise1.then(() => {
     t.true(chrome.storage.local.set.calledOnce);
-    t.same(chrome.storage.local.set.args[0][0], {
+    t.deepEqual(chrome.storage.local.set.args[0][0], {
       updatePeriodMinutes: 60,
       lastUpdatedAt: 1234567890,
     });
@@ -158,9 +158,9 @@ test.serial.cb("emits update event for storage change", t => {
   const { appData } = t.context;
   t.plan(3);
   appData.on("update", (opts, keys) => {
-    t.ok(opts instanceof AppData);
+    t.truthy(opts instanceof AppData);
     t.is(opts.updatePeriodMinutes, 20);
-    t.same(keys, ["updatePeriodMinutes"]);
+    t.deepEqual(keys, ["updatePeriodMinutes"]);
     t.end();
   });
   chrome.storage.onChanged.trigger(
@@ -173,10 +173,10 @@ test.serial.cb("uses default value if storage value is undefined", t => {
   const { appData } = t.context;
   t.plan(4);
   appData.on("update", (opts, keys) => {
-    t.ok(opts instanceof AppData);
+    t.truthy(opts instanceof AppData);
     t.is(opts.updatePeriodMinutes, AppData.defaults.updatePeriodMinutes);
-    t.ok(_.isObject(opts.siteSettings));
-    t.same(keys.sort(), ["siteSettings", "updatePeriodMinutes"]);
+    t.truthy(_.isObject(opts.siteSettings));
+    t.deepEqual(keys.sort(), ["siteSettings", "updatePeriodMinutes"]);
     t.end();
   });
   chrome.storage.onChanged.trigger(

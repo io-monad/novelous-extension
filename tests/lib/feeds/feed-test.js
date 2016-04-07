@@ -13,7 +13,7 @@ test("new Feed", t => {
   t.is(feed.title, data.title);
   t.is(feed.url, data.url);
   t.is(feed.siteName, data.siteName);
-  t.same(feed.items, data.items);
+  t.deepEqual(feed.items, data.items);
 });
 
 test("#toObject returns an Object", t => {

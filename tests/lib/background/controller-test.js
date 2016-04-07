@@ -43,7 +43,7 @@ test.serial("#start updates badge counter", t => {
   return startController(t, {
     subscriptionSettings: [settings],
   }).then(() => {
-    t.same(chrome.browserAction.setBadgeText.lastCall.args[0], { text: "1" });
+    t.deepEqual(chrome.browserAction.setBadgeText.lastCall.args[0], { text: "1" });
   });
 });
 
@@ -55,7 +55,7 @@ test.serial("#start starts update timer", t => {
   }).then(controller => {
     t.true(chrome.alarms.create.calledOnce);
     t.is(chrome.alarms.create.args[0][0], "update");
-    t.same(chrome.alarms.create.args[0][1], {
+    t.deepEqual(chrome.alarms.create.args[0][1], {
       when: controller.updateTimer.nextWillUpdateAt,
       periodInMinutes: controller.updateTimer.updatePeriodMinutes,
     });

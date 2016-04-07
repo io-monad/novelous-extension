@@ -5,6 +5,6 @@ test("#listReceivedMessages", t => {
   const expected = fixture.json("narou/my-message-list.json");
   const myMessageLister = new NarouMyMessageLister;
   return myMessageLister.listReceivedMessages().then((messages) => {
-    t.same(messages, expected);
+    t.deepEqual(messages, expected);
   });
 });

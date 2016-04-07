@@ -5,6 +5,6 @@ test("#listNovelsOfUser", t => {
   const expected = fixture.json("kakuyomu/user-novel-list.json");
   const userNovelLister = new KakuyomuUserNovelLister;
   return userNovelLister.listNovelsOfUser("kadokawabooks").then((result) => {
-    t.same(result, expected);
+    t.deepEqual(result, expected);
   });
 });

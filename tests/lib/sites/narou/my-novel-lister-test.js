@@ -5,6 +5,6 @@ test("#listNovels", t => {
   const expected = fixture.json("narou/my-novel-list.json");
   const myNovelLister = new NarouMyNovelLister;
   return myNovelLister.listNovels().then((result) => {
-    t.same(result, expected);
+    t.deepEqual(result, expected);
   });
 });

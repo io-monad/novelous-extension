@@ -3,10 +3,10 @@ import Narou from "../../../../app/scripts/lib/sites/narou";
 
 test("new Narou", t => {
   const narou = new Narou;
-  t.ok(narou instanceof Narou);
+  t.truthy(narou instanceof Narou);
   t.is(narou.name, "narou");
-  t.ok(_.isString(narou.displayName));
-  t.ok(_.isString(narou.baseUrl));
+  t.truthy(_.isString(narou.displayName));
+  t.truthy(_.isString(narou.baseUrl));
 });
 
 test("#publish", t => {
@@ -16,7 +16,7 @@ test("#publish", t => {
   stub.returns(Promise.resolve());
 
   return narou.publish(pub).then(() => {
-    t.ok(stub.calledOnce);
+    t.truthy(stub.calledOnce);
     t.is(stub.args[0][0], pub);
   });
 });

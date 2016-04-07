@@ -26,7 +26,7 @@ test("#start sets alarm", t => {
   updateTimer.start();
   t.true(updateTimer.started);
   t.true(start.calledOnce);
-  t.same(start.args[0][0], {
+  t.deepEqual(start.args[0][0], {
     when: updateTimer.nextWillUpdateAt,
     periodInMinutes: updateTimer.updatePeriodMinutes,
   });
@@ -87,7 +87,7 @@ test("#updatePeriodMinutes setter updates alarm", t => {
 
   t.is(updateTimer.updatePeriodMinutes, 60);
   t.true(start.calledTwice);
-  t.same(start.args[1][0], {
+  t.deepEqual(start.args[1][0], {
     when: updateTimer.nextWillUpdateAt,
     periodInMinutes: updateTimer.updatePeriodMinutes,
   });
@@ -111,7 +111,7 @@ test("#lastUpdatedAt setter updates alarm", t => {
 
   t.is(updateTimer.lastUpdatedAt, 1234599999);
   t.true(start.calledTwice);
-  t.same(start.args[1][0], {
+  t.deepEqual(start.args[1][0], {
     when: updateTimer.nextWillUpdateAt,
     periodInMinutes: updateTimer.updatePeriodMinutes,
   });
