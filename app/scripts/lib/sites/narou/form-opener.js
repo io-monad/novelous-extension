@@ -1,6 +1,6 @@
-import narouMeta from "./meta.json";
-import openPage from "../../util/open-page";
 import strftime from "strftime";
+import openPage from "../../util/open-page";
+import narouMeta from "./meta.json";
 
 /**
  * Opener for a publish form in Narou.

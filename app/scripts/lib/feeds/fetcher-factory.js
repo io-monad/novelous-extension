@@ -1,5 +1,5 @@
-import NovelousFetchers from "./novelous-fetchers";
 import url from "url";
+import NovelousFetchers from "./novelous-fetchers";
 
 /**
  * @interface FeedFetcher

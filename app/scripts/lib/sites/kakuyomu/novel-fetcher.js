@@ -1,7 +1,7 @@
-import kakuyomuMeta from "./meta.json";
 import url from "url";
 import colorString from "color-string";
 import scrape from "../../util/scrape";
+import kakuyomuMeta from "./meta.json";
 
 /**
  * @typedef {Object} KakuyomuNovel

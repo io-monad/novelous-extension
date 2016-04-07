@@ -1,6 +1,6 @@
 import { fixture } from "../../../common";
-import fetcherTestCases from "./fetcher-test-cases";
 import FetcherNarouMessages from "../../../../app/scripts/lib/feeds/fetcher/narou-messages";
+import fetcherTestCases from "./fetcher-test-cases";
 
 fetcherTestCases({
   fetcher: () => new FetcherNarouMessages,

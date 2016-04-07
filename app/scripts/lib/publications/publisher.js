@@ -1,5 +1,5 @@
-import Publication from "./publication";
 import SiteFactory from "../sites/site-factory";
+import Publication from "./publication";
 
 /**
  * Publisher that publishes article to novel sites.

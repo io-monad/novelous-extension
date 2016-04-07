@@ -1,5 +1,5 @@
-import narouMeta from "./meta.json";
 import scrape from "../../util/scrape";
+import narouMeta from "./meta.json";
 
 /**
  * Fetcher for novel data in Narou.

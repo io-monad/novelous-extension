@@ -1,6 +1,6 @@
 import EventEmitter from "eventemitter3";
-import Subscription from "./subscription";
 import promises from "../util/promises";
+import Subscription from "./subscription";
 const logger = debug("subscriber");
 
 /**

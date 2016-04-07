@@ -1,6 +1,6 @@
 import { fixture } from "../../../common";
-import fetcherTestCases from "./fetcher-test-cases";
 import FetcherKakuyomuReviews from "../../../../app/scripts/lib/feeds/fetcher/kakuyomu-reviews";
+import fetcherTestCases from "./fetcher-test-cases";
 
 fetcherTestCases({
   fetcher: () => new FetcherKakuyomuReviews({ fetchInterval: 0 }),

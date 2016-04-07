@@ -1,6 +1,6 @@
+import strftime from "strftime";
 import { test, factory } from "../../../common";
 import NarouFormOpener from "../../../../app/scripts/lib/sites/narou/form-opener";
-import strftime from "strftime";
 
 test("#openForm", t => {
   const formOpener = new NarouFormOpener;

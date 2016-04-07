@@ -1,7 +1,7 @@
+import url from "url";
+import scrape from "../../util/scrape";
 import narouMeta from "./meta.json";
 import NarouNovelAPI from "./novel-api";
-import scrape from "../../util/scrape";
-import url from "url";
 
 /**
  * @typedef {Object} NarouMyNovel

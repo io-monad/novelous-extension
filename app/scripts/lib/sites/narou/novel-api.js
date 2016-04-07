@@ -1,6 +1,6 @@
-import narouMeta from "./meta.json";
 import querystring from "querystring";
 import request from "../../util/request";
+import narouMeta from "./meta.json";
 
 /**
  * @typedef {Object} NarouNovel

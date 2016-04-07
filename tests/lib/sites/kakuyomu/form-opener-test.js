@@ -1,6 +1,6 @@
+import strftime from "strftime";
 import { test, factory } from "../../../common";
 import KakuyomuFormOpener from "../../../../app/scripts/lib/sites/kakuyomu/form-opener";
-import strftime from "strftime";
 
 test("#openForm", t => {
   const formOpener = new KakuyomuFormOpener;

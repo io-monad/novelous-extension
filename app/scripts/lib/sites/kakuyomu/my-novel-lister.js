@@ -1,8 +1,8 @@
-import kakuyomuMeta from "./meta.json";
-import KakuyomuNovelFetcher from "./novel-fetcher";
+import url from "url";
 import scrape from "../../util/scrape";
 import promises from "../../util/promises";
-import url from "url";
+import kakuyomuMeta from "./meta.json";
+import KakuyomuNovelFetcher from "./novel-fetcher";
 
 /**
  * @typedef {Object} KakuyomuMyNovel

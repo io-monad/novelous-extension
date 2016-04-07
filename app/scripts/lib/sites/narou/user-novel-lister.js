@@ -1,5 +1,5 @@
-import narouMeta from "./meta.json";
 import scrape from "../../util/scrape";
+import narouMeta from "./meta.json";
 
 /**
  * Listing novels of a user in Narou.

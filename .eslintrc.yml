@@ -1,4 +1,6 @@
-extends: airbnb
+extends:
+  - airbnb
+  - plugin:import-order/recommended
 env:
   browser: true
   webextensions: true
@@ -6,6 +8,7 @@ env:
 parser: babel-eslint
 plugins:
   - react
+  - import-order
 globals:
   _: true
   debug: true

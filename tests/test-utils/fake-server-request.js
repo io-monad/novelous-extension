@@ -1,6 +1,6 @@
 import _ from "lodash";
-import fixture from "./fixture-loader";
 import FakeXMLHttpRequest from "fake-xml-http-request";
+import fixture from "./fixture-loader";
 
 export default function createFakeRequest(conf) {
   const responder = createResponder(conf);
