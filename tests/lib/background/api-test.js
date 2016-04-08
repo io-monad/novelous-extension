@@ -20,3 +20,8 @@ test("builds API", t => {
   t.deepEqual(method.args[0], [1, 2, 3]);
   t.is(method.thisValues[0], controller);
 });
+
+test("has list of API", t => {
+  t.true(_.isArray(buildAPI.list));
+  t.true(_.includes(buildAPI.list, "getAppData"));
+});

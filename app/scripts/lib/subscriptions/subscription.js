@@ -63,6 +63,19 @@ export default class Subscription {
     }
   }
 
+  get title() {
+    return this.feed && this.feed.title;
+  }
+  get url() {
+    return this.feed && this.feed.url;
+  }
+  get siteName() {
+    return this.feed && this.feed.siteName;
+  }
+  get items() {
+    return this.feed ? this.feed.items : [];
+  }
+
   get newItems() {
     if (!this._newItems) {
       if (!this.feed) {
@@ -80,7 +93,7 @@ export default class Subscription {
   /**
    * Update feed by fetching from the server.
    *
-   * @return Promise
+   * @return {Promise}
    */
   update() {
     return this._feedFetcher.fetchFeed(this.feedUrl).then(feed => {

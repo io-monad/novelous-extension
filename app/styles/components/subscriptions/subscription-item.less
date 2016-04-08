@@ -1,0 +1,59 @@
+.subscription-item {
+  margin: 0 0 10px 0;
+
+  &__header {
+    .clearfix;
+    cursor: pointer;
+    padding: 0 15px;
+  }
+
+  &__title {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    color: #666666;
+    line-height: 1;
+    margin: 0;
+    padding: 10px 0;
+
+    i {
+      color: #aaaaaa;
+      width: 1em;
+    }
+    a {
+      color: inherit;
+      outline: none;
+    }
+    a:hover {
+      color: inherit;
+    }
+  }
+
+  &__counts {
+    float: right;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 5px;
+    margin: 7px 0 0 7px;
+    background-color: white;
+  }
+  &__new-count, &__item-count {
+    display: inline-block;
+    padding: 3px 5px;
+  }
+  &__new-count {
+    background-color: rgb(255, 128, 36);
+    color: #ffffff;
+    border-radius: 5px 0 0 5px;
+  }
+  &__item-count {
+    background-color: white;
+    color: #999999;
+    border-radius: 5px;
+  }
+
+  &__items {
+    padding: 0;
+  }
+}

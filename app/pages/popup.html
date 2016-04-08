@@ -7,12 +7,14 @@
   <link rel="stylesheet" type="text/css" href="../styles/popup.css">
 </head>
 <body>
-  <div id="container">
+  <main class="layout-main" id="container">
     <div class="message-box">
-      <i class="message-mark fa fa-circle-o-notch fa-spin"></i>
-      <p class="message-text">Loading...</p>
+      <div class="message-box__icon">
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+      </div>
+      <p className="message-box__text">Loading...</p>
     </div>
-  </div>
+  </main>
 
   <script src="../scripts/vendor.js"></script>
   <script src="../bower/bootswatch-dist/js/bootstrap.min.js"></script>

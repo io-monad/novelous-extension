@@ -1,3 +1,15 @@
-@import "common.less";
-@import "@{fontawesome-path}/font-awesome.less";
-@fa-font-path: @fontawesome-font-path;
+@import "common";
+@import "components/common/collapsed-text";
+@import "components/common/message-box";
+@import "components/subscriptions/feed-item";
+@import "components/subscriptions/subscription-item";
+
+.layout-main {
+  width: 40em;
+  min-height: 30em;
+  padding: 10px;
+  overflow-y: auto;
+  font-family: @app-font-family;
+  color: #333333;
+  -webkit-font-smoothing: antialiased;
+}

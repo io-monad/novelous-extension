@@ -18,3 +18,4 @@ export default function buildAPI(controller) {
   });
   return api;
 }
+buildAPI.list = exportMethods;
