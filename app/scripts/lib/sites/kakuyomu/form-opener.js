@@ -49,7 +49,7 @@ export default class KakuyomuFormOpener {
     `;
 
     if (pub.time) {
-      const time = moment(pub.time);
+      const time = moment(pub.time).tz("Asia/Tokyo");
       const dateValue = JSON.stringify(time.format("YYYY-MM-DD"));
       const timeValue = JSON.stringify(time.format("HH:mm"));
       code += `

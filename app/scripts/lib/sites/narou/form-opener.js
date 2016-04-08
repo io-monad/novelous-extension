@@ -43,7 +43,7 @@ export default class NarouFormOpener {
     `;
 
     if (pub.time) {
-      const time = moment(pub.time);
+      const time = moment(pub.time).tz("Asia/Tokyo");
       const monthValue = JSON.stringify(time.format("YYYY-MM"));
       const dayValue = JSON.stringify(time.format("D"));
       const hourValue = JSON.stringify(time.format("H"));

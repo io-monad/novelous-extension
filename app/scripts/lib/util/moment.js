@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment-timezone";
 import "moment/locale/ja";
 
 moment.locale(chrome.i18n.getUILanguage());
