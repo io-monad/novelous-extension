@@ -20,6 +20,7 @@ rules:
   no-console: off
   no-param-reassign: off
   no-use-before-define: off
+  no-else-return: off
   quotes:
     - error
     - double
