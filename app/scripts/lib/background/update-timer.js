@@ -57,6 +57,7 @@ export default class UpdateTimer extends EventEmitter {
       this._started = true;
       this._setAlarm();
     }
+    return this;
   }
 
   stop() {
@@ -64,10 +65,12 @@ export default class UpdateTimer extends EventEmitter {
       this._stopAlarm();
       this._started = false;
     }
+    return this;
   }
 
   reset() {
     this.lastUpdatedAt = _.now();
+    return this;
   }
 
   _bindAlarmEvents() {

@@ -2,8 +2,8 @@ import React, { PropTypes } from "react";
 import classNames from "classnames";
 import Str from "./str";
 
-const MessageBox = ({ str, details, icon, spin, children }) => (
-  <div className={`message-box message-box--${_.kebabCase(str)}-message`}>
+const MessageBox = ({ message, details, icon, spin, children }) => (
+  <div className={`message-box message-box--${_.kebabCase(message)}-message`}>
     <div className="message-box__icon">
       <i
         className={classNames({
@@ -14,7 +14,7 @@ const MessageBox = ({ str, details, icon, spin, children }) => (
       />
     </div>
     <p className="message-box__text">
-      <Str name={str} />
+      <Str name={message} />
     </p>
     {details ? <p className="message-box__details">{details}</p> : ""}
     {children}
@@ -22,7 +22,7 @@ const MessageBox = ({ str, details, icon, spin, children }) => (
 );
 
 MessageBox.propTypes = {
-  str: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
   details: PropTypes.string,
   icon: PropTypes.string.isRequired,
   spin: PropTypes.bool,

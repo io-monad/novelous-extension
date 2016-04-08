@@ -48,6 +48,13 @@
     }
   },
 
+  "updating": {
+    "message": "各サイトから最新情報を取得しています..."
+  },
+  "wentWrong": {
+    "message": "申し訳ございません。問題が発生しました。"
+  },
+
   "enableThisSite": {
     "message": "このサイトを有効にする"
   },

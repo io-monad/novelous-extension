@@ -39,6 +39,11 @@ test("#start does nothing when already started", t => {
   t.true(start.calledOnce);
 });
 
+test("#start returns self", t => {
+  const { updateTimer } = t.context;
+  t.is(updateTimer.start(), updateTimer);
+});
+
 test("#stop stops alarm", t => {
   const { updateTimer, stop } = t.context;
   updateTimer.start();
@@ -54,6 +59,11 @@ test("#stop does nothing when not started", t => {
   t.false(stop.called);
 });
 
+test("#stop returns self", t => {
+  const { updateTimer } = t.context;
+  t.is(updateTimer.stop(), updateTimer);
+});
+
 test.serial("#reset updates lastUpdatedAt", t => {
   const { updateTimer, updatePeriodMinutes } = t.context;
   sinonsb.stub(_, "now").returns(1234599999);
@@ -61,6 +71,11 @@ test.serial("#reset updates lastUpdatedAt", t => {
   updateTimer.reset();
   t.is(updateTimer.lastUpdatedAt, 1234599999);
   t.is(updateTimer.nextWillUpdateAt, 1234599999 + updatePeriodMinutes * 60 * 1000);
+});
+
+test("#reset returns self", t => {
+  const { updateTimer } = t.context;
+  t.is(updateTimer.reset(), updateTimer);
 });
 
 test.cb("#updatePeriodMinutes setter sets alarm", t => {

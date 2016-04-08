@@ -1,26 +1,42 @@
 /**
  * Simple wrapper of XMLHttpRequest with Promise
  */
-export default function request(url) {
+export default function request(url, options) {
+  options = _.extend({
+    method: "GET",
+    xhr: false,
+    timeout: 30,
+  }, options);
+
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
 
-    const rejectError = () => {
-      const err = new Error(`Response: ${xhr.status} ${xhr.statusText}`);
+    const rejectError = (error, props) => {
+      const err = new Error(error);
       err.xhr = xhr;
       err.url = url;
+      if (props) _.extend(err, props);
       reject(err);
     };
 
-    xhr.open("GET", url, true);
+    xhr.open(options.method, url, true);
     xhr.onload = () => {
       if (xhr.status !== 200) {
-        rejectError();
+        rejectError(`Response is not OK: "${xhr.status} ${xhr.statusText}" for url: ${url}`);
       } else {
-        resolve(xhr.responseText);
+        resolve(options.xhr ? xhr : xhr.responseText);
       }
     };
-    xhr.onerror = rejectError;
+    xhr.onerror = () => {
+      rejectError(`Error occurred on request for url: ${url}`);
+    };
+    xhr.ontimeout = () => {
+      rejectError(`Request timed out for url: ${url}`, { isTimeout: true });
+    };
+    xhr.onabort = () => {
+      rejectError(`Request has been aborted for url: ${url}`, { isAborted: true });
+    };
+    xhr.timeout = options.timeout;
     xhr.send(null);
   });
 }

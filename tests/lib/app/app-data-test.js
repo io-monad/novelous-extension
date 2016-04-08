@@ -169,6 +169,15 @@ test.serial.cb("emits update event for storage change", t => {
   );
 });
 
+test.serial("does not update for storage change if autoUpdate = false", t => {
+  const appData = new AppData({}, { saveDelay: 0, autoUpdate: false });
+  appData.on("update", t.fail);
+  chrome.storage.onChanged.trigger(
+    { updatePeriodMinutes: { newValue: 20 } },
+    "local"
+  );
+});
+
 test.serial.cb("uses default value if storage value is undefined", t => {
   const { appData } = t.context;
   t.plan(4);

@@ -75,22 +75,34 @@ export default class Subscriber extends EventEmitter {
   /**
    * Update all subscriptions.
    *
+   * This returns the same Promise for parallel runs.
+   *
    * @return {Promise.<Subscriber>}
    */
   updateAll() {
+    if (this._updatePromise) return this._updatePromise;
+
     logger("Updating all subscriptions");
     const subscriptions = _.filter(this.subscriptions, "enabled");
-    return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
-      logger(`Fetching feed for ${sub.id}`, sub);
-      return sub.update().then(() => {
-        logger(`Fetched feed for ${sub.id}`, sub);
-      }).catch((err) => {
-        console.error(`Error occurred for ${sub.id}`, err);
+    this._updatePromise =
+      promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
+        logger(`Fetching feed for ${sub.id}`, sub);
+        return sub.update().then(() => {
+          logger(`Fetched feed for ${sub.id}`, sub);
+        }).catch((err) => {
+          console.error(`Error occurred for ${sub.id}`, err);
+        });
+      }).then(() => {
+        logger("Updated all subscriptions");
+        this._updatePromise = null;
+        this.emit("update");
+        return this;
+      }).catch(e => {
+        console.error("Error in subscriber.updateAll:", e);
+        this._updatePromise = null;
+        throw e;
       });
-    }).then(() => {
-      logger("Updated all subscriptions");
-      this.emit("update");
-    });
+    return this._updatePromise;
   }
 
   /**

@@ -8,8 +8,8 @@ const PROP_KEYS = _.keys(appDataSchema.properties);
 const DEFAULTS = jsonSchemaDefaults(appDataSchema);
 
 export default class AppData extends EventEmitter {
-  static load() {
-    return (new AppData()).load();
+  static load(options) {
+    return (new AppData(null, options)).load();
   }
   static get schema() {
     return appDataSchema;
@@ -20,17 +20,20 @@ export default class AppData extends EventEmitter {
 
   constructor(data, options) {
     super();
-    options = _.extend({ saveDelay: 1000 }, options);
+    options = _.extend({
+      saveDelay: 1000,
+      autoUpdate: true,
+    }, options);
 
     this.data = {};
     this.changedKeys = {};
     this.savePromise = null;
     this.saveDelay = options.saveDelay;
 
-    this.overwrite(data);
+    if (data) this.overwrite(data);
     this.changedKeys = {};  // Reset changed keys
 
-    this._bindEvents();
+    if (options.autoUpdate) this._bindStorageEvents();
   }
 
   overwrite(data) {
@@ -40,7 +43,7 @@ export default class AppData extends EventEmitter {
     .each((v, k) => { this[k] = v; });
   }
 
-  _bindEvents() {
+  _bindStorageEvents() {
     chrome.storage.onChanged.addListener((changes) => {
       const changedValues = _(changes).pick(PROP_KEYS).mapValues("newValue").value();
       const changedKeys = _.keys(changedValues);

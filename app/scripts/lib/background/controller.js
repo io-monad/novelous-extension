@@ -73,9 +73,7 @@ export default class BackgroundController {
       this.appData.lastUpdatedAt
     );
     this.updateTimer.on("timer", () => {
-      this._updateSubscriptions();
-      this.appData.lastUpdatedAt = this.updateTimer.lastUpdatedAt;
-      this.appData.save();
+      this.updateSubscriptions();
     });
     this.updateTimer.on("update", () => {
       logger("Updated UpdateTimer", this.updateTimer);
@@ -149,18 +147,19 @@ export default class BackgroundController {
   /**
    * Start to update all subscriptions immediately.
    *
-   * @return {Promise}
+   * @return {Promise.<Subscriber>}
    */
   updateSubscriptions() {
-    this.updateTimer.reset();
-    return this._updateSubscriptions();
-  }
-  _updateSubscriptions() {
+    this.updateTimer.stop();
     return this.getSubscriber().then(subscriber => {
-      return subscriber.updateAll().catch((e) => {
-        console.error("Error in subscriber.updateAll:", e);
-        throw e;
+      return subscriber.updateAll().then(resolved => {
+        this.updateTimer.reset().start();
+        return resolved;
       });
+    })
+    .catch((e) => {
+      this.updateTimer.reset().start();
+      throw e;
     });
   }
 
