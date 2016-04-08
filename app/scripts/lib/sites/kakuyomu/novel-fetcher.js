@@ -61,11 +61,7 @@ export default class KakuyomuNovelFetcher {
    * @return {Promise} A promise that resolves to a novel data Object.
    */
   fetchNovel(novelId) {
-    return new Promise((resolve, reject) => {
-      scrape.fetch(this.getURL(novelId))
-      .then($ => { resolve(this._parsePage($)); })
-      .catch(reject);
-    });
+    return scrape.fetch(this.getURL(novelId)).then($ => this._parsePage($));
   }
 
   getURL(novelId) {

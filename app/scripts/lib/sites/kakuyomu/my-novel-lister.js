@@ -73,17 +73,13 @@ export default class KakuyomuMyNovelLister {
    *     `KakuyomuMyNovel` only. It never fetches details from the server.
    */
   listNovels() {
-    return new Promise((resolve, reject) => {
-      scrape.fetch(this.getURL())
-      .then($ => {
-        const novels = this._parsePage($);
-        if (this.fetchDetails) {
-          this._decorateNovels(novels).then(resolve, reject);
-        } else {
-          resolve(novels);
-        }
-      })
-      .catch(reject);
+    return scrape.fetch(this.getURL()).then($ => {
+      const novels = this._parsePage($);
+      if (this.fetchDetails) {
+        return this._decorateNovels(novels);
+      } else {
+        return novels;
+      }
     });
   }
 

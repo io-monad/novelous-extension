@@ -39,11 +39,7 @@ export default class NarouUserNovelLister {
    * @return {Promise} A promise that resolves to a list of novels.
    */
   listNovelsOfUser(userId, page = 1) {
-    return new Promise((resolve, reject) => {
-      scrape.fetch(this.getURL(userId, page))
-      .then($ => { resolve(this._parsePage($)); })
-      .catch(reject);
-    });
+    return scrape.fetch(this.getURL(userId, page)).then($ => this._parsePage($));
   }
 
   getURL(userId, page) {

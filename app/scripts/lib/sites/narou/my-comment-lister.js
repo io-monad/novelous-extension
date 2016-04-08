@@ -31,11 +31,7 @@ export default class NarouMyCommentLister {
    * @return {Promise.<NarouMyComment[]>}
    */
   listReceivedComments() {
-    return new Promise((resolve, reject) => {
-      scrape.fetch(this.getURL())
-      .then($ => { resolve(this._parsePage($)); })
-      .catch(reject);
-    });
+    return scrape.fetch(this.getURL()).then($ => this._parsePage($));
   }
 
   getURL() {

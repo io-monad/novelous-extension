@@ -41,11 +41,7 @@ export default class KakuyomuUserNovelLister {
    * @return {Promise.<KakuyomuUserNovel[]>}
    */
   listNovelsOfUser(userId) {
-    return new Promise((resolve, novels) => {
-      scrape.fetch(this.getURL(userId))
-      .then($ => { resolve(this._parsePage($)); })
-      .catch(novels);
-    });
+    return scrape.fetch(this.getURL(userId)).then($ => this._parsePage($));
   }
 
   getURL(userId) {

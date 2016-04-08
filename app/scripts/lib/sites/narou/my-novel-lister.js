@@ -34,16 +34,9 @@ export default class NarouMyNovelLister {
    * @return {Promise.<NarouMyNovel[]>}
    */
   listNovels() {
-    return new Promise((resolve, reject) => {
-      scrape.fetch(this.getURL())
-      .then($ => {
-        const novels = this._parsePage($);
-        this._decorateNovelsByAPI(novels).then((decorated) => {
-          resolve(decorated);
-        })
-        .catch(reject);
-      })
-      .catch(reject);
+    return scrape.fetch(this.getURL()).then($ => {
+      const novels = this._parsePage($);
+      return this._decorateNovelsByAPI(novels);
     });
   }
 
@@ -73,13 +66,9 @@ export default class NarouMyNovelLister {
 
   _decorateNovelsByAPI(novels) {
     if (novels.length === 0) return Promise.resolve(novels);
-    return new Promise((resolve, reject) => {
-      this.api.getNovelsByIds(_.map(novels, "id"))
-      .then((apiNovels) => {
-        const apiNovelMap = _.keyBy(apiNovels, "id");
-        resolve(_.map(novels, novel => _.defaults(novel, apiNovelMap[novel.id])));
-      })
-      .catch(reject);
+    return this.api.getNovelsByIds(_.map(novels, "id")).then(apiNovels => {
+      const apiNovelMap = _.keyBy(apiNovels, "id");
+      return _.map(novels, novel => _.defaults(novel, apiNovelMap[novel.id]));
     });
   }
 }
