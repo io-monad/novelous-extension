@@ -91,7 +91,7 @@ module.exports = {
   },
 
   translate(key, substitutions, fallback) {
-    if (_.isString(substitutions)) {
+    if (_.isString(substitutions) && _.isUndefined(fallback)) {
       fallback = substitutions;
       substitutions = undefined;
     }
