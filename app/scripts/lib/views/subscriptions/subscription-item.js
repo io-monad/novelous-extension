@@ -20,7 +20,7 @@ export default class SubscriptionItem extends React.Component {
   render() {
     const { subscription } = this.props;
     const { newItemsOnly } = this.state;
-    if (subscription.items.length === 0) return "";
+    if (subscription.items.length === 0) return null;
 
     const items = newItemsOnly ? subscription.newItems : subscription.items;
     const newItemIds = _.keyBy(_.map(subscription.newItems, "id"));

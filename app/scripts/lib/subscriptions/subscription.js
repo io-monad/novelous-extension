@@ -64,16 +64,16 @@ export default class Subscription {
   }
 
   get title() {
-    return this.feed && this.feed.title;
+    return this.feed && this.feed.title || null;
   }
   get url() {
-    return this.feed && this.feed.url;
+    return this.feed && this.feed.url || null;
   }
   get siteName() {
-    return this.feed && this.feed.siteName;
+    return this.feed && this.feed.siteName || null;
   }
   get items() {
-    return this.feed ? this.feed.items : [];
+    return this.feed && this.feed.items || [];
   }
 
   get newItems() {
