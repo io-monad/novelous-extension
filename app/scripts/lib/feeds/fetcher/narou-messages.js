@@ -18,6 +18,7 @@ export default class FetcherNarouMessages {
         title: translate("narouMessagesFeed"),
         url: this.lister.getURL(),
         siteName: translate("narouSiteName"),
+        siteId: "narou",
         items,
       });
     });
@@ -29,6 +30,7 @@ export default class FetcherNarouMessages {
         id: msg.id,
         title: msg.title,
         url: msg.url,
+        type: "message",
         authorName: msg.userName,
         authorUrl: msg.userUrl,
         createdAt: msg.createdAt,

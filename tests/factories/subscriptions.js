@@ -6,6 +6,7 @@ factory.define("feed", Feed, {
   title: factory.seq(n => `Feed title ${n}`),
   url: "http://syosetu.com/messagebox/top/",
   siteName: "Syosetuka ni narou",
+  siteId: "narou",
   items: () => _.range(5).map(() => factory.buildSync("feedItem")),
 });
 
@@ -13,6 +14,7 @@ factory.define("feedItem", Object, {
   id: factory.seq(n => n.toString()),
   title: factory.seq(n => `Test message ${n}`),
   url: () => `http://syosetu.com/messagebox/view/meskey/${_.random(1, 1000000)}/`,
+  type: "message",
   body: factory.seq(n => `Test message body ${n}\nHello, world!`),
   authorName: factory.seq(n => `Sender${n}`),
   authorUrl: () => `http://mypage.syosetu.com/${_.random(1, 1000000)}/`,

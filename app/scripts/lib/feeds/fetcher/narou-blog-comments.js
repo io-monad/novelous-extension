@@ -18,6 +18,7 @@ export default class FetcherNarouBlogComments {
         title: translate("narouBlogCommentsFeed"),
         url: this.lister.getURL(),
         siteName: translate("narouSiteName"),
+        siteId: "narou",
         items,
       });
     });
@@ -29,10 +30,12 @@ export default class FetcherNarouBlogComments {
         id: com.id,
         title: translate("narouBlogCommentTitle", [com.userName]),
         body: com.body,
+        type: "comment",
         authorName: com.userName,
         authorUrl: com.userUrl,
         sourceTitle: com.articleTitle,
         sourceUrl: com.articleUrl,
+        sourceType: "blog",
         createdAt: com.createdAt,
       }));
     });

@@ -18,6 +18,7 @@ export default class FetcherNarouReviews {
         title: translate("narouReviewsFeed"),
         url: this.lister.getURL(),
         siteName: translate("narouSiteName"),
+        siteId: "narou",
         items,
       });
     });
@@ -30,10 +31,12 @@ export default class FetcherNarouReviews {
         title: review.title,
         url: this.pageUrl,
         body: review.body,
+        type: "review",
         authorName: review.userName,
         authorUrl: review.userUrl,
         sourceTitle: review.novelTitle,
         sourceUrl: review.novelUrl,
+        sourceType: "novel",
         createdAt: review.createdAt,
       }));
     });

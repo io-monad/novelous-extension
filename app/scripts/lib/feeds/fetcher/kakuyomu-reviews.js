@@ -18,6 +18,7 @@ export default class FetcherKakuyomuReviews {
         title: translate("kakuyomuReviewsFeed"),
         url: this.lister.getURL(),
         siteName: translate("kakuyomuSiteName"),
+        siteId: "kakuyomu",
         items,
       });
     });
@@ -31,10 +32,12 @@ export default class FetcherKakuyomuReviews {
           title: `${review.rating} ${review.title}`,
           url: review.url,
           body: review.body,
+          type: "review",
           authorName: review.authorName,
           authorUrl: review.authorUrl,
           sourceTitle: novel.title,
           sourceUrl: novel.url,
+          sourceType: "novel",
           createdAt: review.createdAt,
         }));
       });

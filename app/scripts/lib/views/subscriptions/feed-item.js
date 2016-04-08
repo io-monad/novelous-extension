@@ -3,11 +3,29 @@ import classNames from "classnames";
 import Time from "../common/time";
 import CollapsedText from "../common/collapsed-text";
 
+const ItemTypeIcons = {
+  message: "fa-envelope-o",
+  comment: "fa-comment-o",
+  review: "fa-bookmark",
+  other: "fa-asterisk",
+};
+const SourceTypeIcons = {
+  blog: "fa-file-text-o",
+  novel: "fa-book",
+  other: "fa-feed",
+};
+
 export default class FeedItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = { expanded: false };
     this.handleClick = this.handleClick.bind(this);
+  }
+  getIconFromItemType(itemType) {
+    return ItemTypeIcons[itemType] || ItemTypeIcons.other;
+  }
+  getIconFromSourceType(sourceType) {
+    return SourceTypeIcons[sourceType] || SourceTypeIcons.other;
   }
   handleClick(ev) {
     let el = ev.target;
@@ -34,6 +52,7 @@ export default class FeedItem extends React.Component {
       >
         <header className="feed-item__header">
           <h1 className="feed-item__title">
+            <i className={`fa ${this.getIconFromItemType(item.type)}`} />
             {link(item.url, item.title)}
           </h1>
         </header>
@@ -53,7 +72,7 @@ export default class FeedItem extends React.Component {
           }
           {item.sourceTitle &&
             <div className="feed-item__footer-item feed-item__source">
-              <i className="fa fa-book"></i>
+              <i className={`fa ${this.getIconFromSourceType(item.sourceType)}`} />
               {link(item.sourceUrl, item.sourceTitle)}
             </div>
           }
