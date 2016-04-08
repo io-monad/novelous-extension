@@ -21,6 +21,8 @@ export default {
     "narou/my-comment-list.html",
   "http://syosetu.com/usernovelreview/passivelist/":
     "narou/my-review-list.html",
+  "http://syosetu.com/userblog/passivelist/":
+    "narou/my-blog-comment-list.html",
 
   "http://api.syosetu.com/novelapi/api/*": (xhr) => {
     const { query } = parse(xhr.url, true);

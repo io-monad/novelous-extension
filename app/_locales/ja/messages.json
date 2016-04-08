@@ -25,6 +25,9 @@
   "narouCommentsFeed": {
     "message": "小説家になろう: 書かれた感想"
   },
+  "narouBlogCommentsFeed": {
+    "message": "小説家になろう: 書かれた活動報告コメント"
+  },
   "narouReviewsFeed": {
     "message": "小説家になろう: 書かれたレビュー"
   },
@@ -34,6 +37,12 @@
 
   "narouCommentTitle": {
     "message": "$authorName$さんが書いた感想",
+    "placeholders": {
+      "authorName": { "content": "$1" }
+    }
+  },
+  "narouBlogCommentTitle": {
+    "message": "$authorName$さんが書いたコメント",
     "placeholders": {
       "authorName": { "content": "$1" }
     }

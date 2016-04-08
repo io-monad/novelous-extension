@@ -10,6 +10,7 @@ export default {
   narou: {
     "/messages": () => require("./fetcher/narou-messages").default,
     "/comments": () => require("./fetcher/narou-comments").default,
+    "/blog-comments": () => require("./fetcher/narou-blog-comments").default,
     "/reviews": () => require("./fetcher/narou-reviews").default,
   },
   kakuyomu: {

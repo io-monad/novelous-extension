@@ -46,6 +46,7 @@
       "default": [
         { "feedUrl": "novelous-feed://narou/messages" },
         { "feedUrl": "novelous-feed://narou/comments" },
+        { "feedUrl": "novelous-feed://narou/blog-comments" },
         { "feedUrl": "novelous-feed://narou/reviews" },
         { "feedUrl": "novelous-feed://kakuyomu/reviews" }
       ],
