@@ -15,6 +15,7 @@
     "alarms",
     "http://syosetu.com/*",
     "http://*.syosetu.com/*",
+    "https://*.syosetu.com/*",
     "https://kakuyomu.jp/*"
   ],
   "background": {

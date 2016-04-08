@@ -1,4 +1,4 @@
-import { test, factory, sinon } from "../../common";
+import { test, factory, sinon, sinonsb } from "../../common";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import Feed from "../../../app/scripts/lib/feeds/feed";
 
@@ -59,6 +59,40 @@ test("#updateAll", t => {
   return subscriber.updateAll().then(() => {
     t.is(updateStub.callCount, subscriber.subscriptions.length);
     t.true(emitted);
+  });
+});
+
+test("#updateAll stops iteration when not logged in", t => {
+  const { subscriber } = t.context;
+
+  const notLoggedIn = new Error("Not logged in");
+  notLoggedIn.redirected = true;
+  notLoggedIn.responseURL = "https://example.com/login";
+
+  const updateStub = sinon.stub();
+  updateStub.returns(Promise.reject(notLoggedIn));
+  _.each(subscriber.subscriptions, sub => { sub.update = updateStub; });
+
+  return subscriber.updateAll().then(() => {
+    t.is(updateStub.callCount, 1);
+  }).catch(e => {
+    t.fail(e);
+  });
+});
+
+test.serial("#updateAll continues iteration when error occurred", t => {
+  const { subscriber } = t.context;
+
+  const error = new Error("Test Error");
+  const updateStub = sinon.stub();
+  updateStub.returns(Promise.reject(error));
+  _.each(subscriber.subscriptions, sub => { sub.update = updateStub; });
+
+  sinonsb.stub(console, "error");
+  return subscriber.updateAll().then(() => {
+    t.is(updateStub.callCount, 3);
+  }).catch(e => {
+    t.fail(e);
   });
 });
 

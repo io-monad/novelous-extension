@@ -14,9 +14,9 @@
  *     Or rejected with the value returned by a rejected Promise from `fn`.
  */
 function each(arr, options, fn) {
-  if (arr.length === 0) return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    map(arr, options, fn).then(() => resolve(), reject);
+  return _iterator(arr, options, fn, value => {
+    if (value === false) return false;
+    return true;
   });
 }
 
@@ -33,6 +33,13 @@ function each(arr, options, fn) {
  *     Or rejected with the value returned by a rejected Promise from `fn`.
  */
 function map(arr, options, fn) {
+  const mapped = [];
+  return _iterator(arr, options, fn, value => {
+    mapped.push(value);
+  }).then(() => mapped);
+}
+
+function _iterator(arr, options, fn, emit) {
   if (arr.length === 0) return Promise.resolve([]);
 
   if (_.isFunction(options)) {
@@ -41,16 +48,15 @@ function map(arr, options, fn) {
   }
   options = options || {};
   const interval = options.interval || 0;
-  const mapped = [];
 
   return new Promise((resolve, reject) => {
     const queue = _.clone(arr);
     const next = () => {
       const item = queue.shift();
       Promise.resolve(fn(item)).then((value) => {
-        mapped.push(value);
-        if (queue.length === 0) {
-          resolve(mapped);
+        const ret = emit(value);
+        if (queue.length === 0 || ret === false) {
+          resolve();
         } else {
           setTimeout(next, interval);
         }

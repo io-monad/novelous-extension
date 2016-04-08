@@ -4,17 +4,29 @@ import promises from "../../../app/scripts/lib/util/promises";
 test("#each iterates all over items", t => {
   const arr = [1, 2, 3, 4, 5];
   let index = 0;
+  t.plan(arr.length);
   return promises.each(arr, (val) => {
     t.is(val, arr[index++]);
-    return Promise.resolve();
   });
 });
 
 test("#each clones the original array", t => {
   const arr = [1, 2, 3, 4, 5];
+  t.plan(arr.length);
   return promises.each(arr, (val) => {
     t.is(val, arr.shift());
-    return Promise.resolve();
+  });
+});
+
+test("#each stops iteration when false returned", t => {
+  const arr = [1, 2, 3, 4, 5];
+  let index = 0;
+  t.plan(2);
+  return promises.each(arr, (val) => {
+    t.is(val, arr[index++]);
+    return false;
+  }).then(() => {
+    t.is(index, 1);
   });
 });
 
@@ -52,7 +64,6 @@ test.serial("#each waits for interval between iteration", t => {
     }
     lastTime = time;
     index++;
-    return Promise.resolve();
   });
 
   // Clock advances like 0 -> 500 -> 1000 -> 1500 ...
@@ -71,7 +82,7 @@ test.serial("#each waits for interval between iteration", t => {
 test.serial("#map resolves a Promise with mapped values", t => {
   const arr = [1, 2, 3, 4, 5];
   return promises.map(arr, (val) => {
-    return Promise.resolve(val * 10);
+    return val * 10;
   }).then((mapped) => {
     t.deepEqual(mapped, [10, 20, 30, 40, 50]);
   });

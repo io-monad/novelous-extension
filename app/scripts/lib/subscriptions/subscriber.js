@@ -1,3 +1,4 @@
+import url from "url";
 import EventEmitter from "eventemitter3";
 import promises from "../util/promises";
 import Subscription from "./subscription";
@@ -84,25 +85,45 @@ export default class Subscriber extends EventEmitter {
 
     logger("Updating all subscriptions");
     const subscriptions = _.filter(this.subscriptions, "enabled");
-    this._updatePromise =
-      promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
-        logger(`Fetching feed for ${sub.id}`, sub);
-        return sub.update().then(() => {
-          logger(`Fetched feed for ${sub.id}`, sub);
-        }).catch((err) => {
-          console.error(`Error occurred for ${sub.id}`, err);
-        });
-      }).then(() => {
-        logger("Updated all subscriptions");
-        this._updatePromise = null;
-        this.emit("update");
-        return this;
-      }).catch(e => {
-        console.error("Error in subscriber.updateAll:", e);
-        this._updatePromise = null;
-        throw e;
-      });
+    const hostToSubscriptions = _.groupBy(subscriptions, sub => {
+      return url.parse(sub.feedUrl).host || "other";
+    });
+
+    const updatePromises = _.map(
+      hostToSubscriptions,
+      (subs, host) => this._updateSequence(host, subs)
+    );
+    this._updatePromise = Promise.all(updatePromises).then(() => {
+      logger("Updated all subscriptions");
+      this._updatePromise = null;
+      this.emit("update");
+      return this;
+    }).catch(e => {
+      console.error("Error in subscriber.updateAll:", e);
+      this._updatePromise = null;
+      throw e;
+    });
     return this._updatePromise;
+  }
+
+  _updateSequence(host, subscriptions) {
+    const hostlog = debug(`subscriber:${host}`);
+    return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
+      hostlog(`Fetching feed for ${sub.id}`, sub);
+      return sub.update().then(() => {
+        hostlog(`Fetched feed for ${sub.id}`, sub);
+      }).catch((err) => {
+        if (err.redirected && /login/.test(err.responseURL)) {
+          // It seems to be redirected to login form, which means the user is not logged in.
+          hostlog(`Redirected to login form (${err.responseURL}) for ${sub.id}`);
+          hostlog("Skipping remaining updates since the user is not logged in");
+          return false;  // Stop iteration immediately
+        } else {
+          console.error(`Error occurred for ${sub.id}`, err);
+          return true;  // Ignore error and continue to next
+        }
+      });
+    });
   }
 
   /**
