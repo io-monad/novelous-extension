@@ -13,7 +13,16 @@ if (LIVERELOAD) {
     if (e.data) {
       const data = JSON.parse(e.data);
       if (data && data.command === "reload") {
-        chrome.runtime.reload();
+        // chrome.runtime.reload();
+
+        // Using Extensions Reloader
+        // https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid
+        const reloadUrl = "http://reload.extensions/";
+        chrome.tabs.query({ url: reloadUrl }, (tabs) => {
+          if (tabs.length === 0) {
+            chrome.tabs.create({ url: reloadUrl, active: false });
+          }
+        });
       }
     }
   };
