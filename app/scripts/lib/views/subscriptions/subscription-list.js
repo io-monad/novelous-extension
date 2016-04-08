@@ -3,10 +3,10 @@ import Subscription from "../../subscriptions/subscription";
 import SubscriptionItem from "./subscription-item";
 
 const SubscriptionList = ({ subscriptions }) => {
-  const items = _.sortBy(subscriptions, sub => -sub.newItemsCount);
+  subscriptions = _.sortBy(subscriptions, sub => -sub.newItemsCount);
   return (
     <section className="subscription-list">
-      {items.map(sub =>
+      {_.map(subscriptions, sub =>
         <SubscriptionItem key={sub.id} subscription={sub} />
       )}
     </section>

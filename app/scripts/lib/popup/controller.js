@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PopupView from "../views/popup/popup-view";
 import ErrorMessage from "../views/messages/error-message";
+import LoginRequiredMessage from "../views/messages/login-required-message";
+import EmptyFeedsMessage from "../views/messages/empty-feeds-message";
 import UpdatingMessage from "../views/messages/updating-message";
 import AppData from "../app/app-data";
 import Subscriber from "../subscriptions/subscriber";
@@ -14,6 +16,7 @@ export default class PopupController {
     this.appData = null;
     this.subscriber = null;
     this.lastError = null;
+    this.isUpdating = false;
   }
 
   start() {
@@ -27,7 +30,7 @@ export default class PopupController {
       this.renderView();
       logger("View rendered");
 
-      if (!this.appData.lastUpdatedAt) {
+      if (!this.isAnyFeedAvailable()) {
         return this.triggerUpdate().then(() => { return this; });
       }
       return this;
@@ -39,15 +42,29 @@ export default class PopupController {
     });
   }
 
+  isAnyFeedAvailable() {
+    return _.some(this.subscriber.subscriptions, sub => sub.feed);
+  }
+  isAnyFeedItemAvailable() {
+    return _.some(this.subscriber.subscriptions, sub => sub.items.length > 0);
+  }
+
   triggerUpdate() {
     logger("Triggering updateSubscriptions");
+    this.isUpdating = true;
+    this.renderView();
     return BackgroundAPI.updateSubscriptions().then(subscriber => {
       logger("Updated subscriptions");
       this.subscriber = subscriber;
       return BackgroundAPI.getAppData().then(appData => {
         this.appData.overwrite(_.cloneDeep(appData.data));
+        this.isUpdating = false;
         this.renderView();
       });
+    }).catch(e => {
+      this.isUpdating = false;
+      this.renderView();
+      throw e;
     });
   }
 
@@ -59,8 +76,14 @@ export default class PopupController {
     if (this.lastError) {
       return <ErrorMessage reason={this.lastError.message || this.lastError} />;
     }
-    if (!this.appData.lastUpdatedAt) {
+    if (this.isUpdating) {
       return <UpdatingMessage />;
+    }
+    if (!this.isAnyFeedAvailable()) {
+      return <LoginRequiredMessage />;
+    }
+    if (!this.isAnyFeedItemAvailable()) {
+      return <EmptyFeedsMessage />;
     }
     return (
       <PopupView
