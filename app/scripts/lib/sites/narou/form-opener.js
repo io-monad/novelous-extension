@@ -1,4 +1,4 @@
-import strftime from "strftime";
+import moment from "../../util/moment";
 import openPage from "../../util/open-page";
 import narouMeta from "./meta.json";
 
@@ -43,9 +43,10 @@ export default class NarouFormOpener {
     `;
 
     if (pub.time) {
-      const monthValue = JSON.stringify(strftime("%Y-%m", pub.time));
-      const dayValue = JSON.stringify(strftime("%-d", pub.time));
-      const hourValue = JSON.stringify(strftime("%-H", pub.time));
+      const time = moment(pub.time);
+      const monthValue = JSON.stringify(time.format("YYYY-MM"));
+      const dayValue = JSON.stringify(time.format("D"));
+      const hourValue = JSON.stringify(time.format("H"));
       code += `
         form.month.value = ${monthValue};
         form.day.value = ${dayValue};

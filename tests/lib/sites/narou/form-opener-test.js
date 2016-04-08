@@ -1,4 +1,3 @@
-import strftime from "strftime";
 import { test, factory } from "../../../common";
 import NarouFormOpener from "../../../../app/scripts/lib/sites/narou/form-opener";
 
@@ -25,8 +24,8 @@ test("#openForm", t => {
 
     t.is(formValue("subtitle"), pub.title);
     t.is(formValue("novel"), pub.body);
-    t.is(formValue("month"), strftime("%Y-%m", pub.time));
-    t.is(formValue("day"), strftime("%-d", pub.time));
-    t.is(formValue("hour"), strftime("%-H", pub.time));
+    t.is(formValue("month"), "2016-03");
+    t.is(formValue("day"), "1");
+    t.is(formValue("hour"), "11");
   });
 });

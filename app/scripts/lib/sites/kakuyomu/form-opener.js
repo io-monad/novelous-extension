@@ -1,4 +1,4 @@
-import strftime from "strftime";
+import moment from "../../util/moment";
 import openPage from "../../util/open-page";
 import kakuyomuMeta from "./meta.json";
 
@@ -49,8 +49,9 @@ export default class KakuyomuFormOpener {
     `;
 
     if (pub.time) {
-      const dateValue = JSON.stringify(strftime("%Y-%m-%d", pub.time));
-      const timeValue = JSON.stringify(strftime("%H:%M", pub.time));
+      const time = moment(pub.time);
+      const dateValue = JSON.stringify(time.format("YYYY-MM-DD"));
+      const timeValue = JSON.stringify(time.format("HH:mm"));
       code += `
         document.querySelector(".js-reservation-panel-button").click();
         document.getElementById("reservationInput-reserved").click();

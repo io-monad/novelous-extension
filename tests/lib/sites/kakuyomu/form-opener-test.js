@@ -1,4 +1,3 @@
-import strftime from "strftime";
 import { test, factory } from "../../../common";
 import KakuyomuFormOpener from "../../../../app/scripts/lib/sites/kakuyomu/form-opener";
 
@@ -29,7 +28,7 @@ test("#openForm", t => {
 
     t.is(formValue("title"), pub.title);
     t.is(formValue("body"), pub.body);
-    t.is(formValue("reservation_date"), strftime("%Y-%m-%d", pub.time));
-    t.is(formValue("reservation_time"), strftime("%H:%M", pub.time));
+    t.is(formValue("reservation_date"), "2016-03-01");
+    t.is(formValue("reservation_time"), "11:34");
   });
 });
