@@ -4,9 +4,5 @@
     "stage-2",
     "react"
   ],
-  "plugins": [
-    "espower",
-    "transform-runtime"
-  ],
   "ignore": ["node_modules"]
 }
