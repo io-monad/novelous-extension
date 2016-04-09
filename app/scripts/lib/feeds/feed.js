@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /**
  * @typedef {Object} FeedItem
  * @property {string}   id - ID of the item.

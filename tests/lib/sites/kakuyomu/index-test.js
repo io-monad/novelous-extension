@@ -1,4 +1,4 @@
-import { test, sinonsb, factory } from "../../../common";
+import { _, test, sinonsb, factory } from "../../../common";
 import Kakuyomu from "../../../../app/scripts/lib/sites/kakuyomu";
 
 test("new Kakuyomu", t => {

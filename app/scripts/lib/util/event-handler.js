@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export default function createExport(messageTypes) {
   const messageTypeMap = _.keyBy(messageTypes);
 

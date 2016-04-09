@@ -1,3 +1,4 @@
+import _ from "lodash";
 import moment from "../../util/moment";
 import openPage from "../../util/open-page";
 import kakuyomuMeta from "./meta.json";

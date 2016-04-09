@@ -1,4 +1,4 @@
-import { test, factory, sinon, sinonsb } from "../../common";
+import { _, test, factory, sinon, sinonsb } from "../../common";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import Feed from "../../../app/scripts/lib/feeds/feed";
 

@@ -1,4 +1,4 @@
-import { test, sinonsb } from "../../common";
+import { _, test, sinonsb } from "../../common";
 import UpdateTimer from "../../../app/scripts/lib/background/update-timer";
 
 test.beforeEach(t => {

@@ -1,4 +1,4 @@
-import { test, sinonsb, factory } from "../../../common";
+import { _, test, sinonsb, factory } from "../../../common";
 import Narou from "../../../../app/scripts/lib/sites/narou";
 
 test("new Narou", t => {

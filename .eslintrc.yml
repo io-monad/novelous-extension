@@ -10,7 +10,6 @@ plugins:
   - react
   - import-order
 globals:
-  _: true
   debug: true
   __ENV__: true
   __VENDOR__: true

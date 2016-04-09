@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /**
  * Watch strategy that detects updates by changing numertic property.
  *

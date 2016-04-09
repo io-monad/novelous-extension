@@ -1,4 +1,4 @@
-import { test } from "../../common";
+import { _, test } from "../../common";
 import AppData from "../../../app/scripts/lib/app/app-data";
 import appDataSchema from "../../../app/scripts/lib/app/app-data-schema.json";
 

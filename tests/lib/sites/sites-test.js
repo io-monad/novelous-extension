@@ -1,4 +1,4 @@
-import { test } from "../../common";
+import { _, test } from "../../common";
 import Sites from "../../../app/scripts/lib/sites/sites";
 
 test("is an Object", t => {

@@ -1,4 +1,4 @@
-import { test, sinon } from "../../common";
+import { _, test, sinon } from "../../common";
 import ExternalMessageReceiver from "../../../app/scripts/lib/background/external-message-receiver";
 const events = ExternalMessageReceiver.getMessageTypeMap();
 

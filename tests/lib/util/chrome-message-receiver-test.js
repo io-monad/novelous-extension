@@ -1,4 +1,4 @@
-import { test, sinonsb } from "../../common";
+import { _, test, sinonsb } from "../../common";
 import ChromeMessageReceiver from "../../../app/scripts/lib/util/chrome-message-receiver";
 
 class TestMessageReceiver extends ChromeMessageReceiver {

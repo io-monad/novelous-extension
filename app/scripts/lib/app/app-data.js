@@ -1,3 +1,4 @@
+import _ from "lodash";
 import EventEmitter from "eventemitter3";
 import jsonSchemaDefaults from "json-schema-defaults";
 import cutil from "../util/chrome-util";

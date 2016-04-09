@@ -1,4 +1,4 @@
-import { test, factory } from "../../../common";
+import { _, test, factory } from "../../../common";
 import NarouFormOpener from "../../../../app/scripts/lib/sites/narou/form-opener";
 
 test("#openForm", t => {

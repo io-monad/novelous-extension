@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Feed from "../feeds/feed";
 import FetcherFactory from "../feeds/fetcher-factory";
 import WatchStrategies from "./watch-strategies";

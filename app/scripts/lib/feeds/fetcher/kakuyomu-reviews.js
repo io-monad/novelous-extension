@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Feed from "../feed";
 import KakuyomuMyNovelLister from "../../sites/kakuyomu/my-novel-lister";
 import { translate } from "../../util/chrome-util";

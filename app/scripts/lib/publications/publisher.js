@@ -1,3 +1,4 @@
+import _ from "lodash";
 import SiteFactory from "../sites/site-factory";
 import Publication from "./publication";
 

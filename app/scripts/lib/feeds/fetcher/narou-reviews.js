@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Feed from "../feed";
 import NarouMyReviewLister from "../../sites/narou/my-review-lister";
 import { translate } from "../../util/chrome-util";

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import factory from "factory-girl";
 
 factory.define("kakuyomuNovel", Object, {

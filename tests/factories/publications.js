@@ -1,3 +1,4 @@
+import _ from "lodash";
 import factory from "factory-girl";
 import Publication from "../../app/scripts/lib/publications/publication";
 

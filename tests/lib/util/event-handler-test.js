@@ -1,4 +1,4 @@
-import { test, sinon } from "../../common";
+import { _, test, sinon } from "../../common";
 import eventHandler from "../../../app/scripts/lib/util/event-handler";
 
 let testEvents;

@@ -1,4 +1,4 @@
-import { test, sinonsb, factory } from "../../common";
+import { _, test, sinonsb, factory } from "../../common";
 import BackgroundController from "../../../app/scripts/lib/background/controller";
 import AppData from "../../../app/scripts/lib/app/app-data";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";

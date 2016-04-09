@@ -1,4 +1,4 @@
-import { test, sinon } from "../../../common";
+import { _, test, sinon } from "../../../common";
 import cutil from "../../../../app/scripts/lib/util/chrome-util";
 
 /**

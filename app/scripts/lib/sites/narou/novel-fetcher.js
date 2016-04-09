@@ -1,3 +1,4 @@
+import _ from "lodash";
 import scrape from "../../util/scrape";
 import narouMeta from "./meta.json";
 

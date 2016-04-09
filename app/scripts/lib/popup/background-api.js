@@ -1,3 +1,4 @@
+import _ from "lodash";
 import API from "../background/api";
 
 export default _.transform(API.list, (api, method) => {

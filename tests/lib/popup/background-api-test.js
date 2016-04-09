@@ -1,4 +1,4 @@
-import { test, sinon } from "../../common";
+import { _, test, sinon } from "../../common";
 import BackgroundAPI from "../../../app/scripts/lib/popup/background-api";
 import isPromiseLike from "../../../app/scripts/lib/util/is-promise-like";
 

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Feed from "../feed";
 import NarouMyMessageLister from "../../sites/narou/my-message-lister";
 import { translate } from "../../util/chrome-util";

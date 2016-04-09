@@ -1,4 +1,5 @@
 import url from "url";
+import _ from "lodash";
 import scrape from "../../util/scrape";
 import promises from "../../util/promises";
 import kakuyomuMeta from "./meta.json";

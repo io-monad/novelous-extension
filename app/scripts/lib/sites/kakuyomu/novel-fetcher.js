@@ -1,4 +1,5 @@
 import url from "url";
+import _ from "lodash";
 import colorString from "color-string";
 import scrape from "../../util/scrape";
 import kakuyomuMeta from "./meta.json";

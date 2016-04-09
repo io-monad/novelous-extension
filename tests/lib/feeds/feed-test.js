@@ -1,4 +1,4 @@
-import { test, factory } from "../../common";
+import { _, test, factory } from "../../common";
 import Feed from "../../../app/scripts/lib/feeds/feed";
 
 test("new Feed", t => {

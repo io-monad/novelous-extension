@@ -1,4 +1,4 @@
-import { test, factory } from "../../../common";
+import { _, test, factory } from "../../../common";
 import KakuyomuFormOpener from "../../../../app/scripts/lib/sites/kakuyomu/form-opener";
 
 test("#openForm", t => {

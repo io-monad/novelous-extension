@@ -1,3 +1,4 @@
+import _ from "lodash";
 import EventEmitter from "eventemitter3";
 import ChromeAlarm from "../util/chrome-alarm";
 import AppData from "../app/app-data";

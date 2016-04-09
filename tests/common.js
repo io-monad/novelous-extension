@@ -15,7 +15,6 @@ requireDir("./factories");
 
 global.XMLHttpRequest = fakeSererRequest(fakeServerConf);
 global.chrome = chrome;
-global._ = lodash;
 global.debug = debug;
 const sinonsb = sinon.sandbox.create();
 
@@ -27,6 +26,7 @@ test.afterEach(() => {
 factory.setAdapter(new FactoryAdapter());
 
 module.exports = {
+  _: lodash,
   test,
   sinon,
   sinonsb,

@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /**
  * Get property values from object with glob `*` support.
  *

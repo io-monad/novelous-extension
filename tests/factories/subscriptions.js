@@ -1,3 +1,4 @@
+import _ from "lodash";
 import factory from "factory-girl";
 import Feed from "../../app/scripts/lib/feeds/feed";
 import Subscription from "../../app/scripts/lib/subscriptions/subscription";

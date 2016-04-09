@@ -1,3 +1,4 @@
+import _ from "lodash";
 import isPromiseLike from "./is-promise-like";
 
 /**

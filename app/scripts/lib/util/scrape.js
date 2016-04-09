@@ -1,3 +1,4 @@
+import _ from "lodash";
 import cheerio from "cheerio";
 import request from "./request";
 

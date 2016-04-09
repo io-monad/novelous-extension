@@ -1,4 +1,5 @@
 import url from "url";
+import _ from "lodash";
 import NovelousFetchers from "./novelous-fetchers";
 
 /**

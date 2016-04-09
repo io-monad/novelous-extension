@@ -1,4 +1,4 @@
-import { test, sinon } from "../../common";
+import { _, test, sinon } from "../../common";
 import buildAPI from "../../../app/scripts/lib/background/api";
 
 test("builds API", t => {

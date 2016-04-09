@@ -7,7 +7,6 @@ import args from "./lib/args";
 
 gulp.task("vendor", () => {
   return gulp.src([
-    "node_modules/lodash/lodash.min.js",
     "bower_components/visionmedia-debug/Readme.md",
     "bower_components/visionmedia-debug/dist/debug.js",
   ])

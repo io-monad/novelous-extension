@@ -1,4 +1,5 @@
 import url from "url";
+import _ from "lodash";
 import EventEmitter from "eventemitter3";
 import promises from "../util/promises";
 import Subscription from "./subscription";

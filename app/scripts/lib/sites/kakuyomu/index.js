@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Site from "../site";
 import kakuyomuMeta from "./meta.json";
 import KakuyomuFormOpener from "./form-opener";

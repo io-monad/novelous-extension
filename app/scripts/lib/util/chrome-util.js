@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 if (!chrome.storage.sync) {
   chrome.storage.sync = chrome.storage.local;
 }

@@ -1,4 +1,4 @@
-import { test } from "../../common";
+import { _, test } from "../../common";
 import NovelousFetchers from "../../../app/scripts/lib/feeds/novelous-fetchers";
 
 test("is an Object", t => {
