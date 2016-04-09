@@ -1,5 +1,5 @@
-import gulp from "gulp";
 import { spawn } from "child_process";
+import gulp from "gulp";
 import args from "./lib/args";
 
 function runAva(options, done) {
