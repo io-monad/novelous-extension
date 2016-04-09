@@ -35,9 +35,7 @@ export default {
    *     This does not contain disabled sites.
    */
   createMap(settingsMap) {
-    return _(settingsMap)
-      .mapValues((settings, siteName) => this.create(siteName, settings))
-      .omitBy(_.isNull)
-      .value();
+    const sites = _.mapValues(settingsMap, (settings, siteName) => this.create(siteName, settings));
+    return _.omitBy(sites, _.isNull);
   },
 };

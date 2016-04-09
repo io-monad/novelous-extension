@@ -37,15 +37,14 @@ export default class AppData extends EventEmitter {
   }
 
   overwrite(data) {
-    _(data)
-    .pick(PROP_KEYS)
-    .defaults(DEFAULTS)
-    .each((v, k) => { this[k] = v; });
+    data = _.pick(data, PROP_KEYS);
+    data = _.defaults(data, DEFAULTS);
+    _.each(data, (v, k) => { this[k] = v; });
   }
 
   _bindStorageEvents() {
     chrome.storage.onChanged.addListener((changes) => {
-      const changedValues = _(changes).pick(PROP_KEYS).mapValues("newValue").value();
+      const changedValues = _.mapValues(_.pick(changes, PROP_KEYS), "newValue");
       const changedKeys = _.keys(changedValues);
 
       if (changedKeys.length > 0) {
@@ -99,9 +98,8 @@ export default class AppData extends EventEmitter {
   }
   set subscriptionSettings(settings) {
     // Fill missing keys with default values
-    settings = _(settings || [])
-      .concat(DEFAULTS.subscriptionSettings)
-      .uniqBy("feedUrl").value();
+    settings = (settings || []).concat(DEFAULTS.subscriptionSettings);
+    settings = _.uniqBy(settings, "feedUrl");
 
     if (!_.isEqual(settings, this.data.subscriptionSettings)) {
       this.data.subscriptionSettings = settings;
