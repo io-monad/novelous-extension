@@ -21,6 +21,8 @@ module.exports = function webpackConfig(opts) {
         __VENDOR__: JSON.stringify(opts.args.vendor),
         LIVERELOAD: opts.watch,
       }),
+      new webpack.optimize.CommonsChunkPlugin("common-frontend.js", ["options", "popup"]),
+      new webpack.optimize.CommonsChunkPlugin("common.js"),
     ],
     module: {
       loaders: [
