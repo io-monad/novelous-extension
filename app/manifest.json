@@ -13,6 +13,7 @@
     "tabs",
     "storage",
     "alarms",
+    "cookies",
     "http://syosetu.com/*",
     "http://*.syosetu.com/*",
     "https://*.syosetu.com/*",

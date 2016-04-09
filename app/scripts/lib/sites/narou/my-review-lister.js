@@ -1,5 +1,6 @@
 import scrape from "../../util/scrape";
 import narouMeta from "./meta.json";
+import requestMine from "./request-mine";
 
 /**
  * @typedef {Object} NarouMyReview
@@ -30,7 +31,7 @@ export default class NarouMyReviewLister {
    * @return {Promise.<NarouMyReview[]>}
    */
   listReceivedReviews() {
-    return scrape.fetch(this.getURL()).then($ => this._parsePage($));
+    return requestMine(this.getURL()).then(scrape).then($ => this._parsePage($));
   }
 
   getURL() {

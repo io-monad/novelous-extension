@@ -12,6 +12,10 @@ export default class FetcherNarouReviews {
     this.lister = new NarouMyReviewLister(options);
   }
 
+  isLoginRequired() {
+    return true;
+  }
+
   fetchFeed() {
     return this._fetchItems().then(items => {
       return new Feed({

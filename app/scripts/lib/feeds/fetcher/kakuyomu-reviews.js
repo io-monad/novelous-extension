@@ -12,6 +12,10 @@ export default class FetcherKakuyomuReviews {
     this.lister = new KakuyomuMyNovelLister(options);
   }
 
+  isLoginRequired() {
+    return true;
+  }
+
   fetchFeed() {
     return this._fetchItems().then(items => {
       return new Feed({

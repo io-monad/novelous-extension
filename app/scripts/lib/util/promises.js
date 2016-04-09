@@ -3,7 +3,7 @@
  */
 
 /**
- * Simple for-each loop with Promise
+ * Array#forEach with Promise
  *
  * @param {Array} arr - Array to be iterated.
  * @param {Object} [options] - Options.
@@ -21,7 +21,7 @@ function each(arr, options, fn) {
 }
 
 /**
- * Simple for-each loop with Promise
+ * Array#map with Promise
  *
  * @param {Array} arr - Array to be iterated.
  * @param {Object} [options] - Options.
@@ -37,6 +37,34 @@ function map(arr, options, fn) {
   return _iterator(arr, options, fn, value => {
     mapped.push(value);
   }).then(() => mapped);
+}
+
+/**
+ * Array#some with Promise
+ */
+function some(arr, options, fn) {
+  let hasSome = false;
+  return _iterator(arr, options, fn, value => {
+    if (value) {
+      hasSome = true;
+      return false;
+    }
+    return true;
+  }).then(() => hasSome);
+}
+
+/**
+ * Array#every with Promise
+ */
+function every(arr, options, fn) {
+  let hasEvery = true;
+  return _iterator(arr, options, fn, value => {
+    if (!value) {
+      hasEvery = false;
+      return false;
+    }
+    return true;
+  }).then(() => hasEvery);
 }
 
 function _iterator(arr, options, fn, emit) {
@@ -70,4 +98,6 @@ function _iterator(arr, options, fn, emit) {
 module.exports = {
   each,
   map,
+  some,
+  every,
 };

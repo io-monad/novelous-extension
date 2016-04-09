@@ -4,6 +4,7 @@ import NarouMyReviewLister from "../../../../app/scripts/lib/sites/narou/my-revi
 test("#listReceivedReviews", t => {
   const expected = fixture.json("narou/my-review-list.json");
   const myReviewLister = new NarouMyReviewLister;
+  chrome.cookies.get.callsArgWithAsync(1, {});
   return myReviewLister.listReceivedReviews().then((reviews) => {
     t.deepEqual(reviews, expected);
   });

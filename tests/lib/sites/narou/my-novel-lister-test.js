@@ -4,6 +4,7 @@ import NarouMyNovelLister from "../../../../app/scripts/lib/sites/narou/my-novel
 test("#listNovels", t => {
   const expected = fixture.json("narou/my-novel-list.json");
   const myNovelLister = new NarouMyNovelLister;
+  chrome.cookies.get.callsArgWithAsync(1, {});
   return myNovelLister.listNovels().then((result) => {
     t.deepEqual(result, expected);
   });

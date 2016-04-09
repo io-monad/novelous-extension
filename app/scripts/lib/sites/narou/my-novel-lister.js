@@ -1,6 +1,7 @@
 import url from "url";
 import scrape from "../../util/scrape";
 import narouMeta from "./meta.json";
+import requestMine from "./request-mine";
 import NarouNovelAPI from "./novel-api";
 
 /**
@@ -34,7 +35,7 @@ export default class NarouMyNovelLister {
    * @return {Promise.<NarouMyNovel[]>}
    */
   listNovels() {
-    return scrape.fetch(this.getURL()).then($ => {
+    return requestMine(this.getURL()).then(scrape).then($ => {
       const novels = this._parsePage($);
       return this._decorateNovelsByAPI(novels);
     });

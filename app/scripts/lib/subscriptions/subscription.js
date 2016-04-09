@@ -52,6 +52,10 @@ export default class Subscription {
     return this.data.lastUpdatedAt;
   }
 
+  get isLoginRequired() {
+    return this._feedFetcher.isLoginRequired();
+  }
+
   get feed() {
     return this._feed;
   }

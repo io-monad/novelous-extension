@@ -1,5 +1,6 @@
 import scrape from "../../util/scrape";
 import narouMeta from "./meta.json";
+import requestMine from "./request-mine";
 
 /**
  * @typedef {Object} NarouMyBlogComment
@@ -29,7 +30,7 @@ export default class NarouMyBlogCommentLister {
    * @return {Promise.<NarouMyBlogComment[]>}
    */
   listReceivedComments() {
-    return scrape.fetch(this.getURL()).then($ => this._parsePage($));
+    return requestMine(this.getURL()).then(scrape).then($ => this._parsePage($));
   }
 
   getURL() {

@@ -12,6 +12,11 @@ import NovelousFetchers from "./novelous-fetchers";
  * @param {string} feedUrl
  * @return {Promise.<Feed>} Promise of fetched feed.
  */
+/**
+ * @function
+ * @name FeedFetcher#isLoginRequired
+ * @return {boolean} `true` if the user has to be logged in to fetch a feed.
+ */
 
 /**
  * Fetcher factory.

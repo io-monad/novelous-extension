@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { test, sinonsb } from "../../common";
+import { test, sinonsb, factory } from "../../common";
 import PopupController from "../../../app/scripts/lib/popup/controller";
 import BackgroundAPI from "../../../app/scripts/lib/popup/background-api";
 import AppData from "../../../app/scripts/lib/app/app-data";
@@ -44,13 +44,15 @@ test.serial("#start triggers updateSubscriptions when never updated", t => {
 });
 
 test.serial("#start not triggers updateSubscriptions when updated once", t => {
-  return startController(t, { lastUpdatedAt: 1234567890 }).then(() => {
+  const subscriptionSettings = [factory.buildSync("subscriptionSettings")];
+  return startController(t, { subscriptionSettings }).then(() => {
     t.false(BackgroundAPI.updateSubscriptions.called);
   });
 });
 
 test.serial("#start renders ReactDOM", t => {
-  return startController(t, { lastUpdatedAt: 1234567890 }).then(() => {
+  const subscriptionSettings = [factory.buildSync("subscriptionSettings")];
+  return startController(t, { subscriptionSettings }).then(() => {
     const { container } = t.context;
     t.true(ReactDOM.render.calledOnce);
     t.is(ReactDOM.render.args[0][1], container);

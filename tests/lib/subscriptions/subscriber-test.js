@@ -62,12 +62,11 @@ test("#updateAll", t => {
   });
 });
 
-test("#updateAll stops iteration when not logged in", t => {
+test("#updateAll skips login required subscriptions when not logged in", t => {
   const { subscriber } = t.context;
 
   const notLoggedIn = new Error("Not logged in");
-  notLoggedIn.redirected = true;
-  notLoggedIn.responseURL = "https://example.com/login";
+  notLoggedIn.name = "LoginRequiredError";
 
   const updateStub = sinon.stub();
   updateStub.returns(Promise.reject(notLoggedIn));

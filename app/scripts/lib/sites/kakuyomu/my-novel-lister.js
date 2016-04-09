@@ -2,6 +2,7 @@ import url from "url";
 import scrape from "../../util/scrape";
 import promises from "../../util/promises";
 import kakuyomuMeta from "./meta.json";
+import requestMine from "./request-mine";
 import KakuyomuNovelFetcher from "./novel-fetcher";
 
 /**
@@ -73,7 +74,7 @@ export default class KakuyomuMyNovelLister {
    *     `KakuyomuMyNovel` only. It never fetches details from the server.
    */
   listNovels() {
-    return scrape.fetch(this.getURL()).then($ => {
+    return requestMine(this.getURL()).then(scrape).then($ => {
       const novels = this._parsePage($);
       if (this.fetchDetails) {
         return this._decorateNovels(novels);

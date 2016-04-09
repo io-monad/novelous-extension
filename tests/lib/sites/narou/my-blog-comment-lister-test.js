@@ -5,6 +5,7 @@ import NarouMyBlogCommentLister from
 test("#listReceivedComments", t => {
   const expected = fixture.json("narou/my-blog-comment-list.json");
   const myCommentLister = new NarouMyBlogCommentLister;
+  chrome.cookies.get.callsArgWithAsync(1, {});
   return myCommentLister.listReceivedComments().then((comments) => {
     t.deepEqual(comments, expected);
   });

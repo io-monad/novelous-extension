@@ -12,6 +12,10 @@ export default class FetcherNarouComments {
     this.lister = new NarouMyCommentLister(options);
   }
 
+  isLoginRequired() {
+    return true;
+  }
+
   fetchFeed() {
     return this._fetchItems().then(items => {
       return new Feed({

@@ -108,20 +108,24 @@ export default class Subscriber extends EventEmitter {
 
   _updateSequence(host, subscriptions) {
     const hostlog = debug(`subscriber:${host}`);
+    let loggedIn = true;
     return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
+      if (sub.isLoginRequired && !loggedIn) {
+        hostlog(`Skipping login required ${sub.id}`, sub);
+        return true;
+      }
+
       hostlog(`Fetching feed for ${sub.id}`, sub);
       return sub.update().then(() => {
         hostlog(`Fetched feed for ${sub.id}`, sub);
       }).catch((err) => {
-        if (err.redirected && /login/.test(err.responseURL)) {
-          // It seems to be redirected to login form, which means the user is not logged in.
-          hostlog(`Redirected to login form (${err.responseURL}) for ${sub.id}`);
-          hostlog("Skipping remaining updates since the user is not logged in");
-          return false;  // Stop iteration immediately
+        if (err.name === "LoginRequiredError") {
+          loggedIn = false;
+          hostlog(`Skipped login required ${sub.id}`);
         } else {
           console.error(`Error occurred for ${sub.id}`, err);
-          return true;  // Ignore error and continue to next
         }
+        // Ignore error and continue to the next subscription.
       });
     });
   }

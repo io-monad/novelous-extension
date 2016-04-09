@@ -12,6 +12,10 @@ export default class FetcherNarouMessages {
     this.lister = new NarouMyMessageLister(options);
   }
 
+  isLoginRequired() {
+    return true;
+  }
+
   fetchFeed() {
     return this._fetchItems().then(items => {
       return new Feed({

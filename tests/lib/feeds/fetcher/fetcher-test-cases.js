@@ -13,9 +13,15 @@ export default function fetcherTestCases(settings) {
     translateStub.restore();
   });
 
-  test("#fetchFeed returns Promise of Feed", t => {
+  test("#isLoginRequired returns boolean", t => {
+    const fetcher = settings.fetcher();
+    t.true(_.isBoolean(fetcher.isLoginRequired()));
+  });
+
+  test.serial("#fetchFeed returns Promise of Feed", t => {
     const fetcher = settings.fetcher();
     const itemsFixture = settings.itemsFixture();
+    chrome.cookies.get.callsArgWithAsync(1, {});
 
     return fetcher.fetchFeed().then(feed => {
       t.true(_.isString(feed.title));
@@ -25,6 +31,17 @@ export default function fetcherTestCases(settings) {
 
       t.is(feed.items.length, itemsFixture.length);
       t.deepEqual(_.map(feed.items, "id"), _.map(itemsFixture, "id"));
+    });
+  });
+
+  test.serial("#fetchFeed returns rejected Promise when login required", t => {
+    const fetcher = settings.fetcher();
+    if (!fetcher.isLoginRequired()) return null;  // Skip test
+
+    chrome.cookies.get.callsArgWithAsync(1, null);
+
+    return fetcher.fetchFeed().then(t.fail).catch(err => {
+      t.is(err.name, "LoginRequiredError");
     });
   });
 }

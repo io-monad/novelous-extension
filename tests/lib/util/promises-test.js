@@ -79,11 +79,47 @@ test.serial("#each waits for interval between iteration", t => {
   return promise;
 });
 
-test.serial("#map resolves a Promise with mapped values", t => {
+test("#map resolves a Promise with mapped values", t => {
   const arr = [1, 2, 3, 4, 5];
   return promises.map(arr, (val) => {
     return val * 10;
   }).then((mapped) => {
     t.deepEqual(mapped, [10, 20, 30, 40, 50]);
+  });
+});
+
+test("#some resolves a Promise with true if some truthy", t => {
+  const arr = [1, 2, 3, 4, 5];
+  return promises.some(arr, (val) => {
+    return val === 3;
+  }).then((result) => {
+    t.true(result);
+  });
+});
+
+test("#some resolves a Promise with false if all falsy", t => {
+  const arr = [1, 2, 3, 4, 5];
+  return promises.some(arr, (val) => {
+    return val > 5;
+  }).then((result) => {
+    t.false(result);
+  });
+});
+
+test("#every resolves a Promise with true if all truthy", t => {
+  const arr = [1, 2, 3, 4, 5];
+  return promises.every(arr, (val) => {
+    return val <= 5;
+  }).then((result) => {
+    t.true(result);
+  });
+});
+
+test("#some resolves a Promise with false if some falsy", t => {
+  const arr = [1, 2, 3, 4, 5];
+  return promises.every(arr, (val) => {
+    return val !== 3;
+  }).then((result) => {
+    t.false(result);
   });
 });
