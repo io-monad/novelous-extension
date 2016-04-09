@@ -1,5 +1,6 @@
 import { test, sinon } from "../../common";
 import BackgroundAPI from "../../../app/scripts/lib/popup/background-api";
+import isPromiseLike from "../../../app/scripts/lib/util/is-promise-like";
 
 test("is Object of API methods", t => {
   t.true(_.isObject(BackgroundAPI));
@@ -7,7 +8,7 @@ test("is Object of API methods", t => {
 });
 
 test("returns Promise", t => {
-  t.true(BackgroundAPI.getAppData() instanceof Promise);
+  t.true(isPromiseLike(BackgroundAPI.getAppData()));
 });
 
 test("uses getBackgroundPage to call API", t => {

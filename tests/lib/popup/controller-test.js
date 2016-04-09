@@ -5,6 +5,7 @@ import BackgroundAPI from "../../../app/scripts/lib/popup/background-api";
 import AppData from "../../../app/scripts/lib/app/app-data";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import cutil from "../../../app/scripts/lib/util/chrome-util";
+import isPromiseLike from "../../../app/scripts/lib/util/is-promise-like";
 
 test.beforeEach(t => {
   t.context.container = {};
@@ -27,7 +28,7 @@ test("new PopupController", t => {
 
 test("#start returns Promise", t => {
   const { controller } = t.context;
-  t.true(controller.start() instanceof Promise);
+  t.true(isPromiseLike(controller.start()));
 });
 
 test.serial("#start initializes members", t => {

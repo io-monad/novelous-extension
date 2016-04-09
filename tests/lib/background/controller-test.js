@@ -5,6 +5,7 @@ import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import Publisher from "../../../app/scripts/lib/publications/publisher";
 import UpdateTimer from "../../../app/scripts/lib/background/update-timer";
 import cutil from "../../../app/scripts/lib/util/chrome-util";
+import isPromiseLike from "../../../app/scripts/lib/util/is-promise-like";
 
 test.beforeEach(t => {
   t.context.controller = new BackgroundController;
@@ -23,7 +24,7 @@ test("new BackgroundController", t => {
 
 test("#start returns Promise", t => {
   const { controller } = t.context;
-  t.true(controller.start() instanceof Promise);
+  t.true(isPromiseLike(controller.start()));
 });
 
 test.serial("#start initializes members", t => {
