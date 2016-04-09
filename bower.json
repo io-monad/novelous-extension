@@ -30,7 +30,7 @@
       "main": []
     },
     "bootswatch-dist": {
-      "main": "**/*.min.{css,js}"
+      "main": "**/*.min.css"
     },
     "visionmedia-debug": {
       "main": []

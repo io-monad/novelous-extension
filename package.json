@@ -64,8 +64,6 @@
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "gulp-zip": "^3.2.0",
-    "jquery": "^2.2.3",
-    "jquery-mockjax": "^2.1.1",
     "json-loader": "^0.5.4",
     "json-schema-defaults": "^0.1.1",
     "lodash": "^4.9.0",
