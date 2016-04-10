@@ -1,10 +1,8 @@
 import url from "url";
 import _ from "lodash";
 import scrape from "../../util/scrape";
-import promises from "../../util/promises";
 import kakuyomuMeta from "./meta.json";
 import requestMine from "./request-mine";
-import KakuyomuNovelFetcher from "./novel-fetcher";
 
 /**
  * @typedef {Object} KakuyomuMyNovel
@@ -27,41 +25,25 @@ import KakuyomuNovelFetcher from "./novel-fetcher";
  */
 
 /**
- * @typedef {Object} KakuyomuMyDetailedNovel
- * @extends {KakuyomuMyNovel}
- * @property {string}   color - Theme color of the novel in CSS expression.
- * @property {?string}  catchphrase - Catchphrase (tagline) of the novel.
- * @property {string}   description - Description of the novel.
- * @property {string[]} keywords - Keywords of the novel.
- * @property {?string}  genre - Genre of the novel.
- * @property {boolean}  isFunFiction - `true` if the novel is a fun-fiction.
- * @property {?string}  originalTitle - Title of the original work of the novel.
- * @property {number}   createdAt - Timestamp when the first episode was published.
- * @property {number}   updatedAt - Timestamp when the latest episode was published.
- * @property {KakuyomuReview[]} reviews - Recent reviews on the novel.
- */
-
-/**
  * Listing my own novels in Kakuyomu.
  */
 export default class KakuyomuMyNovelLister {
   /**
    * @param {Object}  [options] - Options.
    * @param {string}  [options.baseUrl] - A base URL of Kakuyomu.
-   * @param {boolean} [options.fetchDetails] - `true` if fetching details from server.
-   * @param {number}  [options.fetchInterval] - Interval between fetches from server.
-   * @param {KakuyomuNovelFetcher} [options.novelFetcher]
    */
   constructor(options) {
-    options = _.extend({
-      baseUrl: kakuyomuMeta.baseUrl,
-      fetchDetails: true,
-      fetchInterval: 1000,
-    }, options);
-    this.baseUrl = options.baseUrl;
-    this.fetchDetails = options.fetchDetails;
-    this.fetchInterval = options.fetchInterval;
-    this.novelFetcher = options.novelFetcher || new KakuyomuNovelFetcher(options);
+    options = options || {};
+    this.baseUrl = options.baseUrl || kakuyomuMeta.baseUrl;
+  }
+
+  /**
+   * Get IDs of my own novels.
+   *
+   * @return {Promise.<Array<string>} Novel IDs.
+   */
+  listNovelIds() {
+    return requestMine(this.getURL()).then(scrape).then($ => this._parseIdList($));
   }
 
   /**
@@ -75,21 +57,22 @@ export default class KakuyomuMyNovelLister {
    *     `KakuyomuMyNovel` only. It never fetches details from the server.
    */
   listNovels() {
-    return requestMine(this.getURL()).then(scrape).then($ => {
-      const novels = this._parsePage($);
-      if (this.fetchDetails) {
-        return this._decorateNovels(novels);
-      } else {
-        return novels;
-      }
-    });
+    return requestMine(this.getURL()).then(scrape).then($ => this._parseNovelList($));
   }
 
   getURL() {
     return `${this.baseUrl}/my`;
   }
 
-  _parsePage($) {
+  _parseIdList($) {
+    return _.map($("#works-hasWorks > ul > li"), (item) => {
+      const $item = $(item);
+      const editUrl = $item.find("h3 > a").last().attr("href");
+      return editUrl.match(/\/works\/(\d+)/)[1];
+    });
+  }
+
+  _parseNovelList($) {
     const resolve = (path) => (path ? url.resolve(this.baseUrl, path) : null);
     const authorName = $.text($("#profile > h2").first());
     const authorUrl = resolve($("#profile > h2").first().children("a").attr("href"));
@@ -125,16 +108,6 @@ export default class KakuyomuMyNovelLister {
         resolve($item.find(".works-workEpisodes-labelTitle").last().attr("href"));
 
       return novel;
-    });
-  }
-
-  _decorateNovels(novels) {
-    return promises.map(novels, { interval: this.fetchInterval }, (novel) => {
-      if (novel.isPrivate) {
-        return novel;
-      }
-      return this.novelFetcher.fetchNovel(novel.id)
-        .then((details) => _.extend(novel, details));
     });
   }
 }

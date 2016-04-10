@@ -1,7 +1,9 @@
 import _ from "lodash";
 import Feed from "../feed";
 import KakuyomuMyNovelLister from "../../sites/kakuyomu/my-novel-lister";
+import KakuyomuReviewLister from "../../sites/kakuyomu/review-lister";
 import { translate } from "../../util/chrome-util";
+import promises from "../../util/promises";
 
 /**
  * Feed fetcher of received reviews in Kakuyomu
@@ -10,7 +12,12 @@ import { translate } from "../../util/chrome-util";
  */
 export default class FetcherKakuyomuReviews {
   constructor(options) {
-    this.lister = new KakuyomuMyNovelLister(options);
+    options = _.extend({
+      fetchInterval: 1000,
+    }, options);
+    this.novelLister = new KakuyomuMyNovelLister(options);
+    this.reviewLister = new KakuyomuReviewLister(options);
+    this.fetchInterval = options.fetchInterval;
   }
 
   isLoginRequired() {
@@ -21,7 +28,7 @@ export default class FetcherKakuyomuReviews {
     return this._fetchItems().then(items => {
       return new Feed({
         title: translate("kakuyomuReviewsFeed"),
-        url: this.lister.getURL(),
+        url: this.novelLister.getURL(),
         siteName: translate("kakuyomuSiteName"),
         siteId: "kakuyomu",
         items,
@@ -30,22 +37,30 @@ export default class FetcherKakuyomuReviews {
   }
 
   _fetchItems() {
-    return this.lister.listNovels().then(novels => {
-      return _.flatMap(novels, novel => {
-        return _.map(novel.reviews || [], review => ({
-          id: review.id,
-          title: `${review.rating} ${review.title}`,
-          url: review.url,
-          body: review.body,
-          type: "review",
-          authorName: review.authorName,
-          authorUrl: review.authorUrl,
-          sourceTitle: novel.title,
-          sourceUrl: novel.url,
-          sourceType: "novel",
-          createdAt: review.createdAt,
-        }));
-      });
-    });
+    return this.novelLister.listNovels().then(novels =>
+      promises.map(novels, { interval: this.fetchInterval }, novel =>
+        this.reviewLister.listReviews(novel.id).then(reviews =>
+          _.map(reviews, review => this._buildItem(novel, review))
+        )
+      )
+      .then(_.flatten)
+      .then(items => _.sortBy(items, it => -it.createdAt))
+    );
+  }
+
+  _buildItem(novel, review) {
+    return {
+      id: review.id,
+      title: `${review.rating} ${review.title}`,
+      url: review.url,
+      body: review.body,
+      type: "review",
+      authorName: review.authorName,
+      authorUrl: review.authorUrl,
+      sourceTitle: novel.title,
+      sourceUrl: novel.url,
+      sourceType: "novel",
+      createdAt: review.createdAt,
+    };
   }
 }
