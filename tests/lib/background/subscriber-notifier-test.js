@@ -1,17 +1,30 @@
-import { _, test, sinonsb, factory } from "../../common";
+import { _, test, sinon, sinonsb, factory } from "../../common";
 import SubscriberNotifier from "../../../app/scripts/lib/background/subscriber-notifier";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import AppVars from "../../../app/scripts/lib/app/app-vars";
 
+const realAudio = global.Audio;
 test.beforeEach(t => {
+  t.context.sound = { play: sinon.spy() };
+  global.Audio = sinon.stub().returns(t.context.sound);
+
   t.context.subscriber = new Subscriber([
     factory.buildSync("subscriptionSettings"),
   ]);
   t.context.subscription = t.context.subscriber.subscriptions[0];
   t.context.notifier = new SubscriberNotifier(t.context.subscriber);
+
+  chrome.notifications.create.callsArgAsync(2);
+});
+test.afterEach(() => {
+  if (realAudio) {
+    global.Audio = realAudio;
+  } else {
+    delete global.Audio;
+  }
 });
 
-test("subscriber update makes notifiactions", t => {
+test.serial("subscriber update makes notifiactions", t => {
   const { subscriber, subscription, notifier } = t.context;
   const notifyItemStub = sinonsb.stub(notifier, "notifyItem");
   subscription._lastFoundItems = subscription.items.slice(0, 2);
@@ -24,9 +37,8 @@ test("subscriber update makes notifiactions", t => {
 });
 
 test.serial("#notifyItem creates notification", t => {
-  const { subscription, notifier } = t.context;
+  const { sound, subscription, notifier } = t.context;
   const item = subscription.items[0];
-  chrome.notifications.create.callsArgAsync(2);
 
   return notifier.notifyItem(subscription, item).then(notified => {
     t.true(notified);
@@ -42,13 +54,14 @@ test.serial("#notifyItem creates notification", t => {
       contextMessage: item.body,
       isClickable: true,
     });
+
+    t.true(sound.play.calledOnce);
   });
 });
 
 test.serial("#notifyItem ignores notified item", t => {
   const { subscription, notifier } = t.context;
   const item = subscription.items[0];
-  chrome.notifications.create.callsArgAsync(2);
 
   return notifier.notifyItem(subscription, item).then(notified => {
     t.true(notified);
@@ -61,10 +74,57 @@ test.serial("#notifyItem ignores notified item", t => {
   });
 });
 
+test.serial("#notifyItem respects alertEnabled setting", t => {
+  const { sound, subscription, notifier } = t.context;
+
+  notifier.options.alertEnabled = false;
+  return notifier.notifyItem(subscription, subscription.items[0]).then(notified => {
+    t.true(notified);
+    t.false(chrome.notifications.create.called);
+    t.true(sound.play.calledOnce);
+  });
+});
+
+test.serial("#notifyItem respects soundEnabled setting", t => {
+  const { sound, subscription, notifier } = t.context;
+
+  notifier.options.soundEnabled = false;
+  return notifier.notifyItem(subscription, subscription.items[0]).then(notified => {
+    t.true(notified);
+    t.true(chrome.notifications.create.called);
+    t.false(sound.play.called);
+  });
+});
+
+test.serial("#notifyItem skips notification if both disabled", t => {
+  const { sound, subscription, notifier } = t.context;
+
+  notifier.options.alertEnabled = false;
+  notifier.options.soundEnabled = false;
+  return notifier.notifyItem(subscription, subscription.items[0]).then(notified => {
+    t.false(notified);
+    t.false(chrome.notifications.create.called);
+    t.false(sound.play.called);
+  });
+});
+
+test.serial("#notifyItem closes alert after autoCloseSeconds", t => {
+  const { subscription, notifier } = t.context;
+
+  const clock = sinonsb.useFakeTimers();
+  notifier.options.autoCloseSeconds = 5;
+
+  return notifier.notifyItem(subscription, subscription.items[0]).then(() => {
+    t.false(chrome.notifications.clear.called);
+
+    clock.tick(5000);
+    t.true(chrome.notifications.clear.calledOnce);
+  });
+});
+
 test.serial("clicking notification opens page and marks it as read", t => {
   const { subscriber, subscription, notifier } = t.context;
   const item = subscription.items[0];
-  chrome.notifications.create.callsArgAsync(2);
   sinonsb.spy(subscriber, "clearUnreadItem");
 
   return notifier.notifyItem(subscription, item).then(() => {

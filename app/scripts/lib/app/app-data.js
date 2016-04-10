@@ -108,6 +108,17 @@ export default class AppData extends EventEmitter {
     }
   }
 
+  get notificationSettings() {
+    return this.data.notificationSettings;
+  }
+  set notificationSettings(settings) {
+    settings = _.defaults(settings, DEFAULTS.notificationSettings);
+    if (!_.isEqual(settings, this.data.notificationSettings)) {
+      this.data.notificationSettings = settings;
+      this.changedKeys.notificationSettings = true;
+    }
+  }
+
   load() {
     logger("Loading");
     return cutil.localGet(PROP_KEYS).then((data) => {

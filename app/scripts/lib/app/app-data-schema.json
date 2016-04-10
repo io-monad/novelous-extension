@@ -5,7 +5,8 @@
   "required": [
     "updatePeriodMinutes",
     "siteSettings",
-    "subscriptionSettings"
+    "subscriptionSettings",
+    "notificationSettings"
   ],
   "properties": {
     "updatePeriodMinutes": {
@@ -87,6 +88,26 @@
               { "type": "null" }
             ]
           }
+        }
+      }
+    },
+    "notificationSettings": {
+      "title": "notificationSettings",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alertEnabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "soundEnabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "autoCloseSeconds": {
+          "type": "number",
+          "minimum": 0,
+          "default": 5
         }
       }
     }

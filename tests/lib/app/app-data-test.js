@@ -86,6 +86,18 @@ test("#subscriptionSettings setter not duplicating defaults", t => {
   t.is(appData.subscriptionSettings.length, AppData.defaults.subscriptionSettings.length);
 });
 
+test("#notificationSettings returns default value", t => {
+  const { appData } = t.context;
+  t.deepEqual(appData.notificationSettings, AppData.defaults.notificationSettings);
+});
+
+test("#notificationSettings setter uses default value", t => {
+  const { appData } = t.context;
+  appData.notificationSettings = { soundEnabled: false };
+  t.is(appData.notificationSettings.alertEnabled, true);
+  t.is(appData.notificationSettings.soundEnabled, false);
+});
+
 test.serial(".load returns appData Promise", t => {
   chrome.storage.local.get.callsArgWithAsync(1, {});
   return AppData.load().then((opts) => {

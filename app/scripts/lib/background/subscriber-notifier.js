@@ -1,11 +1,15 @@
 import _ from "lodash";
 import AppVars from "../app/app-vars";
+import AppData from "../app/app-data";
+
+const DEFAULTS = AppData.defaults.notificationSettings;
 
 /**
  * Notification for Subscriber
  */
 export default class SubscriberNotifier {
-  constructor(subscriber) {
+  constructor(subscriber, options) {
+    this.options = _.extend({}, DEFAULTS, options);
     this.subscriber = subscriber;
     this.notifiedItemIds = {};
     this.clickHandlers = {};
@@ -13,23 +17,50 @@ export default class SubscriberNotifier {
     this._bindEvents();
   }
 
+  get alertEnabled() {
+    return this.options.alertEnabled;
+  }
+  get soundEnabled() {
+    return this.options.soundEnabled;
+  }
+  get enabled() {
+    return this.alertEnabled || this.soundEnabled;
+  }
+  get autoCloseSeconds() {
+    return this.options.autoCloseSeconds;
+  }
+
   notifyItem(subscription, item) {
-    if (this.notifiedItemIds[item.id]) return Promise.resolve(false);
+    if (!this.enabled || this.notifiedItemIds[item.id]) {
+      return Promise.resolve(false);
+    }
     this.notifiedItemIds[item.id] = true;
+
     return new Promise(resolve => {
-      const notificationId = this._registerClickHandler(subscription, item);
-      const options = {
-        type: "basic",
-        iconUrl: AppVars.iconUrl[128],
-        title: subscription.title,
-        message: item.title,
-        contextMessage: item.body || undefined,
-        isClickable: true,
-      };
-      chrome.notifications.create(notificationId, options, () => {
+      if (this.soundEnabled && this.sound) {
+        this.sound.play();
+      }
+      if (this.alertEnabled) {
+        const notificationId = this._registerClickHandler(subscription, item);
+        const options = {
+          type: "basic",
+          iconUrl: AppVars.iconUrl[128],
+          title: subscription.title,
+          message: item.title,
+          contextMessage: item.body || undefined,
+          isClickable: true,
+        };
+        chrome.notifications.create(notificationId, options, () => {
+          if (this.autoCloseSeconds > 0) {
+            setTimeout(() => {
+              chrome.notifications.clear(notificationId);
+            }, this.autoCloseSeconds * 1000);
+          }
+          resolve(true);
+        });
+      } else {
         resolve(true);
-      });
-      if (this.sound) this.sound.play();
+      }
     });
   }
 
