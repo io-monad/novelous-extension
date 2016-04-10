@@ -1,18 +1,12 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
-import classNames from "classnames";
+import Icon from "./icon";
 import Str from "./str";
 
 const MessageBox = ({ message, details, icon, spin, children }) => (
   <div className={`message-box message-box--${_.kebabCase(message)}-message`}>
     <div className="message-box__icon">
-      <i
-        className={classNames({
-          fa: true,
-          [`fa-${icon}`]: true,
-          "fa-spin": spin,
-        })}
-      />
+      <Icon name={icon} spin={spin} />
     </div>
     <p className="message-box__text">
       <Str name={message} />

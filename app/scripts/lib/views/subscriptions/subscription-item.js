@@ -2,6 +2,7 @@ import React, { PropTypes } from "react";
 import classNames from "classnames";
 import withinElement from "../helpers/within-element";
 import Subscription from "../../subscriptions/subscription";
+import Icon from "../common/icon";
 import FeedItem from "./feed-item";
 
 export default class SubscriptionItem extends React.Component {
@@ -33,7 +34,7 @@ export default class SubscriptionItem extends React.Component {
       >
         <header className="subscription-item__header panel-heading" onClick={this.handleClick}>
           <h1 className="subscription-item__title">
-            <i className={`fa fa-caret-${newItemsOnly ? "right" : "down"}`} />
+            <Icon name={`caret-${newItemsOnly ? "right" : "down"}`} />
             <a href={subscription.url} target="_blank">{subscription.title}</a>
           </h1>
           <div className="subscription-item__counts">

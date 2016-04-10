@@ -2,19 +2,20 @@ import React, { PropTypes } from "react";
 import shallowCompare from "react-addons-shallow-compare";
 import classNames from "classnames";
 import withinElement from "../helpers/within-element";
+import Icon from "../common/icon";
 import Time from "../common/time";
 import CollapsedText from "../common/collapsed-text";
 
 const ItemTypeIcons = {
-  message: "fa-envelope-o",
-  comment: "fa-comment-o",
-  review: "fa-bookmark",
-  other: "fa-asterisk",
+  message: "envelope-o",
+  comment: "comment-o",
+  review: "bookmark",
+  other: "asterisk",
 };
 const SourceTypeIcons = {
-  blog: "fa-file-text-o",
-  novel: "fa-book",
-  other: "fa-feed",
+  blog: "file-text-o",
+  novel: "book",
+  other: "feed",
 };
 
 export default class FeedItem extends React.Component {
@@ -53,7 +54,7 @@ export default class FeedItem extends React.Component {
       >
         <header className="feed-item__header">
           <h1 className="feed-item__title">
-            <i className={`fa ${this.getIconFromItemType(item.type)}`} />
+            <Icon name={this.getIconFromItemType(item.type)} />
             {link(item.url, item.title)}
           </h1>
         </header>
@@ -67,19 +68,19 @@ export default class FeedItem extends React.Component {
         <footer className="feed-item__footer">
           {item.authorName &&
             <div className="feed-item__footer-item feed-item__author">
-              <i className="fa fa-user"></i>
+              <Icon name="user" />
               {link(item.authorUrl, item.authorName)}
             </div>
           }
           {item.sourceTitle &&
             <div className="feed-item__footer-item feed-item__source">
-              <i className={`fa ${this.getIconFromSourceType(item.sourceType)}`} />
+              <Icon name={this.getIconFromSourceType(item.sourceType)} />
               {link(item.sourceUrl, item.sourceTitle)}
             </div>
           }
           {(item.createdAt || item.updatedAt) &&
             <div className="feed-item__footer-item feed-item__time">
-              <i className="fa fa-clock-o"></i>
+              <Icon name="clock-o" />
               <Time value={item.updatedAt || item.createdAt} />
             </div>
           }
