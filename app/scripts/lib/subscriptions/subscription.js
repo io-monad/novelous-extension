@@ -65,6 +65,7 @@ export default class Subscription {
       this._feed = newFeed;
       this.data.feedData = newFeed ? newFeed.toObject() : null;
       this._newItems = null;  // Clear cache
+      this._seenItems = null;
     }
   }
 
@@ -83,16 +84,21 @@ export default class Subscription {
 
   get newItems() {
     if (!this._newItems) {
-      if (!this.feed) {
-        this._newItems = [];
-      } else {
-        this._newItems = this._watchStrategy.filterNewItems(this.feed.items, this.data.watchState);
-      }
+      this._newItems = this._watchStrategy.filterNewItems(this.items, this.data.watchState);
     }
     return this._newItems;
   }
   get newItemsCount() {
     return this.newItems.length;
+  }
+  get seenItems() {
+    if (!this._seenItems) {
+      this._seenItems = _.differenceBy(this.items, this.newItems, "id");
+    }
+    return this._seenItems;
+  }
+  get seenItemsCount() {
+    return this.seenItems.length;
   }
 
   /**
@@ -117,5 +123,6 @@ export default class Subscription {
       this.data.watchState = this._watchStrategy.getClearedState(this.feed.items);
     }
     this._newItems = null;
+    this._seenItems = null;
   }
 }

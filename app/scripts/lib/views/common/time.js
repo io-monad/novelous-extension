@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
+import shallowCompare from "react-addons-shallow-compare";
 import moment from "../../util/moment";
 
 export default class Time extends React.Component {
@@ -12,6 +13,9 @@ export default class Time extends React.Component {
     if (this.props.format === "relative") {
       this.timer = setInterval(() => { this.forceUpdate(); }, 3000);
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
   }
   componentWillUnmount() {
     if (this.timer) {

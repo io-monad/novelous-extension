@@ -1,5 +1,7 @@
 import React, { PropTypes } from "react";
+import shallowCompare from "react-addons-shallow-compare";
 import classNames from "classnames";
+import withinElement from "../helpers/within-element";
 import Time from "../common/time";
 import CollapsedText from "../common/collapsed-text";
 
@@ -21,6 +23,9 @@ export default class FeedItem extends React.Component {
     this.state = { expanded: false };
     this.handleClick = this.handleClick.bind(this);
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
   getIconFromItemType(itemType) {
     return ItemTypeIcons[itemType] || ItemTypeIcons.other;
   }
@@ -28,11 +33,7 @@ export default class FeedItem extends React.Component {
     return SourceTypeIcons[sourceType] || SourceTypeIcons.other;
   }
   handleClick(ev) {
-    let el = ev.target;
-    while (el) {
-      if (/^a$/i.test(el.tagName)) return;
-      el = el.parentNode;
-    }
+    if (withinElement(ev.target, "a")) return;
     this.setState({ expanded: !this.state.expanded });
   }
   render() {
