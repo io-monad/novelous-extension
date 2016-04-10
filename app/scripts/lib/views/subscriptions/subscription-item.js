@@ -8,50 +8,54 @@ import FeedItem from "./feed-item";
 export default class SubscriptionItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { newItemsOnly: true };
+    this.state = { unreadOnly: true };
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick(ev) {
     if (withinElement(ev.target, "a")) return;
-    this.setState({ newItemsOnly: !this.state.newItemsOnly });
+    this.setState({ unreadOnly: !this.state.unreadOnly });
   }
   render() {
     const { subscription } = this.props;
-    const { newItemsOnly } = this.state;
+    const { unreadOnly } = this.state;
     if (subscription.items.length === 0) return null;
 
-    const visibleCount = newItemsOnly ? subscription.newItems.length : subscription.items.length;
+    const visibleCount = unreadOnly ? subscription.unreadItems.length : subscription.items.length;
     return (
       <article
         className={classNames({
           "subscription-item": true,
           "subscription-item--has-items": visibleCount > 0,
-          "subscription-item--has-new-items": subscription.newItemsCount > 0,
-          "subscription-item--new-items-only": newItemsOnly,
+          "subscription-item--has-unread-items": subscription.unreadItemsCount > 0,
+          "subscription-item--unread-items-only": unreadOnly,
           panel: true,
           "panel-default": true,
         })}
       >
         <header className="subscription-item__header panel-heading" onClick={this.handleClick}>
           <h1 className="subscription-item__title">
-            <Icon name={`caret-${newItemsOnly ? "right" : "down"}`} />
+            <Icon name={`caret-${unreadOnly ? "right" : "down"}`} />
             <a href={subscription.url} target="_blank">{subscription.title}</a>
           </h1>
           <div className="subscription-item__counts">
-            {subscription.newItemsCount > 0 &&
-              <span className="subscription-item__new-count">{subscription.newItemsCount}</span>
+            {subscription.unreadItemsCount > 0 &&
+              <span className="subscription-item__unread-count">
+                {subscription.unreadItemsCount}
+              </span>
             }
-            <span className="subscription-item__item-count">{subscription.items.length}</span>
+            <span className="subscription-item__item-count">
+              {subscription.items.length}
+            </span>
           </div>
         </header>
         <div className="subscription-item__items panel-body">
           <div>
-            {subscription.newItems.map(item =>
-              <FeedItem key={item.id} item={item} isNewItem />
+            {subscription.unreadItems.map(item =>
+              <FeedItem key={item.id} item={item} isUnread />
             )}
           </div>
-          <div style={{ display: newItemsOnly ? "none" : "" }}>
-            {subscription.seenItems.map(item =>
+          <div style={{ display: unreadOnly ? "none" : "" }}>
+            {subscription.readItems.map(item =>
               <FeedItem key={item.id} item={item} />
             )}
           </div>

@@ -132,21 +132,35 @@ export default class Subscriber extends EventEmitter {
   }
 
   /**
-   * Clear all new items in subscriptions.
+   * Clear specific unread item in subscription.
    */
-  clearNewItems() {
+  clearUnreadItem(subscription, item) {
+    if (_.isString(subscription)) {
+      subscription = _.find(this.subscriptions, ["id", subscription]);
+    }
+    if (subscription) {
+      if (subscription.clearUnreadItem(item)) {
+        this.emit("update");
+      }
+    }
+  }
+
+  /**
+   * Clear all unread items in subscriptions.
+   */
+  clearUnreadItems() {
     _.each(this.subscriptions, sub => {
-      sub.clearNewItems();
+      sub.clearUnreadItems();
     });
     this.emit("update");
   }
 
   /**
-   * Get total count of new items in subscriptions.
+   * Get total count of unread items in subscriptions.
    *
-   * @return {number} Total new items count.
+   * @return {number} Total unread items count.
    */
-  getNewItemsCount() {
-    return _.sumBy(this.subscriptions, "newItemsCount");
+  getUnreadItemsCount() {
+    return _.sumBy(this.subscriptions, "unreadItemsCount");
   }
 }

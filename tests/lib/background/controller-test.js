@@ -93,9 +93,9 @@ test.serial("#getPublisher returns Promise of Publisher", t => {
   });
 });
 
-test.serial("#markBadgeAsSeen calls subscriber.clearNewItems", t => {
+test.serial("#markBadgeAsSeen calls subscriber.clearUnreadItems", t => {
   return startController(t).then(controller => {
-    const stubClear = sinonsb.stub(controller.subscriber, "clearNewItems");
+    const stubClear = sinonsb.stub(controller.subscriber, "clearUnreadItems");
     return controller.markBadgeAsSeen().then(() => {
       t.true(stubClear.calledOnce);
     });

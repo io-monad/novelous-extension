@@ -24,11 +24,18 @@ export default class WatchStrategySet {
     });
   }
 
-  getClearedState(items) {
+  getAllClearedState(items) {
     return _.transform(items, (state, item) => {
       const id = this._getId(item);
       if (_.isString(id) || _.isNumber(id)) state[id] = 1;
     }, {});
+  }
+
+  getOneClearedState(item, prevState) {
+    const state = prevState ? _.clone(prevState) : {};
+    const id = this._getId(item);
+    if (_.isString(id) || _.isNumber(id)) state[id] = 1;
+    return state;
   }
 
   _getId(item) {

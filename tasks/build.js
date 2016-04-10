@@ -11,6 +11,7 @@ gulp.task("build", gulpSequence(
     "pages",
     "locales",
     "images",
+    "sounds",
     "fonts",
     "livereload",
   ]

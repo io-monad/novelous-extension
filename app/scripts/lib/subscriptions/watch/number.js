@@ -27,6 +27,7 @@ export default class WatchStrategyNumber {
   filterNewItems(items, state) {
     if (!state) return _.clone(items);
     return _.filter(items, item => {
+      if (!state.hasOwnProperty(item.id)) return true;
       if (this.greaterOnly) {
         return state[item.id] < this._getValue(item);
       }
@@ -34,10 +35,16 @@ export default class WatchStrategyNumber {
     });
   }
 
-  getClearedState(items) {
+  getAllClearedState(items) {
     return _.transform(items, (state, item) => {
       state[item.id] = this._getValue(item);
     }, {});
+  }
+
+  getOneClearedState(item, prevState) {
+    const state = prevState ? _.clone(prevState) : {};
+    state[item.id] = this._getValue(item);
+    return state;
   }
 
   _getValue(item) {

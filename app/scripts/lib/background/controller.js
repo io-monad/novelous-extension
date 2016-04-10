@@ -5,6 +5,7 @@ import AppData from "../app/app-data";
 import ExternalMessageReceiver from "./external-message-receiver";
 import UpdateTimer from "./update-timer";
 import Badge from "./badge";
+import SubscriberNotifier from "./subscriber-notifier";
 const logger = debug("background");
 
 /**
@@ -18,6 +19,7 @@ export default class BackgroundController {
     this.subscriber = null;
     this.publisher = null;
     this.updateTimer = null;
+    this.notifier = null;
     this.initializePromise = null;
   }
 
@@ -60,11 +62,12 @@ export default class BackgroundController {
     this.subscriber = new Subscriber(this.appData.subscriptionSettings);
     this.subscriber.on("update", () => {
       logger("Updated Subscriber", this.subscriber);
-      this.badge.setCount(this.subscriber.getNewItemsCount());
+      this.badge.setCount(this.subscriber.getUnreadItemsCount());
       this.appData.subscriptionSettings = this.subscriber.subscriptionSettings;
       this.appData.save();
     });
-    this.badge.setCount(this.subscriber.getNewItemsCount());
+    this.badge.setCount(this.subscriber.getUnreadItemsCount());
+    this.notifier = new SubscriberNotifier(this.subscriber);
     logger("Initialized Subscriber", this.subscriber);
   }
 
@@ -140,8 +143,8 @@ export default class BackgroundController {
    */
   markBadgeAsSeen() {
     return this.getSubscriber().then(subscriber => {
-      logger("Clearing new items");
-      subscriber.clearNewItems();
+      logger("Clearing unread items");
+      subscriber.clearUnreadItems();
     });
   }
 

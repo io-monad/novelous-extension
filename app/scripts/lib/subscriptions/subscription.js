@@ -64,8 +64,7 @@ export default class Subscription {
     if (this._feed !== newFeed) {
       this._feed = newFeed;
       this.data.feedData = newFeed ? newFeed.toObject() : null;
-      this._newItems = null;  // Clear cache
-      this._seenItems = null;
+      this._clearCache();
     }
   }
 
@@ -82,47 +81,77 @@ export default class Subscription {
     return this.feed && this.feed.items || [];
   }
 
-  get newItems() {
-    if (!this._newItems) {
-      this._newItems = this._watchStrategy.filterNewItems(this.items, this.data.watchState);
+  get unreadItems() {
+    if (!this._unreadItems) {
+      this._unreadItems = this._watchStrategy.filterNewItems(this.items, this.data.watchState);
     }
-    return this._newItems;
+    return this._unreadItems;
   }
-  get newItemsCount() {
-    return this.newItems.length;
+  get unreadItemsCount() {
+    return this.unreadItems.length;
   }
-  get seenItems() {
-    if (!this._seenItems) {
-      this._seenItems = _.differenceBy(this.items, this.newItems, "id");
+  get readItems() {
+    if (!this._readItems) {
+      this._readItems = _.differenceBy(this.items, this.unreadItems, "id");
     }
-    return this._seenItems;
+    return this._readItems;
   }
-  get seenItemsCount() {
-    return this.seenItems.length;
+  get readItemsCount() {
+    return this.readItems.length;
+  }
+  get lastFoundItems() {
+    return this._lastFoundItems || (this._lastFoundItems = []);
+  }
+  get lastFoundItemsCount() {
+    return this.lastFoundItems.length;
   }
 
   /**
    * Update feed by fetching from the server.
    *
-   * @return {Promise}
+   * @return {Promise.<FeedItem>} New items found by this update.
    */
   update() {
     return this._feedFetcher.fetchFeed(this.feedUrl).then(feed => {
-      const isFirstFetch = !this.data.feedData;
+      const oldFeed = this.feed;
       this.feed = feed;
       this.data.lastUpdatedAt = _.now();
-      if (isFirstFetch) this.clearNewItems();
+      if (oldFeed) {
+        const oldState = this._watchStrategy.getAllClearedState(oldFeed.items);
+        this._lastFoundItems = this._watchStrategy.filterNewItems(this.items, oldState);
+      } else {
+        this.clearUnreadItems();
+        this._lastFoundItems = [];
+      }
+      return this._lastFoundItems;
     });
   }
 
   /**
-   * Clear new items in feed to mark them as have seen.
+   * Clear an item in feed to mark it as read.
    */
-  clearNewItems() {
+  clearUnreadItem(item) {
+    if (!this.feed) return false;
+    if (_.isString(item)) item = _.find(this.items, ["id", item]);
+    if (!item) return false;
+    this.data.watchState = this._watchStrategy.getOneClearedState(item, this.data.watchState);
+    this._clearCache();
+    return true;
+  }
+
+  /**
+   * Clear all unread items in feed to mark them as read.
+   */
+  clearUnreadItems() {
     if (this.feed) {
-      this.data.watchState = this._watchStrategy.getClearedState(this.feed.items);
+      this.data.watchState = this._watchStrategy.getAllClearedState(this.feed.items);
     }
-    this._newItems = null;
-    this._seenItems = null;
+    this._clearCache();
+  }
+
+  _clearCache() {
+    this._unreadItems = null;
+    this._readItems = null;
+    this._lastFoundItems = null;
   }
 }

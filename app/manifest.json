@@ -14,6 +14,7 @@
     "storage",
     "alarms",
     "cookies",
+    "notifications",
     "http://syosetu.com/*",
     "http://*.syosetu.com/*",
     "https://*.syosetu.com/*",

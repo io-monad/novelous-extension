@@ -95,32 +95,32 @@ test.serial("#updateAll continues iteration when error occurred", t => {
   });
 });
 
-test.cb("#clearNewItems", t => {
+test.cb("#clearUnreadItems", t => {
   const { subscriber } = t.context;
 
   const clearStub = sinon.stub();
-  _.each(subscriber.subscriptions, sub => { sub.clearNewItems = clearStub; });
+  _.each(subscriber.subscriptions, sub => { sub.clearUnreadItems = clearStub; });
 
   subscriber.on("update", () => {
     t.is(clearStub.callCount, subscriber.subscriptions.length);
     t.end();
   });
-  subscriber.clearNewItems();
+  subscriber.clearUnreadItems();
 });
 
-test("#getNewItemsCount", async t => {
+test("#getUnreadItemsCount", async t => {
   const { subscriber } = t.context;
-  t.is(subscriber.getNewItemsCount(), 0);
+  t.is(subscriber.getUnreadItemsCount(), 0);
 
-  addNewItems(subscriber.subscriptions[0], 2);
-  addNewItems(subscriber.subscriptions[1], 1);
+  addUnreadItems(subscriber.subscriptions[0], 2);
+  addUnreadItems(subscriber.subscriptions[1], 1);
 
-  t.is(subscriber.getNewItemsCount(), 3);
+  t.is(subscriber.getUnreadItemsCount(), 3);
 });
 
-function addNewItems(subscription, num) {
-  const newItems = _.range(num).map(() => factory.buildSync("feedItem"));
+function addUnreadItems(subscription, num) {
+  const unreadItems = _.range(num).map(() => factory.buildSync("feedItem"));
   const feedData = _.cloneDeep(subscription.feed.toObject());
-  feedData.items = feedData.items.concat(newItems);
+  feedData.items = feedData.items.concat(unreadItems);
   subscription.feed = new Feed(feedData);
 }

@@ -25,9 +25,18 @@ const WatchStrategies = {
  * Get new state with all new items cleared as being seen by a user.
  *
  * @function
- * @name WatchStrategy#getClearedState
+ * @name WatchStrategy#getAllClearedState
  * @param {FeedItem[]} items - All feed items in the feed.
  * @return {Object} State data that represents all items have been cleared.
+ */
+/**
+ * Get new state with one new item cleared as being seen by a user.
+ *
+ * @function
+ * @name WatchStrategy#getOneClearedState
+ * @param {FeedItem} item - Feed item to be marked as seen.
+ * @param {Object} prevState - Previous state.
+ * @return {Object} State data that represents `item` has been cleared.
  */
 
 /**

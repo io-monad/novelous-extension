@@ -38,14 +38,14 @@ export default class FeedItem extends React.Component {
     this.setState({ expanded: !this.state.expanded });
   }
   render() {
-    const { item, isNewItem } = this.props;
+    const { item, isUnread } = this.props;
     const { expanded } = this.state;
     const link = (url, text) => (url ? <a href={url} target="_blank">{text}</a> : text);
     return (
       <article
         className={classNames({
           "feed-item": true,
-          "feed-item--new-item": isNewItem,
+          "feed-item--unread": isUnread,
           "feed-item--expandable": !!item.body,
           "feed-item--collapsed": !expanded,
           "feed-item--expanded": expanded,
@@ -92,7 +92,7 @@ export default class FeedItem extends React.Component {
 
 FeedItem.propTypes = {
   item: PropTypes.object.isRequired,
-  isNewItem: PropTypes.bool,
+  isUnread: PropTypes.bool,
 };
 
 export default FeedItem;

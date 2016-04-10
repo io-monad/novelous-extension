@@ -4,7 +4,7 @@ import Subscription from "../../subscriptions/subscription";
 import SubscriptionItem from "./subscription-item";
 
 const SubscriptionList = ({ subscriptions }) => {
-  subscriptions = _.sortBy(subscriptions, sub => -sub.newItemsCount);
+  subscriptions = _.sortBy(subscriptions, sub => -sub.unreadItemsCount);
   return (
     <section className="subscription-list">
       {_.map(subscriptions, sub =>
