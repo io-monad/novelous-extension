@@ -12,7 +12,6 @@ gulp.task("build", gulpSequence(
     "locales",
     "images",
     "fonts",
-    "bower",
     "livereload",
   ]
 ));

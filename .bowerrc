@@ -1,6 +1,5 @@
 {
   "ignoredDependencies": [
-    "bootstrap",
     "jquery"
   ]
 }
