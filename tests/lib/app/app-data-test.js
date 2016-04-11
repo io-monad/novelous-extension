@@ -2,7 +2,7 @@ import { _, test } from "../../common";
 import AppData from "../../../app/scripts/lib/app/app-data";
 
 test.beforeEach(t => {
-  t.context.appData = new AppData({}, { saveDelay: 0 });
+  t.context.appData = new AppData({});
 });
 
 test("new AppData", t => {
@@ -146,26 +146,6 @@ test.serial("#save saves only changed values into storage", t => {
   });
 });
 
-test.serial("#save buffers changes by delaying to save", t => {
-  const { appData } = t.context;
-  chrome.storage.local.set.callsArgAsync(1);
-
-  appData.updatePeriodMinutes = 60;
-  const promise1 = appData.save();
-
-  appData.lastUpdatedAt = 1234567890;
-  const promise2 = appData.save();
-
-  t.is(promise1, promise2);
-  return promise1.then(() => {
-    t.true(chrome.storage.local.set.calledOnce);
-    t.deepEqual(chrome.storage.local.set.args[0][0], {
-      updatePeriodMinutes: 60,
-      lastUpdatedAt: 1234567890,
-    });
-  });
-});
-
 test.serial.cb("emits update event for storage change", t => {
   const { appData } = t.context;
   t.plan(3);
@@ -182,7 +162,7 @@ test.serial.cb("emits update event for storage change", t => {
 });
 
 test.serial("does not update for storage change if autoUpdate = false", t => {
-  const appData = new AppData({}, { saveDelay: 0, autoUpdate: false });
+  const appData = new AppData({}, { autoUpdate: false });
   appData.on("update", t.fail);
   chrome.storage.onChanged.trigger(
     { updatePeriodMinutes: { newValue: 20 } },

@@ -39,14 +39,11 @@ export default class AppData extends EventEmitter {
   constructor(data, options) {
     super();
     options = _.extend({
-      saveDelay: 1000,
       autoUpdate: true,
     }, options);
 
     this.data = {};
     this.changedKeys = {};
-    this.savePromise = null;
-    this.saveDelay = options.saveDelay;
 
     if (data) this.overwrite(data);
     this.changedKeys = {};  // Reset changed keys
@@ -72,6 +69,7 @@ export default class AppData extends EventEmitter {
     logger("Loading");
     return cutil.localGet(PROP_KEYS).then((data) => {
       this.overwrite(data);
+      this.changedKeys = {};  // Reset changed keys
       logger("Loaded successfully", this.data);
 
       this.emit("update", this, PROP_KEYS);
@@ -80,26 +78,17 @@ export default class AppData extends EventEmitter {
   }
 
   save() {
-    if (this.savePromise) return this.savePromise;
     if (_.isEmpty(this.changedKeys)) return Promise.resolve(this);
 
-    this.savePromise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const keys = _.keys(this.changedKeys);
-        const savedData = _.pick(this.data, keys);
+    const keys = _.keys(this.changedKeys);
+    const savedData = _.pick(this.data, keys);
+    this.changedKeys = {};
 
-        this.savePromise = null;
-        this.changedKeys = {};
-
-        logger("Saving", savedData);
-        cutil.localSet(savedData).then(() => {
-          logger("Saved successfully", keys, this.data);
-          resolve(this);
-        })
-        .catch(reject);
-      }, this.saveDelay);
+    logger("Saving", savedData);
+    return cutil.localSet(savedData).then(() => {
+      logger("Saved successfully", keys, this.data);
+      return this;
     });
-    return this.savePromise;
   }
 
   _bindStorageEvents() {
@@ -109,6 +98,7 @@ export default class AppData extends EventEmitter {
 
       if (changedKeys.length > 0) {
         _.extend(this, changedValues);
+        this.changedKeys = _.omit(this.changedKeys, changedKeys);
 
         logger("Updated by storage change successfully", this.data, changedKeys);
         this.emit("update", this, changedKeys);

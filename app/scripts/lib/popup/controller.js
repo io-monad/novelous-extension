@@ -21,11 +21,12 @@ export default class PopupController {
   }
 
   start() {
-    return AppData.load({ autoUpdate: false }).then(appData => {
+    return AppData.load().then(appData => {
       BackgroundAPI.markBadgeAsSeen();
 
       this.appData = appData;
       this.subscriber = new Subscriber(this.appData.subscriptionSettings);
+      this.appData.on("update", this._handleAppDataUpdate.bind(this));
       logger("Initialized", this);
 
       this.renderView();
@@ -54,14 +55,10 @@ export default class PopupController {
     logger("Triggering updateSubscriptions");
     this.isUpdating = true;
     this.renderView();
-    return BackgroundAPI.updateSubscriptions().then(subscriber => {
+    return BackgroundAPI.updateSubscriptions().then(() => {
       logger("Updated subscriptions");
-      this.subscriber = subscriber;
-      return BackgroundAPI.getAppData().then(appData => {
-        this.appData.overwrite(_.cloneDeep(appData.data));
-        this.isUpdating = false;
-        this.renderView();
-      });
+      this.isUpdating = false;
+      this.renderView();
     }).catch(e => {
       this.isUpdating = false;
       this.renderView();
@@ -92,5 +89,13 @@ export default class PopupController {
         subscriptions={this.subscriber.subscriptions}
       />
     );
+  }
+
+  _handleAppDataUpdate(appData, keys) {
+    if (keys.indexOf("subscriptionSettings") >= 0) {
+      logger("Updating Subscriber with updated settings", appData.subscriptionSettings);
+      this.subscriber.subscriptionSettings = appData.subscriptionSettings;
+      this.renderView();
+    }
   }
 }

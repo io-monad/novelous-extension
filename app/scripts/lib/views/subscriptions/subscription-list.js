@@ -9,24 +9,23 @@ const MAX_FLAT_ITEMS = 50;  // Not customizable currently
 
 export default class SubscriptionList extends React.Component {
   renderInFlatItems() {
-    if (!this.flattenedEntries) {
-      const entries = _.flatMap(this.props.subscriptions, subscription => {
-        const unreadItems = _.keyBy(subscription.unreadItems, item => item.id);
-        return _.map(subscription.items, item => ({
-          id: `${subscription.id}::${item.id}`,
-          isUnread: !!unreadItems[item.id],
-          subscription,
-          item,
-        }));
-      });
-      this.flattenedEntries = _.sortBy(entries, entry => (
-        -entry.item.createdAt * (entry.isUnread ? 2 : 1),  // Prioritize unread
-      )).slice(0, MAX_FLAT_ITEMS);
-    }
+    const entries = _.flatMap(this.props.subscriptions, subscription => {
+      const unreadItems = _.keyBy(subscription.unreadItems, item => item.id);
+      return _.map(subscription.items, item => ({
+        id: `${subscription.id}::${item.id}`,
+        isUnread: !!unreadItems[item.id],
+        subscription,
+        item,
+      }));
+    });
+    const flattenedEntries = _.sortBy(entries, entry => (
+      -entry.item.createdAt * (entry.isUnread ? 2 : 1),  // Prioritize unread
+    )).slice(0, MAX_FLAT_ITEMS);
+
     return (
       <section className="subscription-list subscription-list--flat panel panel-default">
         <div className="panel-body">
-          {_.map(this.flattenedEntries, (entry) =>
+          {_.map(flattenedEntries, (entry) =>
             <FeedItem key={entry.id} {...entry} />
           )}
         </div>
@@ -35,12 +34,10 @@ export default class SubscriptionList extends React.Component {
   }
 
   renderInFolders() {
-    if (!this.sortedSubscriptions) {
-      this.sortedSubscriptions = _.sortBy(this.props.subscriptions, sub => -sub.unreadItemsCount);
-    }
+    const sortedSubscriptions = _.sortBy(this.props.subscriptions, sub => -sub.unreadItemsCount);
     return (
       <section className="subscription-list subscription-list--categorized">
-        {_.map(this.sortedSubscriptions, sub =>
+        {_.map(sortedSubscriptions, sub =>
           <SubscriptionItem key={sub.id} subscription={sub} />
         )}
       </section>
