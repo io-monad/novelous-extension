@@ -1,6 +1,5 @@
 import { _, test } from "../../common";
 import AppData from "../../../app/scripts/lib/app/app-data";
-import appDataSchema from "../../../app/scripts/lib/app/app-data-schema.json";
 
 test.beforeEach(t => {
   t.context.appData = new AppData({}, { saveDelay: 0 });
@@ -32,9 +31,10 @@ test("#overwrite calls setter for each value", t => {
   t.is(appData.updatePeriodMinutes, 20);
 });
 
-test("#schema returns schema", t => {
+test("#optionsSchema returns JSON schema", t => {
   const { appData } = t.context;
-  t.deepEqual(appData.schema, appDataSchema);
+  t.true(_.isObject(appData.optionsSchema));
+  t.is(appData.optionsSchema.$schema, "http://json-schema.org/draft-04/schema#");
 });
 
 test("#updatePeriodMinutes returns default value", t => {
@@ -115,7 +115,7 @@ test.serial("#load returns appData Promise", t => {
 
 test.serial("#load emits update event", t => {
   const { appData } = t.context;
-  const propKeys = _.keys(AppData.schema.properties);
+  const propKeys = _.clone(AppData.keys);
   chrome.storage.local.get.callsArgWithAsync(1, {});
   t.plan(2);
   appData.on("update", (opts, keys) => {

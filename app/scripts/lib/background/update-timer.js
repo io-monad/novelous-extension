@@ -4,7 +4,7 @@ import ChromeAlarm from "../util/chrome-alarm";
 import AppData from "../app/app-data";
 
 const DEFAULT_UPDATE_PERIOD_MINUTES = AppData.defaults.updatePeriodMinutes;
-const MIN_UPDATE_PERIOD_MINUTES = AppData.schema.properties.updatePeriodMinutes.minimum;
+const MIN_UPDATE_PERIOD_MINUTES = AppData.optionsSchema.properties.updatePeriodMinutes.minimum;
 
 export default class UpdateTimer extends EventEmitter {
   /**

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "required": [
+    "updatePeriodMinutes",
+    "notificationSettings"
+  ],
+  "properties": {
+    "updatePeriodMinutes": {
+      "type": "integer",
+      "minimum": 15,
+      "default": 30,
+      "enum": [15, 30, 60, 120, 180],
+      "enumNames": [
+        "every 15 minutes",
+        "every 30 minutes",
+        "every 1 hour",
+        "every 2 hours",
+        "every 3 hours"
+      ]
+    },
+    "notificationSettings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "alertEnabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "soundEnabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "autoCloseSeconds": {
+          "type": "number",
+          "minimum": 0,
+          "default": 5
+        }
+      }
+    }
+  },
+  "uiSchema": {
+    "ui:order": [
+      "updatePeriodMinutes",
+      "notificationSettings"
+    ],
+    "ui:rootFieldId": "options"
+  }
+}
