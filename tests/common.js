@@ -13,6 +13,10 @@ import FactoryAdapter from "./test-utils/factory-adapter";
 
 requireDir("./factories");
 
+global.__ENV__ = "test";
+global.__VENDOR__ = "chrome";
+global.LIVERELOAD = false;
+
 global.XMLHttpRequest = fakeSererRequest(fakeServerConf);
 global.chrome = chrome;
 global.debug = debug;
