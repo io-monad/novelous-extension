@@ -27,6 +27,9 @@ const CustomSchemaField = (props) => {
   if (props.name && (!props.uiSchema || !props.uiSchema.className)) {
     getProps("uiSchema").classNames = `options-form__${_.kebabCase(props.name)}`;
   }
+  if (props.uiSchema && props.uiSchema["ui:help"]) {
+    getProps("uiSchema")["ui:help"] = translate(props.uiSchema["ui:help"]);
+  }
 
   return (
     <SchemaField {...props} />

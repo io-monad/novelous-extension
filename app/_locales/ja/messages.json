@@ -104,6 +104,9 @@
   "autoCloseSeconds": {
     "message": "デスクトップ通知を自動で閉じる秒数"
   },
+  "autoCloseSecondsHint": {
+    "message": "0 秒を指定すると自動で閉じません"
+  },
   "saveOptions": {
     "message": "保存"
   },

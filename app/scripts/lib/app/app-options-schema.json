@@ -33,7 +33,7 @@
         },
         "autoCloseSeconds": {
           "type": "number",
-          "minimum": 1,
+          "minimum": 0,
           "default": 5
         }
       }
@@ -50,7 +50,10 @@
         "soundEnabled",
         "alertEnabled",
         "autoCloseSeconds"
-      ]
+      ],
+      "autoCloseSeconds": {
+        "ui:help": "autoCloseSecondsHint"
+      }
     }
   }
 }
