@@ -46,7 +46,7 @@ export default class BackgroundController {
    */
   _setupWithAppData(appData) {
     this.appData = appData;
-    this.appData.on("update", () => { this._handleAppDataUpdate(); });
+    this.appData.on("update", this._handleAppDataUpdate.bind(this));
 
     this._setupPublisher();
     this._setupSubscriber();
@@ -99,6 +99,9 @@ export default class BackgroundController {
     }
     if (updated.subscriptionSettings) {
       this.subscriber.subscriptionSettings = this.appData.subscriptionSettings;
+    }
+    if (updated.notificationSettings) {
+      this.notifier.options = this.appData.notificationSettings;
     }
     if (updated.lastUpdatedAt) {
       this.updateTimer.lastUpdatedAt = this.appData.lastUpdatedAt;
