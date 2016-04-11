@@ -1,11 +1,5 @@
 import React, { PropTypes } from "react";
-import Form from "react-jsonschema-form";
-import Str from "../common/str";
-import CustomSchemaField from "./custom-schema-field";
-
-const FormFields = {
-  SchemaField: CustomSchemaField,
-};
+import OptionsForm from "./options-form";
 
 export default class OptionsView extends React.Component {
   constructor(props) {
@@ -18,22 +12,7 @@ export default class OptionsView extends React.Component {
   render() {
     return (
       <div className="options-view">
-        <div className="options-form">
-          <Form
-            {...this.props}
-            fields={FormFields}
-            onSubmit={this.handleFormSubmit}
-          >
-            <div className="options-form__actions">
-              <button
-                type="submit"
-                className="options-form__save-button btn btn-primary"
-              >
-                <Str name="saveOptions" />
-              </button>
-            </div>
-          </Form>
-        </div>
+        <OptionsForm {...this.props} onSubmit={this.handleFormSubmit} />
       </div>
     );
   }
