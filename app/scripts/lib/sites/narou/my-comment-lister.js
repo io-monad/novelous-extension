@@ -54,7 +54,7 @@ export default class NarouMyCommentLister {
       const $link = $item.find(".novelcomment_info > a:not(.delete)");
       if ($link.length === 0) {
         const info = $.text($item.find(".novelcomment_info"));
-        const matched = info.match(/投稿者：\n *(.+?) *\n/);
+        const matched = info.match(/投稿者：[\n\r ]*(.+?) *\r?\n/);
         comment.userName = matched ? matched[1] : null;
         comment.userUrl = null;
       } else {

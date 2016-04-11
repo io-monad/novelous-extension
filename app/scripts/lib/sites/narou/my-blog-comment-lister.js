@@ -49,7 +49,7 @@ export default class NarouMyBlogCommentLister {
       const $userLink = $item.find(".blogcomment_info").first().find("a");
       if ($userLink.length === 0) {
         const info = $.text($item.find(".blogcomment_info"));
-        const matched = info.match(/投稿者：[\n ]*(.+?) *\n/);
+        const matched = info.match(/投稿者：[\n\r ]*(.+?) *\r?\n/);
         comment.userName = matched ? matched[1] : null;
         comment.userUrl = null;
       } else {
