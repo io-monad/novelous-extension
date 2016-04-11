@@ -16,6 +16,7 @@ module.exports = function webpackConfig(opts) {
       publicPath: "/scripts/",
     },
     plugins: [
+      new webpack.IgnorePlugin(/^(buffertools)$/),
       new webpack.DefinePlugin({
         __ENV__: env,
         __VENDOR__: JSON.stringify(opts.args.vendor),

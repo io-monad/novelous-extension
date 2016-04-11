@@ -61,13 +61,40 @@
     "message": "申し訳ございません。問題が発生しました。"
   },
 
-  "enableThisSite": {
-    "message": "このサイトを有効にする"
+  "updatePeriodMinutes": {
+    "message": "各サイトの更新チェック間隔"
   },
-  "defaultNarouNcode": {
-    "message": "作品のNコード"
+  "every15Minutes": {
+    "message": "15分ごと"
   },
-  "defaultKakuyomuWorkId": {
-    "message": "作品のID"
+  "every30Minutes": {
+    "message": "30分ごと"
+  },
+  "every1Hour": {
+    "message": "1時間ごと"
+  },
+  "every2Hours": {
+    "message": "2時間ごと"
+  },
+  "every3Hours": {
+    "message": "3時間ごと"
+  },
+  "notificationSettings": {
+    "message": "通知設定"
+  },
+  "alertEnabled": {
+    "message": "デスクトップ通知を有効にする"
+  },
+  "soundEnabled": {
+    "message": "通知音を再生する"
+  },
+  "autoCloseSeconds": {
+    "message": "デスクトップ通知を自動で閉じる秒数"
+  },
+  "saveOptions": {
+    "message": "保存"
+  },
+  "saving": {
+    "message": "保存しています..."
   }
 }

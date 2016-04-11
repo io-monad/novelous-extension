@@ -99,6 +99,9 @@ module.exports = {
     }
     key = _.camelCase(key);
     const translated = chrome.i18n.getMessage(key, substitutions);
+    if (!translated && !fallback) {
+      console.error(`No translation for "${key}"`);
+    }
     return translated || fallback;
   },
 

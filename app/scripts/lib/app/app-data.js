@@ -63,6 +63,10 @@ export default class AppData extends EventEmitter {
   getOptions() {
     return _.cloneDeep(_.pick(this.data, OPTION_KEYS));
   }
+  setOptions(options) {
+    options = _.pick(options, OPTION_KEYS);
+    _.each(options, (v, k) => { this[k] = v; });
+  }
 
   load() {
     logger("Loading");
