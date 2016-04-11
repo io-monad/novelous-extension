@@ -1,6 +1,5 @@
 import React, { PropTypes } from "react";
 import classNames from "classnames";
-import withinElement from "../helpers/within-element";
 import Subscription from "../../subscriptions/subscription";
 import Icon from "../common/icon";
 import FeedItem from "./feed-item";
@@ -12,7 +11,8 @@ export default class SubscriptionItem extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick(ev) {
-    if (withinElement(ev.target, "a")) return;
+    ev.stopPropagation();
+    ev.preventDefault();
     this.setState({ unreadOnly: !this.state.unreadOnly });
   }
   render() {
@@ -34,9 +34,23 @@ export default class SubscriptionItem extends React.Component {
       >
         <header className="subscription-item__header panel-heading" onClick={this.handleClick}>
           <h1 className="subscription-item__title">
-            <Icon name={`caret-${unreadOnly ? "right" : "down"}`} />
-            <a href={subscription.url} target="_blank">{subscription.title}</a>
+            <a href="#" onClick={this.handleClick}>
+              <Icon name={`caret-${unreadOnly ? "right" : "down"}`} />
+            </a>
+            {subscription.siteId &&
+              <img src={`/images/sites/${subscription.siteId}.png`} />
+            }
+            {subscription.siteName ?
+              `${subscription.siteName}: ${subscription.title}` : subscription.title
+            }
           </h1>
+          <div className="subscription-item__links">
+            <a href={subscription.url} target="_blank" className="btn btn-default btn-xs"
+              onClick={(ev) => { ev.stopPropagation(); }}
+            >
+              <Icon name="external-link" />
+            </a>
+          </div>
           <div className="subscription-item__counts">
             {subscription.unreadItemsCount > 0 &&
               <span className="subscription-item__unread-count">

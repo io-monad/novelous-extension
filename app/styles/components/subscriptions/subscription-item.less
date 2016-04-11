@@ -4,8 +4,8 @@
   &__header {
     .clearfix;
     cursor: pointer;
-    padding: 0 15px;
     border-bottom: none;
+    padding: 0;
   }
 
   &__title {
@@ -13,21 +13,27 @@
     font-size: 14px;
     font-weight: bold;
     color: #666666;
-    line-height: 1;
+    line-height: 30px;
     margin: 0;
-    padding: 8px 0;
+    padding: 0 10px;
 
     i {
       color: #aaaaaa;
       width: 1em;
     }
-    a {
-      color: inherit;
-      outline: none;
+    img {
+      height: 16px;
+      margin-right: 5px;
+      vertical-align: text-bottom;
     }
-    a:hover {
-      color: inherit;
-    }
+  }
+
+  &__links {
+    float: right;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1;
+    margin: 4px 4px 4px 0;
   }
 
   &__counts {
@@ -35,8 +41,8 @@
     display: inline-block;
     font-size: 12px;
     line-height: 1;
-    border-radius: 5px;
-    margin: 7px 0 0 7px;
+    border-radius: 8px;
+    margin: 6px 8px;
     background-color: white;
   }
   &__unread-count, &__item-count {
@@ -46,12 +52,12 @@
   &__unread-count {
     background-color: rgb(255, 128, 36);
     color: #ffffff;
-    border-radius: 5px 0 0 5px;
+    border-radius: 8px 0 0 8px;
   }
   &__item-count {
     background-color: white;
     color: #999999;
-    border-radius: 5px;
+    border-radius: 8px;
   }
 
   &__items {

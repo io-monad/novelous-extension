@@ -27,7 +27,7 @@ export default class Time extends React.Component {
     return moment(this.props.value).toISOString();
   }
   getTitle() {
-    return moment(this.props.value).calendar();
+    return moment(this.props.value).format("llll");
   }
   getFormattedDate() {
     const time = moment(this.props.value);

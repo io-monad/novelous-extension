@@ -77,6 +77,9 @@ export default class Subscription {
   get siteName() {
     return this.feed && this.feed.siteName || null;
   }
+  get siteId() {
+    return this.feed && this.feed.siteId || null;
+  }
   get items() {
     return this.feed && this.feed.items || [];
   }

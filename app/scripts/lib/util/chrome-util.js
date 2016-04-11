@@ -77,6 +77,11 @@ module.exports = {
     return promised((cb) => chrome.storage.local.remove(keys, cb));
   },
 
+  getStorePageUrl() {
+    const extensionId = chrome.i18n.getMessage("@@extension_id");
+    return `https://chrome.google.com/webstore/detail/currently/${extensionId}`;
+  },
+
   openOptionsPage() {
     if (chrome.runtime.openOptionsPage) {
       chrome.runtime.openOptionsPage();

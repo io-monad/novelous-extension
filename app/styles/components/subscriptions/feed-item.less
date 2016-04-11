@@ -1,7 +1,10 @@
 .feed-item {
+  @c: feed-item;
+
+  position: relative;
   padding: 10px 15px 10px 12px;
   border-left: 3px solid transparent;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #ddd;
 
   &:first-child {
     border-top: none;
@@ -17,35 +20,33 @@
     background-color: #fcfcfc;
   }
 
-  &__header {
-    float: left;
-  }
   &__title {
+    float: left;
+    color: inherit;
     font-size: 14px;
     line-height: 20px;
     margin: 0 10px 0 0;
 
+    a:visited {
+      color: darken(@link-color, 15%);
+    }
     i {
       color: #999999;
       margin-right: 5px;
     }
-    a {
-      color: inherit;
-    }
   }
-
   &__body {
     font-size: 12px;
+    line-height: 1.5;
+    padding: 10px 5px;
 
-    .feed-item--collapsed & {
+    .@{c}--collapsed & {
       color: #cccccc;
       line-height: 20px;
-      padding-bottom: 2px;
+      padding: 0 0 2px 0;
     }
-    .feed-item--expanded & {
+    .@{c}--expanded & {
       clear: left;
-      line-height: 1.5;
-      padding: 10px 5px;
     }
   }
 
@@ -58,7 +59,17 @@
     font-size: 11px;
     padding-top: 8px;
   }
+  &__subscription {
+    img {
+      height: 11px;
+      margin-right: 5px;
+      vertical-align: bottom;
+      opacity: 0.6;
+    }
+  }
   &__footer-item {
+    display: inline;
+
     i {
       margin-right: 5px;
     }
@@ -66,16 +77,20 @@
       color: inherit;
     }
   }
-  &__author, &__source {
-    margin-right: 10px;
-  }
-  &__author {
-    float: left;
-  }
-  &__source {
-    float: left;
-  }
-  &__time {
+  &__footer-right {
     float: right;
+
+    .@{c}__footer-item {
+      margin-left: 10px;
+    }
+  }
+  &__footer-left {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    .@{c}__footer-item {
+      margin-right: 10px;
+    }
   }
 }

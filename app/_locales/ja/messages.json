@@ -20,29 +20,29 @@
   },
 
   "narouMessagesFeed": {
-    "message": "小説家になろう: 受信メッセージ"
+    "message": "メッセージ"
   },
   "narouCommentsFeed": {
-    "message": "小説家になろう: 書かれた感想"
+    "message": "小説の感想"
   },
   "narouBlogCommentsFeed": {
-    "message": "小説家になろう: 書かれた活動報告コメント"
+    "message": "活動報告コメント"
   },
   "narouReviewsFeed": {
-    "message": "小説家になろう: 書かれたレビュー"
+    "message": "小説レビュー"
   },
   "kakuyomuReviewsFeed": {
-    "message": "カクヨム: 書かれたレビュー"
+    "message": "小説レビュー"
   },
 
   "narouCommentTitle": {
-    "message": "$authorName$さんが書いた感想",
+    "message": "$authorName$さんの感想",
     "placeholders": {
       "authorName": { "content": "$1" }
     }
   },
   "narouBlogCommentTitle": {
-    "message": "$authorName$さんが書いたコメント",
+    "message": "$authorName$さんのコメント",
     "placeholders": {
       "authorName": { "content": "$1" }
     }
@@ -59,6 +59,19 @@
   },
   "wentWrong": {
     "message": "申し訳ございません。問題が発生しました。"
+  },
+
+  "options": {
+    "message": "設定"
+  },
+  "openOptions": {
+    "message": "設定画面を開く"
+  },
+  "viewModeFlat": {
+    "message": "全てのアイテムを時系列順に並べて表示"
+  },
+  "viewModeCategorized": {
+    "message": "アイテムの種類ごとに分類して表示"
   },
 
   "updatePeriodMinutes": {

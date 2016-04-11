@@ -23,7 +23,7 @@ OptionsView.propTypes = {
   schema: PropTypes.object.isRequired,
   uiSchema: PropTypes.object,
   formData: PropTypes.object.isRequired,
-  onSubmit: PropTypes.function,
+  onSubmit: PropTypes.func,
 };
 
 export default OptionsView;
