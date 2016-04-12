@@ -1,7 +1,7 @@
 import _ from "lodash";
 import scrape from "../../util/scrape";
+import SiteClient from "../site-client";
 import narouMeta from "./meta.json";
-import requestMine from "./request-mine";
 
 /**
  * @typedef {Object} NarouMyReview
@@ -22,17 +22,20 @@ export default class NarouMyReviewLister {
   /**
    * @param {Object} [options] - Options.
    * @param {string} [options.baseUrl] - A base URL of Narou.
+   * @param {SiteClient} [options.client] - SiteClient used to fetch content.
    */
   constructor(options) {
-    options = _.extend({}, narouMeta, options);
-    this.baseUrl = options.baseUrl;
+    options = options || {};
+    this.baseUrl = options.baseUrl || narouMeta.baseUrl;
+    this.client = options.client || new SiteClient;
   }
 
   /**
    * @return {Promise.<NarouMyReview[]>}
    */
   listReceivedReviews() {
-    return requestMine(this.getURL()).then(scrape).then($ => this._parsePage($));
+    return this.client.fetch(this.getURL())
+      .then(scrape).then($ => this._parsePage($));
   }
 
   getURL() {

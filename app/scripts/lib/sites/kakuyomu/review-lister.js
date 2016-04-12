@@ -1,6 +1,7 @@
 import url from "url";
 import _ from "lodash";
 import scrape from "../../util/scrape";
+import SiteClient from "../site-client";
 import kakuyomuMeta from "./meta.json";
 
 /**
@@ -8,12 +9,14 @@ import kakuyomuMeta from "./meta.json";
  */
 export default class KakuyomuReviewLister {
   /**
-   * @param {Object}  [options] - Options.
-   * @param {string}  [options.baseUrl] - A base URL of Kakuyomu.
+   * @param {Object} [options] - Options.
+   * @param {string} [options.baseUrl] - A base URL of Kakuyomu.
+   * @param {SiteClient} [options.client] - SiteClient used to fetch content.
    */
   constructor(options) {
     options = options || {};
     this.baseUrl = options.baseUrl || kakuyomuMeta.baseUrl;
+    this.client = options.client || new SiteClient;
   }
 
   /**
@@ -21,7 +24,8 @@ export default class KakuyomuReviewLister {
    * @return {Promise.<Array<KakuyomuReview>}
    */
   listReviews(novelId) {
-    return scrape.fetch(this.getURL(novelId)).then($ => this._parsePage($));
+    return this.client.fetch(this.getURL(novelId))
+      .then(scrape).then($ => this._parsePage($));
   }
 
   getURL(novelId) {

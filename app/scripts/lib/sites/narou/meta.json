@@ -3,6 +3,7 @@
   "displayName": "小説家になろう",
   "url": "http://syosetu.com/",
   "baseUrl": "http://syosetu.com",
+  "sslBaseUrl": "https://ssl.syosetu.com",
   "apiBaseUrl": "http://api.syosetu.com",
   "ncodeBaseUrl": "http://ncode.syosetu.com",
   "mypageBaseUrl": "http://mypage.syosetu.com",

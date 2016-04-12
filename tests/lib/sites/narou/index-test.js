@@ -1,12 +1,21 @@
 import { _, test, sinonsb, factory } from "../../../common";
 import Narou from "../../../../app/scripts/lib/sites/narou";
+import SiteClient from "../../../../app/scripts/lib/sites/site-client";
+import NarouNovelFetcher from "../../../../app/scripts/lib/sites/narou/novel-fetcher";
 
 test("new Narou", t => {
   const narou = new Narou;
   t.truthy(narou instanceof Narou);
   t.is(narou.name, "narou");
-  t.truthy(_.isString(narou.displayName));
-  t.truthy(_.isString(narou.baseUrl));
+  t.true(_.isString(narou.url));
+  t.true(_.isString(narou.baseUrl));
+  t.true(narou.client instanceof SiteClient);
+});
+
+test("#getFetcher", t => {
+  const narou = new Narou;
+  const fetcher = narou.getFetcher(Narou.FetcherTypes.NOVEL);
+  t.true(fetcher instanceof NarouNovelFetcher);
 });
 
 test("#publish", t => {

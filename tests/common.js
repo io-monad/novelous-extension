@@ -23,6 +23,7 @@ global.debug = debug;
 const sinonsb = sinon.sandbox.create();
 
 test.afterEach(() => {
+  XMLHttpRequest.flush();
   chrome.flush();
   sinonsb.restore();
 });

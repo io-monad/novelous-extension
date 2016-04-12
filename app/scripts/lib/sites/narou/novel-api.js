@@ -1,6 +1,6 @@
 import querystring from "querystring";
 import _ from "lodash";
-import request from "../../util/request";
+import SiteClient from "../site-client";
 import narouMeta from "./meta.json";
 
 /**
@@ -46,12 +46,14 @@ export default class NarouNovelAPI {
    * @param {string} [options.apiBaseUrl] - A base URL for API of Narou.
    * @param {string} [options.ncodeBaseUrl] - A base URL for N-Code of Narou.
    * @param {string} [options.mypageBaseUrl] - A base URL for mypages of Narou.
+   * @param {SiteClient} [options.client] - SiteClient used to fetch content.
    */
   constructor(options) {
-    options = _.extend({}, narouMeta, options);
-    this.apiBaseUrl = options.apiBaseUrl;
-    this.ncodeBaseUrl = options.ncodeBaseUrl;
-    this.mypageBaseUrl = options.mypageBaseUrl;
+    options = options || {};
+    this.apiBaseUrl = options.apiBaseUrl || narouMeta.apiBaseUrl;
+    this.ncodeBaseUrl = options.ncodeBaseUrl || narouMeta.ncodeBaseUrl;
+    this.mypageBaseUrl = options.mypageBaseUrl || narouMeta.mypageBaseUrl;
+    this.client = options.client || new SiteClient;
   }
 
   /**
@@ -107,9 +109,9 @@ export default class NarouNovelAPI {
    */
   query(query) {
     query = _.extend({ out: "json" }, query);
-    return request.json(this._getURL(query)).then(
-      response => this._parseResponse(response, query)
-    );
+
+    return this.client.fetch(this._getURL(query)).then(res => JSON.parse(res))
+      .then(res => this._parseResponse(res, query));
   }
 
   /**

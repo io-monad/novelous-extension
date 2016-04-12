@@ -1,5 +1,6 @@
 import _ from "lodash";
 import scrape from "../../util/scrape";
+import SiteClient from "../site-client";
 import narouMeta from "./meta.json";
 
 /**
@@ -28,10 +29,14 @@ import narouMeta from "./meta.json";
  */
 export default class NarouUserNovelLister {
   /**
-   * @param {string} [mypageBaseUrl] - A base URL for mypages of Narou.
+   * @param {Object} [options] - Options.
+   * @param {string} [options.mypageBaseUrl] - A base URL for mypages of Narou.
+   * @param {SiteClient} [options.client] - SiteClient used to fetch content.
    */
-  constructor(mypageBaseUrl) {
-    this.mypageBaseUrl = mypageBaseUrl || narouMeta.mypageBaseUrl;
+  constructor(options) {
+    options = options || {};
+    this.mypageBaseUrl = options.mypageBaseUrl || narouMeta.mypageBaseUrl;
+    this.client = options.client || new SiteClient;
   }
 
   /**
@@ -40,7 +45,8 @@ export default class NarouUserNovelLister {
    * @return {Promise} A promise that resolves to a list of novels.
    */
   listNovelsOfUser(userId, page = 1) {
-    return scrape.fetch(this.getURL(userId, page)).then($ => this._parsePage($));
+    return this.client.fetch(this.getURL(userId, page))
+      .then(scrape).then($ => this._parsePage($));
   }
 
   getURL(userId, page) {

@@ -1,8 +1,8 @@
 import url from "url";
 import _ from "lodash";
 import scrape from "../../util/scrape";
+import SiteClient from "../site-client";
 import kakuyomuMeta from "./meta.json";
-import requestMine from "./request-mine";
 
 /**
  * @typedef {Object} KakuyomuMyNovel
@@ -29,12 +29,14 @@ import requestMine from "./request-mine";
  */
 export default class KakuyomuMyNovelLister {
   /**
-   * @param {Object}  [options] - Options.
-   * @param {string}  [options.baseUrl] - A base URL of Kakuyomu.
+   * @param {Object} [options] - Options.
+   * @param {string} [options.baseUrl] - A base URL of Kakuyomu.
+   * @param {SiteClient} [options.client] - SiteClient used to fetch content.
    */
   constructor(options) {
     options = options || {};
     this.baseUrl = options.baseUrl || kakuyomuMeta.baseUrl;
+    this.client = options.client || new SiteClient;
   }
 
   /**
@@ -43,7 +45,8 @@ export default class KakuyomuMyNovelLister {
    * @return {Promise.<Array<string>} Novel IDs.
    */
   listNovelIds() {
-    return requestMine(this.getURL()).then(scrape).then($ => this._parseIdList($));
+    return this.client.fetch(this.getURL())
+      .then(scrape).then($ => this._parseIdList($));
   }
 
   /**
@@ -57,7 +60,8 @@ export default class KakuyomuMyNovelLister {
    *     `KakuyomuMyNovel` only. It never fetches details from the server.
    */
   listNovels() {
-    return requestMine(this.getURL()).then(scrape).then($ => this._parseNovelList($));
+    return this.client.fetch(this.getURL())
+      .then(scrape).then($ => this._parseNovelList($));
   }
 
   getURL() {

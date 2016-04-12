@@ -2,6 +2,7 @@ import url from "url";
 import _ from "lodash";
 import colorString from "color-string";
 import scrape from "../../util/scrape";
+import SiteClient from "../site-client";
 import kakuyomuMeta from "./meta.json";
 
 /**
@@ -29,10 +30,14 @@ import kakuyomuMeta from "./meta.json";
  */
 export default class KakuyomuUserNovelLister {
   /**
-   * @param {string} [baseUrl] - A base URL of Kakuyomu.
+   * @param {Object} [options] - Options.
+   * @param {string} [options.baseUrl] - A base URL of Kakuyomu.
+   * @param {SiteClient} [options.client] - SiteClient used to fetch content.
    */
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl || kakuyomuMeta.baseUrl;
+  constructor(options) {
+    options = options || {};
+    this.baseUrl = options.baseUrl || kakuyomuMeta.baseUrl;
+    this.client = options.client || new SiteClient;
   }
 
   /**
@@ -42,7 +47,8 @@ export default class KakuyomuUserNovelLister {
    * @return {Promise.<KakuyomuUserNovel[]>}
    */
   listNovelsOfUser(userId) {
-    return scrape.fetch(this.getURL(userId)).then($ => this._parsePage($));
+    return this.client.fetch(this.getURL(userId))
+      .then(scrape).then($ => this._parsePage($));
   }
 
   getURL(userId) {

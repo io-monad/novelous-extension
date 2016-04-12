@@ -1,7 +1,17 @@
 import _ from "lodash";
 import Site from "../site";
 import narouMeta from "./meta.json";
+import narouFetchers from "./fetchers";
 import NarouFormOpener from "./form-opener";
+
+const DEFAULT_SETTINGS = _.extend({
+  fetchers: narouFetchers,
+  client: {
+    sessionCookies: ["autologin", "userl"],
+    loginFormUrlTester: (url) => _.startsWith(url, `${narouMeta.sslBaseUrl}/login`),
+    loginRequiredUrlTester: (url) => _.startsWith(url, `${narouMeta.baseUrl}/`),
+  },
+}, narouMeta);
 
 /**
  * Site "Syosetuka ni Narou" (syosetu.com)
@@ -14,9 +24,19 @@ export default class Narou extends Site {
    * @param {Object} [settings] - Settings.
    */
   constructor(settings) {
-    settings = _.defaults(settings, narouMeta);
+    settings = _.defaultsDeep({}, settings, DEFAULT_SETTINGS);
     super(settings);
     this.formOpener = settings.formOpener || new NarouFormOpener(settings.baseUrl);
+  }
+
+  get sslBaseUrl() {
+    return this.settings.sslBaseUrl;
+  }
+  get apiBaseUrl() {
+    return this.settings.apiBaseUrl;
+  }
+  get ncodeBaseUrl() {
+    return this.settings.ncodeBaseUrl;
   }
 
   /**
@@ -31,3 +51,4 @@ export default class Narou extends Site {
 }
 
 Narou.meta = narouMeta;
+Narou.FetcherTypes = _.keyBy(_.keys(narouFetchers));

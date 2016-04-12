@@ -1,5 +1,6 @@
 import _ from "lodash";
 import scrape from "../../util/scrape";
+import SiteClient from "../site-client";
 import narouMeta from "./meta.json";
 
 /**
@@ -37,10 +38,14 @@ import narouMeta from "./meta.json";
  */
 export default class NarouNovelFetcher {
   /**
-   * @param {string} [ncodeBaseUrl] - A base URL of Narou.
+   * @param {Object} [options] - Options.
+   * @param {string} [options.ncodeBaseUrl] - A base URL for N-Code of Narou.
+   * @param {SiteClient} [options.client] - SiteClient used to fetch content.
    */
-  constructor(ncodeBaseUrl) {
-    this.ncodeBaseUrl = ncodeBaseUrl || narouMeta.ncodeBaseUrl;
+  constructor(options) {
+    options = options || {};
+    this.ncodeBaseUrl = options.ncodeBaseUrl || narouMeta.ncodeBaseUrl;
+    this.client = options.client || new SiteClient;
   }
 
   /**
@@ -48,7 +53,8 @@ export default class NarouNovelFetcher {
    * @return {Promise} A promise that resolves to a novel data Object.
    */
   fetchNovel(novelId) {
-    return scrape.fetch(this.getURL(novelId)).then($ => this._parsePage($));
+    return this.client.fetch(this.getURL(novelId))
+      .then(scrape).then($ => this._parsePage($));
   }
 
   getURL(novelId) {
