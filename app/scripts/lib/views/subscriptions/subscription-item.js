@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { PropTypes } from "react";
 import classNames from "classnames";
 import Subscription from "../../subscriptions/subscription";
@@ -16,17 +17,19 @@ export default class SubscriptionItem extends React.Component {
     this.setState({ unreadOnly: !this.state.unreadOnly });
   }
   render() {
-    const { subscription } = this.props;
+    const { subscription, unreadItemIds } = this.props;
     const { unreadOnly } = this.state;
     if (subscription.items.length === 0) return null;
 
-    const visibleCount = unreadOnly ? subscription.unreadItems.length : subscription.items.length;
+    const items = _.sortBy(subscription.items, it => -it.createdAt);
+    const unreadCount = _.sumBy(items, it => (unreadItemIds[it.id] ? 1 : 0));
+    const visibleCount = unreadOnly ? unreadCount : items.length;
     return (
       <article
         className={classNames({
           "subscription-item": true,
           "subscription-item--has-items": visibleCount > 0,
-          "subscription-item--has-unread-items": subscription.unreadItemsCount > 0,
+          "subscription-item--has-unread-items": unreadCount > 0,
           "subscription-item--unread-items-only": unreadOnly,
           panel: true,
           "panel-default": true,
@@ -52,27 +55,25 @@ export default class SubscriptionItem extends React.Component {
             </a>
           </div>
           <div className="subscription-item__counts">
-            {subscription.unreadItemsCount > 0 &&
+            {unreadCount > 0 &&
               <span className="subscription-item__unread-count">
-                {subscription.unreadItemsCount}
+                {unreadCount}
               </span>
             }
             <span className="subscription-item__item-count">
-              {subscription.items.length}
+              {items.length}
             </span>
           </div>
         </header>
         <div className="subscription-item__items panel-body">
-          <div>
-            {subscription.unreadItems.map(item =>
-              <FeedItem key={item.id} item={item} isUnread />
-            )}
-          </div>
-          <div style={{ display: unreadOnly ? "none" : "" }}>
-            {subscription.readItems.map(item =>
-              <FeedItem key={item.id} item={item} />
-            )}
-          </div>
+          {items.map(item =>
+            <FeedItem
+              key={item.id}
+              item={item}
+              isUnread={!!unreadItemIds[item.id]}
+              isHidden={unreadOnly && !unreadItemIds[item.id]}
+            />
+          )}
         </div>
       </article>
     );
@@ -81,4 +82,5 @@ export default class SubscriptionItem extends React.Component {
 
 SubscriptionItem.propTypes = {
   subscription: PropTypes.instanceOf(Subscription).isRequired,
+  unreadItemIds: PropTypes.object.isRequired,
 };

@@ -37,7 +37,7 @@ export default class FeedItem extends React.Component {
     this.setState({ expanded: !this.state.expanded });
   }
   render() {
-    const { subscription, item, isUnread } = this.props;
+    const { subscription, item, isUnread, isHidden } = this.props;
     const { expanded } = this.state;
 
     const stop = (ev) => { ev.stopPropagation(); };
@@ -56,6 +56,7 @@ export default class FeedItem extends React.Component {
           "feed-item--expandable": !!item.body,
           "feed-item--collapsed": !expanded,
           "feed-item--expanded": expanded,
+          hidden: isHidden,
         })}
         onClick={this.handleClick}
       >
@@ -126,6 +127,7 @@ FeedItem.propTypes = {
   subscription: PropTypes.instanceOf(Subscription),
   item: PropTypes.object.isRequired,
   isUnread: PropTypes.bool,
+  isHidden: PropTypes.bool,
 };
 
 export default FeedItem;

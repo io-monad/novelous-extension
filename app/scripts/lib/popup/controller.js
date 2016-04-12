@@ -18,6 +18,7 @@ export default class PopupController {
     this.subscriber = null;
     this.lastError = null;
     this.isUpdating = false;
+    this.unreadItemIds = {};
   }
 
   start() {
@@ -26,6 +27,7 @@ export default class PopupController {
 
       this.appData = appData;
       this.subscriber = new Subscriber(this.appData.subscriptionSettings);
+      this._saveUnreadItemIds();
       this.appData.on("update", this._handleAppDataUpdate.bind(this));
       logger("Initialized", this);
 
@@ -87,14 +89,24 @@ export default class PopupController {
       <PopupView
         controller={this}
         subscriptions={this.subscriber.subscriptions}
+        unreadItemIds={this.unreadItemIds}
       />
     );
+  }
+
+  _saveUnreadItemIds() {
+    _.each(this.subscriber.subscriptions, sub => {
+      _.each(sub.unreadItems, item => {
+        _.set(this.unreadItemIds, [sub.id, item.id], true);
+      });
+    });
   }
 
   _handleAppDataUpdate(appData, keys) {
     if (keys.indexOf("subscriptionSettings") >= 0) {
       logger("Updating Subscriber with updated settings", appData.subscriptionSettings);
       this.subscriber.subscriptionSettings = appData.subscriptionSettings;
+      this._saveUnreadItemIds();
       this.renderView();
     }
   }

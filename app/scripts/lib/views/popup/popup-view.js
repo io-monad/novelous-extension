@@ -18,7 +18,7 @@ export default class PopupView extends React.Component {
   }
 
   render() {
-    const { subscriptions } = this.props;
+    const { subscriptions, unreadItemIds } = this.props;
     const { viewMode } = this.state;
     return (
       <div className="popup-view">
@@ -46,7 +46,11 @@ export default class PopupView extends React.Component {
             />
           </div>
         </div>
-        <SubscriptionList viewMode={viewMode} subscriptions={subscriptions} />
+        <SubscriptionList
+          viewMode={viewMode}
+          subscriptions={subscriptions}
+          unreadItemIds={unreadItemIds}
+        />
       </div>
     );
   }
@@ -54,4 +58,5 @@ export default class PopupView extends React.Component {
 
 PopupView.propTypes = {
   subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(Subscription)).isRequired,
+  unreadItemIds: PropTypes.object.isRequired,
 };

@@ -10,10 +10,10 @@ const MAX_FLAT_ITEMS = 50;  // Not customizable currently
 export default class SubscriptionList extends React.Component {
   renderInFlatItems() {
     const entries = _.flatMap(this.props.subscriptions, subscription => {
-      const unreadItems = _.keyBy(subscription.unreadItems, item => item.id);
+      const unreadItemIds = this.props.unreadItemIds[subscription.id] || {};
       return _.map(subscription.items, item => ({
         id: `${subscription.id}::${item.id}`,
-        isUnread: !!unreadItems[item.id],
+        isUnread: !!unreadItemIds[item.id],
         subscription,
         item,
       }));
@@ -34,11 +34,16 @@ export default class SubscriptionList extends React.Component {
   }
 
   renderInFolders() {
-    const sortedSubscriptions = _.sortBy(this.props.subscriptions, sub => -sub.unreadItemsCount);
+    const { subscriptions, unreadItemIds } = this.props;
+    const sortedSubscriptions = _.sortBy(subscriptions, sub => -sub.unreadItemsCount);
     return (
       <section className="subscription-list subscription-list--categorized">
         {_.map(sortedSubscriptions, sub =>
-          <SubscriptionItem key={sub.id} subscription={sub} />
+          <SubscriptionItem
+            key={sub.id}
+            subscription={sub}
+            unreadItemIds={unreadItemIds[sub.id] || {}}
+          />
         )}
       </section>
     );
@@ -64,6 +69,7 @@ SubscriptionList.defaultViewMode = SubscriptionList.viewModes[0].name;
 
 SubscriptionList.propTypes = {
   subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(Subscription)).isRequired,
+  unreadItemIds: PropTypes.object.isRequired,
   viewMode: PropTypes.oneOf(_.map(SubscriptionList.viewModes, "name")),
 };
 
