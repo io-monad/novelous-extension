@@ -12,10 +12,10 @@
     "description": "The description of the application"
   },
 
-  "narouSiteName": {
+  "narou": {
     "message": "小説家になろう"
   },
-  "kakuyomuSiteName": {
+  "kakuyomu": {
     "message": "カクヨム"
   },
 

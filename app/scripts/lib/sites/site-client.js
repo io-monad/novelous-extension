@@ -39,15 +39,7 @@ export default class SiteClient {
    *     Cached response expires in this milliseconds.
    */
   constructor(settings) {
-    settings = _.extend({
-      sessionCookies: [],
-      loginFormUrlTester: null,
-      loginRequiredUrlTester: null,
-      fetchInterval: 3 * 1000,
-      caching: true,
-      cacheExpiresIn: 5 * 60 * 1000,
-    }, settings);
-
+    settings = _.extend({}, SiteClient.DefaultOptions, settings);
     this.sessionCookies = _.castArray(settings.sessionCookies || []);
     this.loginFormUrlTester = settings.loginFormUrlTester;
     this.loginRequiredUrlTester = settings.loginRequiredUrlTester;
@@ -69,7 +61,9 @@ export default class SiteClient {
    * @return {Promise.<string>} Reponse body from the server.
    */
   fetch(url) {
-    return this.cache.memoize(url, () => this._throttledRequest(url));
+    return this.cache.memoizePromise(url, () =>
+      this._throttledRequest(url)
+    );
   }
 
   _throttledRequest(url) {
@@ -144,5 +138,14 @@ export default class SiteClient {
     }
   }
 }
+
+SiteClient.DefaultOptions = {
+  sessionCookies: [],
+  loginFormUrlTester: null,
+  loginRequiredUrlTester: null,
+  fetchInterval: 3 * 1000,
+  caching: true,
+  cacheExpiresIn: 5 * 60 * 1000,
+};
 
 SiteClient.LoginRequiredError = LoginRequiredError;

@@ -1,22 +1,11 @@
 import _ from "lodash";
-import SiteFactory from "../sites/site-factory";
+import Sites from "../sites";
 import Publication from "./publication";
 
 /**
  * Publisher that publishes article to novel sites.
  */
 export default class Publisher {
-  /**
-   * @param {Object.<string, Object>} siteSettings - A map of site name and Site settings.
-   */
-  constructor(siteSettings) {
-    this.siteSettings = siteSettings;
-  }
-
-  set siteSettings(siteSettings) {
-    this.sites = SiteFactory.createMap(siteSettings || {});
-  }
-
   /**
    * Publish a set of Publications.
    *
@@ -49,8 +38,8 @@ export default class Publisher {
    * @return {Promise}
    */
   publishToSite(pub, siteName) {
-    if (!this.sites[siteName]) return Promise.reject(`Unknown site: ${siteName}`);
+    if (!Sites[siteName]) return Promise.reject(`Unknown site: ${siteName}`);
     if (!(pub instanceof Publication)) pub = new Publication(pub);
-    return this.sites[siteName].publish(pub);
+    return Sites[siteName].publish(pub);
   }
 }

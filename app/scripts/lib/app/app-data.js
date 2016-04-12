@@ -7,10 +7,6 @@ const logger = debug("app-data");
 
 const DEFAULTS = _.extend(jsonSchemaDefaults(appOptionsSchema), {
   lastUpdatedAt: null,
-  siteSettings: {
-    narou: true,
-    kakuyomu: true,
-  },
   subscriptionSettings: [
     { feedUrl: "novelous-feed://narou/messages" },
     { feedUrl: "novelous-feed://narou/comments" },
@@ -131,14 +127,6 @@ export default class AppData extends EventEmitter {
   set lastUpdatedAt(time) {
     time = parseInt(time, 10) || null;
     this._setData("lastUpdatedAt", time);
-  }
-
-  get siteSettings() {
-    return this.data.siteSettings;
-  }
-  set siteSettings(siteSettings) {
-    siteSettings = _.defaultsDeep(siteSettings, DEFAULTS.siteSettings);
-    this._setData("siteSettings", siteSettings);
   }
 
   get subscriptionSettings() {

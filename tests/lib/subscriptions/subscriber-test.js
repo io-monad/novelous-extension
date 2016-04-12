@@ -4,7 +4,7 @@ import Feed from "../../../app/scripts/lib/feeds/feed";
 
 test.beforeEach(t => {
   t.context.settings = _.range(3).map(() => factory.buildSync("subscriptionSettings"));
-  t.context.subscriber = new Subscriber(t.context.settings, { fetchInterval: 0 });
+  t.context.subscriber = new Subscriber(t.context.settings);
 });
 
 test("new Subscriber", t => {

@@ -3,6 +3,6 @@ import FetcherKakuyomuReviews from "../../../../app/scripts/lib/feeds/fetcher/ka
 import fetcherTestCases from "./fetcher-test-cases";
 
 fetcherTestCases({
-  fetcher: () => new FetcherKakuyomuReviews({ fetchInterval: 0 }),
+  fetcher: () => new FetcherKakuyomuReviews,
   itemsFixture: () => fixture.json("kakuyomu/original-novel.json").reviews,
 });

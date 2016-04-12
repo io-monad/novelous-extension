@@ -1,13 +1,13 @@
 import { test, sinonsb, factory } from "../../common";
 import Publisher from "../../../app/scripts/lib/publications/publisher";
+import Sites from "../../../app/scripts/lib/sites";
 
 test.beforeEach(t => {
-  t.context.publisher = new Publisher({ narou: true });
+  t.context.publisher = new Publisher;
 });
 
-function stubPublish(publisher, siteName) {
-  const stub = sinonsb.stub();
-  publisher.sites[siteName] = { publish: stub };
+function stubPublish(siteName) {
+  const stub = sinonsb.stub(Sites[siteName], "publish");
   stub.returns(Promise.resolve());
   return stub;
 }
@@ -16,19 +16,9 @@ test("new Publisher", t => {
   t.truthy(t.context.publisher instanceof Publisher);
 });
 
-test("#siteSettings setter updates sites", t => {
+test.serial("#publishToSite calls site.publish", t => {
   const { publisher } = t.context;
-  t.truthy(publisher.sites.narou);
-  t.truthy(!publisher.sites.kakuyomu);
-
-  publisher.siteSettings = { kakuyomu: true };
-  t.truthy(!publisher.sites.narou);
-  t.truthy(publisher.sites.kakuyomu);
-});
-
-test("#publishToSite calls site.publish", t => {
-  const { publisher } = t.context;
-  const stub = stubPublish(publisher, "narou");
+  const stub = stubPublish("narou");
 
   const pub = factory.buildSync("publication");
   return publisher.publishToSite(pub, "narou").then(() => {
@@ -37,9 +27,9 @@ test("#publishToSite calls site.publish", t => {
   });
 });
 
-test("#publish calls site.publish", t => {
+test.serial("#publish calls site.publish", t => {
   const { publisher } = t.context;
-  const stub = stubPublish(publisher, "narou");
+  const stub = stubPublish("narou");
 
   const pub = factory.buildSync("publication");
   return publisher.publish(pub).then(() => {
@@ -48,9 +38,9 @@ test("#publish calls site.publish", t => {
   });
 });
 
-test("#publishAll calls site.publish", async t => {
+test.serial("#publishAll calls site.publish", async t => {
   const { publisher } = t.context;
-  const stub = stubPublish(publisher, "narou");
+  const stub = stubPublish("narou");
 
   const pubs = await factory.buildMany("publication", 3);
   return publisher.publishAll(pubs).then(() => {

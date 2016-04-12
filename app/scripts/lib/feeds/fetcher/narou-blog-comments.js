@@ -1,6 +1,6 @@
 import _ from "lodash";
 import Feed from "../feed";
-import NarouMyBlogCommentLister from "../../sites/narou/my-blog-comment-lister";
+import Narou from "../../sites/narou";
 import { translate } from "../../util/chrome-util";
 
 /**
@@ -9,10 +9,6 @@ import { translate } from "../../util/chrome-util";
  * @implements FeedFetcher
  */
 export default class FetcherNarouBlogComments {
-  constructor(options) {
-    this.lister = new NarouMyBlogCommentLister(options);
-  }
-
   isLoginRequired() {
     return true;
   }
@@ -21,16 +17,16 @@ export default class FetcherNarouBlogComments {
     return this._fetchItems().then(items => {
       return new Feed({
         title: translate("narouBlogCommentsFeed"),
-        url: this.lister.getURL(),
-        siteName: translate("narouSiteName"),
-        siteId: "narou",
+        url: Narou.URL.getMyReceivedBlogCommentsURL(),
+        siteName: translate(Narou.name),
+        siteId: Narou.name,
         items,
       });
     });
   }
 
   _fetchItems() {
-    return this.lister.listReceivedComments().then(comments => {
+    return Narou.API.listMyReceivedBlogComments().then(comments => {
       return _.map(comments, com => ({
         id: com.id,
         title: translate("narouBlogCommentTitle", [com.userName]),

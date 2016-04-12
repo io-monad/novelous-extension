@@ -27,28 +27,27 @@ export default {
    * Create a feed fetcher.
    *
    * @param {string} feedUrl - URL of the feed.
-   * @param {Object} options - Options for the feed fetcher.
    * @return {FeedFetcher}
    */
-  create(feedUrl, options) {
+  create(feedUrl) {
     const parsed = url.parse(feedUrl);
     if (!parsed.protocol) {
       throw new Error(`Invalid feed URL: ${feedUrl}`);
     }
     switch (parsed.protocol) {
       case "novelous-feed:":
-        return createNovelousFetcher(parsed.host, parsed.path, options);
+        return createNovelousFetcher(parsed.host, parsed.path);
       default:
         throw new Error(`Not supported protocol: ${feedUrl}`);
     }
   },
 };
 
-function createNovelousFetcher(host, path, options) {
+function createNovelousFetcher(host, path) {
   const getter = _.get(NovelousFetchers, [host, path]);
   if (!getter) {
     throw new Error(`Unknown novelous-feed URL: novelous-feed://${host}${path}`);
   }
   const FeedClass = getter();
-  return new FeedClass(options);
+  return new FeedClass();
 }

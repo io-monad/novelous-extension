@@ -10,6 +10,27 @@ test("#memoize", t => {
   t.is(cache.get("test"), 123);
 });
 
+test("#memoizePromise", t => {
+  const cache = new Cache;
+  return cache.memoizePromise("test", () => {
+    return Promise.resolve(123);
+  }).then(resolved => {
+    t.is(resolved, 123);
+    t.is(cache.get("test"), 123);
+  });
+});
+
+test("#memoizePromise does not cache rejected Promise", t => {
+  const cache = new Cache;
+  t.plan(2);
+  return cache.memoizePromise("test", () => {
+    return Promise.reject(new Error("error test"));
+  }).catch(err => {
+    t.is(err.message, "error test");
+    t.is(cache.get("test"), undefined);
+  });
+});
+
 test.serial("#set / #get", t => {
   sinonsb.stub(_, "now").returns(1234567890);
   const cache = new Cache;

@@ -11,17 +11,10 @@ const logger = debug("subscriber");
 export default class Subscriber extends EventEmitter {
   /**
    * @param {Object[]} subscriptionSettings
-   * @param {Object} settings - Settings.
-   * @param {number} settings.fetchInterval
    */
-  constructor(subscriptionSettings, settings) {
+  constructor(subscriptionSettings) {
     super();
-    settings = _.extend({
-      fetchInterval: 1000,
-    }, settings);
-
     this.subscriptionSettings = subscriptionSettings;
-    this.fetchInterval = settings.fetchInterval;
   }
 
   /**
@@ -110,7 +103,7 @@ export default class Subscriber extends EventEmitter {
   _updateSequence(host, subscriptions) {
     const hostlog = debug(`subscriber:${host}`);
     let loggedIn = true;
-    return promises.each(subscriptions, { interval: this.fetchInterval }, (sub) => {
+    return promises.each(subscriptions, (sub) => {
       if (sub.isLoginRequired && !loggedIn) {
         hostlog(`Skipping login required ${sub.id}`, sub);
         return true;

@@ -40,7 +40,8 @@ export default function fetcherTestCases(settings) {
 
     chrome.cookies.get.callsArgWithAsync(1, null);
 
-    return fetcher.fetchFeed().then(t.fail).catch(err => {
+    t.plan(1);
+    return fetcher.fetchFeed().catch(err => {
       t.is(err.name, "LoginRequiredError");
     });
   });

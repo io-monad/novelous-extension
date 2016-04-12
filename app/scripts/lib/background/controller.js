@@ -15,9 +15,9 @@ export default class BackgroundController {
   constructor() {
     this.externalMessageReceiver = new ExternalMessageReceiver(this);
     this.badge = new Badge();
+    this.publisher = new Publisher();
     this.appData = null;
     this.subscriber = null;
-    this.publisher = null;
     this.updateTimer = null;
     this.notifier = null;
     this.initializePromise = null;
@@ -48,14 +48,8 @@ export default class BackgroundController {
     this.appData = appData;
     this.appData.on("update", this._handleAppDataUpdate.bind(this));
 
-    this._setupPublisher();
     this._setupSubscriber();
     this._setupUpdateTimer();
-  }
-
-  _setupPublisher() {
-    this.publisher = new Publisher(this.appData.siteSettings);
-    logger("Initialized Publisher", this.publisher);
   }
 
   _setupSubscriber() {
@@ -94,9 +88,6 @@ export default class BackgroundController {
    */
   _handleAppDataUpdate(appData, keys) {
     const updated = _.keyBy(keys);
-    if (updated.siteSettings) {
-      this.publisher.siteSettings = this.appData.siteSettings;
-    }
     if (updated.subscriptionSettings) {
       this.subscriber.subscriptionSettings = this.appData.subscriptionSettings;
     }
@@ -136,7 +127,7 @@ export default class BackgroundController {
    * @return {Promise.<Publisher>}
    */
   getPublisher() {
-    return this.initialized().then(() => this.publisher);
+    return Promise.resolve(this.publisher);
   }
 
   /**

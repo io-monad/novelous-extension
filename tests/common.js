@@ -22,6 +22,11 @@ global.chrome = chrome;
 global.debug = debug;
 const sinonsb = sinon.sandbox.create();
 
+test.before(() => {
+  const SiteClient = require("../app/scripts/lib/sites/site-client").default;
+  SiteClient.DefaultOptions.caching = false;
+  SiteClient.DefaultOptions.fetchInterval = 0;
+});
 test.afterEach(() => {
   XMLHttpRequest.flush();
   chrome.flush();

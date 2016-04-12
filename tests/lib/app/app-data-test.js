@@ -12,23 +12,23 @@ test("new AppData", t => {
 test("#overwrite updates values with default values", t => {
   const { appData } = t.context;
   appData.overwrite({
-    siteSettings: { narou: false },
+    updatePeriodMinutes: 60,
   });
-  t.false(appData.siteSettings.narou);
+  t.is(appData.updatePeriodMinutes, 60);
 
   appData.overwrite({
-    siteSettings: { kakuyomu: false },
+    notificationSettings: { alertEnabled: false },
   });
-  t.true(appData.siteSettings.narou);
-  t.false(appData.siteSettings.kakuyomu);
+  t.is(appData.updatePeriodMinutes, AppData.defaults.updatePeriodMinutes);
+  t.is(appData.notificationSettings.alertEnabled, false);
 });
 
 test("#overwrite calls setter for each value", t => {
   const { appData } = t.context;
   appData.overwrite({
-    updatePeriodMinutes: "20abc",
+    updatePeriodMinutes: "30abc",
   });
-  t.is(appData.updatePeriodMinutes, 20);
+  t.is(appData.updatePeriodMinutes, 30);
 });
 
 test("#optionsSchema returns JSON schema", t => {
@@ -58,11 +58,6 @@ test("#lastUpdatedAt setter uses null for NaN", t => {
   const { appData } = t.context;
   appData.lastUpdatedAt = "foobar";
   t.is(appData.lastUpdatedAt, null);
-});
-
-test("#siteSettings returns default value", t => {
-  const { appData } = t.context;
-  t.deepEqual(appData.siteSettings, AppData.defaults.siteSettings);
 });
 
 test("#subscriptionSettings returns default value", t => {
@@ -176,14 +171,14 @@ test.serial.cb("uses default value if storage value is undefined", t => {
   appData.on("update", (opts, keys) => {
     t.truthy(opts instanceof AppData);
     t.is(opts.updatePeriodMinutes, AppData.defaults.updatePeriodMinutes);
-    t.truthy(_.isObject(opts.siteSettings));
-    t.deepEqual(keys.sort(), ["siteSettings", "updatePeriodMinutes"]);
+    t.truthy(_.isObject(opts.notificationSettings));
+    t.deepEqual(keys.sort(), ["notificationSettings", "updatePeriodMinutes"]);
     t.end();
   });
   chrome.storage.onChanged.trigger(
     {
       updatePeriodMinutes: { newValue: undefined },
-      siteSettings: { newValue: undefined },
+      notificationSettings: { newValue: undefined },
     },
     "local"
   );

@@ -1,7 +1,6 @@
 import _ from "lodash";
 import Feed from "../feed";
-import KakuyomuMyNovelLister from "../../sites/kakuyomu/my-novel-lister";
-import KakuyomuReviewLister from "../../sites/kakuyomu/review-lister";
+import Kakuyomu from "../../sites/kakuyomu";
 import { translate } from "../../util/chrome-util";
 import promises from "../../util/promises";
 
@@ -11,15 +10,6 @@ import promises from "../../util/promises";
  * @implements FeedFetcher
  */
 export default class FetcherKakuyomuReviews {
-  constructor(options) {
-    options = _.extend({
-      fetchInterval: 1000,
-    }, options);
-    this.novelLister = new KakuyomuMyNovelLister(options);
-    this.reviewLister = new KakuyomuReviewLister(options);
-    this.fetchInterval = options.fetchInterval;
-  }
-
   isLoginRequired() {
     return true;
   }
@@ -28,18 +18,18 @@ export default class FetcherKakuyomuReviews {
     return this._fetchItems().then(items => {
       return new Feed({
         title: translate("kakuyomuReviewsFeed"),
-        url: this.novelLister.getURL(),
-        siteName: translate("kakuyomuSiteName"),
-        siteId: "kakuyomu",
+        url: Kakuyomu.URL.getMyTopURL(),
+        siteName: translate(Kakuyomu.name),
+        siteId: Kakuyomu.name,
         items,
       });
     });
   }
 
   _fetchItems() {
-    return this.novelLister.listNovels().then(novels =>
-      promises.map(novels, { interval: this.fetchInterval }, novel =>
-        this.reviewLister.listReviews(novel.id).then(reviews =>
+    return Kakuyomu.API.listMyNovels().then(novels =>
+      promises.map(novels, novel =>
+        Kakuyomu.API.listReviewsByNovelId(novel.id).then(reviews =>
           _.map(reviews, review => this._buildItem(novel, review))
         )
       )

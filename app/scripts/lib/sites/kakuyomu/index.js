@@ -1,45 +1,23 @@
-import _ from "lodash";
-import Site from "../site";
-import kakuyomuMeta from "./meta.json";
-import kakuyomuFetchers from "./fetchers";
-import KakuyomuFormOpener from "./form-opener";
+import KakuyomuAPI from "./api";
+import KakuyomuURL from "./url";
+import publish from "./publish";
 
-const DEFAULT_SETTINGS = _.extend({
-  fetchers: kakuyomuFetchers,
-  client: {
-    sessionCookies: ["dlsc"],
-    loginFormUrlTester: (url) => _.startsWith(url, `${kakuyomuMeta.baseUrl}/login`),
-    loginRequiredUrlTester: (url) => _.startsWith(url, `${kakuyomuMeta.baseUrl}/my`),
-  },
-}, kakuyomuMeta);
+let api;
 
 /**
  * Site "Kakuyomu" (kakuyomu.jp)
- *
- * Publication site settings:
- * - `novelId`: `String` A Novel ID of publishing novels.
  */
-export default class Kakuyomu extends Site {
-  /**
-   * @param {Object} [settings] - Settings.
-   */
-  constructor(settings) {
-    settings = _.defaultsDeep({}, settings, DEFAULT_SETTINGS);
-    super(settings);
-    this.formOpener = settings.formOpener || new KakuyomuFormOpener(this.baseUrl);
-  }
+export default class Kakuyomu {
+  /** @return {string} */
+  static get name() { return "kakuyomu"; }
+  /** @return {string} */
+  static get iconUrl() { return "/images/sites/kakuyomu.png"; }
+  /** @return {string} */
+  static get url() { return KakuyomuURL.getTopURL(); }
+  /** @return {KakuyomuAPI} */
+  static get API() { return api || (api = new KakuyomuAPI); }
+  /** @return {KakuyomuURL} */
+  static get URL() { return KakuyomuURL; }
 
-  /**
-   * Publish an episode by opening a publish form.
-   *
-   * @param {Publication} pub - A Publication to be published.
-   * @return {Promise}
-   * @see KakuyomuFormOpener
-   */
-  publish(pub) {
-    return this.formOpener.openForm(pub);
-  }
+  static publish(...args) { return publish.apply(null, args); }
 }
-
-Kakuyomu.meta = kakuyomuMeta;
-Kakuyomu.FetcherTypes = _.keyBy(_.keys(kakuyomuFetchers));

@@ -42,6 +42,27 @@ export default class Cache {
   }
 
   /**
+   * Cache a resolved value of a Promise returned from function.
+   *
+   * @param {string} key - Key of cached value.
+   * @param {Function} fn - Function to be called if not cached.
+   *     This should return a Promise.
+   * @return {Promise} Promise that resolves to cached value or
+   *     returned value from the function.
+   */
+  memoizePromise(key, fn) {
+    if (!this.enabled) return fn();
+
+    const entry = this.getEntry(key);
+    if (entry) return Promise.resolve(entry.value);
+
+    return fn().then(resolved => {
+      this.set(key, resolved);
+      return resolved;
+    });
+  }
+
+  /**
    * Get a value from cache.
    *
    * @param {string} key - Key of cached value.

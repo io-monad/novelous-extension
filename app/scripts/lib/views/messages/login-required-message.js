@@ -1,16 +1,17 @@
 import _ from "lodash";
 import React from "react";
 import MessageBox from "../common/message-box";
-import Sites from "../../sites/sites";
+import Str from "../common/str";
+import Sites from "../../sites";
 
 const LoginRequiredMessage = () => (
   <MessageBox message="loginRequired" icon="user-times">
     <div className="sites">
-      {_.map(Sites, (site, name) =>
-        <a key={name} href={site.meta.url} target="_blank" className="btn btn-link">
-          <img src={`/images/sites/${name}.png`} height="16" />
+      {_.map(Sites, (site) =>
+        <a key={site.name} href={site.url} target="_blank" className="btn btn-link">
+          <img src={site.iconUrl} height="16" />
           {" "}
-          {site.meta.displayName}
+          <Str name={site.name} />
         </a>
       )}
     </div>

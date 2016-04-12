@@ -1,6 +1,6 @@
 import _ from "lodash";
 import Feed from "../feed";
-import NarouMyMessageLister from "../../sites/narou/my-message-lister";
+import Narou from "../../sites/narou";
 import { translate } from "../../util/chrome-util";
 
 /**
@@ -9,10 +9,6 @@ import { translate } from "../../util/chrome-util";
  * @implements FeedFetcher
  */
 export default class FetcherNarouMessages {
-  constructor(options) {
-    this.lister = new NarouMyMessageLister(options);
-  }
-
   isLoginRequired() {
     return true;
   }
@@ -21,16 +17,16 @@ export default class FetcherNarouMessages {
     return this._fetchItems().then(items => {
       return new Feed({
         title: translate("narouMessagesFeed"),
-        url: this.lister.getURL(),
-        siteName: translate("narouSiteName"),
-        siteId: "narou",
+        url: Narou.URL.getMyReceivedMessagesURL(),
+        siteName: translate(Narou.name),
+        siteId: Narou.name,
         items,
       });
     });
   }
 
   _fetchItems() {
-    return this.lister.listReceivedMessages().then(messages => {
+    return Narou.API.listMyReceivedMessages().then(messages => {
       return _.map(messages, msg => ({
         id: msg.id,
         title: msg.title,

@@ -1,6 +1,6 @@
 import _ from "lodash";
 import Feed from "../feed";
-import NarouMyReviewLister from "../../sites/narou/my-review-lister";
+import Narou from "../../sites/narou";
 import { translate } from "../../util/chrome-util";
 
 /**
@@ -9,10 +9,6 @@ import { translate } from "../../util/chrome-util";
  * @implements FeedFetcher
  */
 export default class FetcherNarouReviews {
-  constructor(options) {
-    this.lister = new NarouMyReviewLister(options);
-  }
-
   isLoginRequired() {
     return true;
   }
@@ -21,16 +17,16 @@ export default class FetcherNarouReviews {
     return this._fetchItems().then(items => {
       return new Feed({
         title: translate("narouReviewsFeed"),
-        url: this.lister.getURL(),
-        siteName: translate("narouSiteName"),
-        siteId: "narou",
+        url: Narou.URL.getMyReceivedReviewsURL(),
+        siteName: translate(Narou.name),
+        siteId: Narou.name,
         items,
       });
     });
   }
 
   _fetchItems() {
-    return this.lister.listReceivedReviews().then(reviews => {
+    return Narou.API.listMyReceivedReviews().then(reviews => {
       return _.map(reviews, review => ({
         id: review.id,
         title: review.title,
