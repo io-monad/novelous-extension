@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import SubscriptionList from "../subscriptions/subscription-list";
-import Subscription from "../../subscriptions/subscription";
+import Subscriber from "../../subscriptions/subscriber";
 import { translate, getStorePageUrl, openOptionsPage } from "../../util/chrome-util";
 import Icon from "../common/icon";
 import AppInfo from "../../../../../package.json";
@@ -18,7 +18,7 @@ export default class PopupView extends React.Component {
   }
 
   render() {
-    const { subscriptions, unreadItemIds } = this.props;
+    const { subscriber, unreadItemIds } = this.props;
     const { viewMode } = this.state;
     return (
       <div className="popup-view">
@@ -48,7 +48,7 @@ export default class PopupView extends React.Component {
         </div>
         <SubscriptionList
           viewMode={viewMode}
-          subscriptions={subscriptions}
+          subscriptions={subscriber.itemsSubscriptions}
           unreadItemIds={unreadItemIds}
         />
       </div>
@@ -57,6 +57,6 @@ export default class PopupView extends React.Component {
 }
 
 PopupView.propTypes = {
-  subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(Subscription)).isRequired,
+  subscriber: PropTypes.instanceOf(Subscriber).isRequired,
   unreadItemIds: PropTypes.object.isRequired,
 };

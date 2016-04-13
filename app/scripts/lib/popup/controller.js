@@ -88,14 +88,14 @@ export default class PopupController {
     return (
       <PopupView
         controller={this}
-        subscriptions={this.subscriber.subscriptions}
+        subscriber={this.subscriber}
         unreadItemIds={this.unreadItemIds}
       />
     );
   }
 
   _saveUnreadItemIds() {
-    _.each(this.subscriber.subscriptions, sub => {
+    _.each(this.subscriber.itemsSubscriptions, sub => {
       _.each(sub.unreadItems, item => {
         _.set(this.unreadItemIds, [sub.id, item.id], true);
       });

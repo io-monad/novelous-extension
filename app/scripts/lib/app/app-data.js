@@ -8,11 +8,11 @@ const logger = debug("app-data");
 const DEFAULTS = _.extend(jsonSchemaDefaults(appOptionsSchema), {
   lastUpdatedAt: null,
   subscriptionSettings: [
-    { feedUrl: "novelous-feed://narou/messages" },
-    { feedUrl: "novelous-feed://narou/comments" },
-    { feedUrl: "novelous-feed://narou/blog-comments" },
-    { feedUrl: "novelous-feed://narou/reviews" },
-    { feedUrl: "novelous-feed://kakuyomu/reviews" },
+    { type: "items", feedUrl: "novelous-feed://narou/messages" },
+    { type: "items", feedUrl: "novelous-feed://narou/comments" },
+    { type: "items", feedUrl: "novelous-feed://narou/blog-comments" },
+    { type: "items", feedUrl: "novelous-feed://narou/reviews" },
+    { type: "items", feedUrl: "novelous-feed://kakuyomu/reviews" },
   ],
 });
 const PROP_KEYS = _.keys(DEFAULTS);

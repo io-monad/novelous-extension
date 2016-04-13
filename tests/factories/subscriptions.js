@@ -1,7 +1,7 @@
 import _ from "lodash";
 import factory from "factory-girl";
 import Feed from "../../app/scripts/lib/feeds/feed";
-import Subscription from "../../app/scripts/lib/subscriptions/subscription";
+import ItemsSubscription from "../../app/scripts/lib/subscriptions/subscription/items";
 
 factory.define("feed", Feed, {
   title: factory.seq(n => `Feed title ${n}`),
@@ -22,15 +22,16 @@ factory.define("feedItem", Object, {
   createdAt: () => 1462073640000 + _.random(0, 100000),
 });
 
-const subscriptionSchema = {
+const itemsSubscriptionSchema = {
+  type: "items",
   feedUrl: "novelous-feed://narou/messages",
   feedData: () => factory.buildSync("feed").toObject(),
-  readItemIds() { return _.map(this.feedData.items, "id"); },
   enabled: true,
   lastUpdatedAt: null,
+  readItemIds() { return _.map(this.feedData.items, "id"); },
 };
 
-factory.define("subscription", Subscription, subscriptionSchema);
-factory.define("subscriptionSettings", Object, subscriptionSchema);
+factory.define("itemsSubscription", ItemsSubscription, itemsSubscriptionSchema);
+factory.define("itemsSubscriptionData", Object, itemsSubscriptionSchema);
 
 module.exports = factory;

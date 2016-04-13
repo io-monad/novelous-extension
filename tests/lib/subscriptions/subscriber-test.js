@@ -3,25 +3,22 @@ import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import helpers from "./helpers";
 
 test.beforeEach(t => {
-  t.context.settings = _.range(3).map(() => factory.buildSync("subscriptionSettings"));
+  t.context.settings = _.times(3, () => factory.buildSync("itemsSubscriptionData"));
   t.context.subscriber = new Subscriber(t.context.settings);
 });
 
 test("new Subscriber", t => {
-  t.truthy(t.context.subscriber instanceof Subscriber);
+  t.true(t.context.subscriber instanceof Subscriber);
 });
 
 test("#subscriptionSettings getter", t => {
   const { subscriber, settings } = t.context;
-  const gotSettings = subscriber.subscriptionSettings;
-  t.true(_.isArray(gotSettings));
-  t.is(gotSettings.length, settings.length);
-  t.true(_.every(gotSettings, _.isObject));
+  t.deepEqual(subscriber.subscriptionSettings, settings);
 });
 
 test("#subscriptionSettings setter", t => {
   const { subscriber } = t.context;
-  const newSettings = _.range(5).map(() => factory.buildSync("subscriptionSettings"));
+  const newSettings = _.times(5, () => factory.buildSync("itemsSubscriptionData"));
   subscriber.subscriptionSettings = newSettings;
 
   t.is(subscriber.subscriptions.length, newSettings.length);
@@ -30,27 +27,9 @@ test("#subscriptionSettings setter", t => {
   });
 });
 
-test.cb("#subscribe", t => {
-  const { subscriber, settings } = t.context;
-  const subscription = factory.buildSync("subscription");
-  subscriber.on("update", t.end);
-  subscriber.subscribe(subscription);
-  t.is(subscriber.subscriptions.length, settings.length + 1);
-  t.is(subscriber.subscriptions[settings.length], subscription);
-});
-
-test.cb("#unsubscribe", t => {
-  const { subscriber, settings } = t.context;
-  const subscription = factory.buildSync("subscription");
-  subscriber.subscribe(subscription);
-  subscriber.on("update", t.end);
-  subscriber.unsubscribe(subscription);
-  t.is(subscriber.subscriptions.length, settings.length);
-});
-
 test("#updateAll", t => {
   const { subscriber } = t.context;
-  const updateStub = sinon.stub().returns(Promise.resolve(true));
+  const updateStub = sinon.stub().returns(Promise.resolve());
   _.each(subscriber.subscriptions, sub => { sub.update = updateStub; });
 
   let emitted = false;
@@ -74,8 +53,6 @@ test("#updateAll skips login required subscriptions when not logged in", t => {
 
   return subscriber.updateAll().then(() => {
     t.is(updateStub.callCount, 1);
-  }).catch(e => {
-    t.fail(e);
   });
 });
 
@@ -89,9 +66,7 @@ test.serial("#updateAll continues iteration when error occurred", t => {
 
   sinonsb.stub(console, "error");
   return subscriber.updateAll().then(() => {
-    t.is(updateStub.callCount, 3);
-  }).catch(e => {
-    t.fail(e);
+    t.is(updateStub.callCount, subscriber.subscriptions.length);
   });
 });
 
@@ -99,10 +74,10 @@ test.cb("#clearUnreadItems", t => {
   const { subscriber } = t.context;
 
   const clearStub = sinon.stub();
-  _.each(subscriber.subscriptions, sub => { sub.clearUnreadItems = clearStub; });
+  _.each(subscriber.itemsSubscriptions, sub => { sub.clearUnreadItems = clearStub; });
 
   subscriber.on("update", () => {
-    t.is(clearStub.callCount, subscriber.subscriptions.length);
+    t.is(clearStub.callCount, subscriber.itemsSubscriptions.length);
     t.end();
   });
   subscriber.clearUnreadItems();
@@ -112,7 +87,7 @@ test("#getUnreadItemsCount", async t => {
   const { subscriber } = t.context;
   t.is(subscriber.getUnreadItemsCount(), 0);
 
-  const subs = subscriber.subscriptions;
+  const subs = subscriber.itemsSubscriptions;
   subs[0].feed = helpers.getFeedWithNewItems(subs[0].feed, 2)[0];
   subs[1].feed = helpers.getFeedWithNewItems(subs[1].feed, 1)[0];
 

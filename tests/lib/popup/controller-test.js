@@ -45,14 +45,14 @@ test.serial("#start triggers updateSubscriptions when never updated", t => {
 });
 
 test.serial("#start not triggers updateSubscriptions when updated once", t => {
-  const subscriptionSettings = [factory.buildSync("subscriptionSettings")];
+  const subscriptionSettings = [factory.buildSync("itemsSubscriptionData")];
   return startController(t, { subscriptionSettings }).then(() => {
     t.false(BackgroundAPI.updateSubscriptions.called);
   });
 });
 
 test.serial("#start renders ReactDOM", t => {
-  const subscriptionSettings = [factory.buildSync("subscriptionSettings")];
+  const subscriptionSettings = [factory.buildSync("itemsSubscriptionData")];
   return startController(t, { subscriptionSettings }).then(() => {
     const { container } = t.context;
     t.true(ReactDOM.render.calledOnce);

@@ -9,7 +9,7 @@ test.beforeEach(t => {
   global.Audio = sinon.stub().returns(t.context.sound);
 
   t.context.subscriber = new Subscriber([
-    factory.buildSync("subscriptionSettings"),
+    factory.buildSync("itemsSubscriptionData"),
   ]);
   t.context.subscription = t.context.subscriber.subscriptions[0];
   t.context.notifier = new SubscriberNotifier(t.context.subscriber);

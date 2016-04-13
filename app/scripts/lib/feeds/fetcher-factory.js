@@ -21,6 +21,7 @@ import NovelousFetchers from "./novelous-fetchers";
 
 /**
  * Fetcher factory.
+ * @name FetcherFactory
  */
 export default {
   /**

@@ -37,12 +37,12 @@ test.serial("#start initializes members", t => {
 });
 
 test.serial("#start updates badge counter", t => {
-  const settings = factory.buildSync("subscriptionSettings");
+  const subData = factory.buildSync("itemsSubscriptionData");
   const newFeedItem = factory.buildSync("feedItem");
-  settings.feedData.items.push(newFeedItem);
+  subData.feedData.items.push(newFeedItem);
 
   return startController(t, {
-    subscriptionSettings: [settings],
+    subscriptionSettings: [subData],
   }).then(() => {
     t.deepEqual(chrome.browserAction.setBadgeText.lastCall.args[0], { text: "1" });
   });

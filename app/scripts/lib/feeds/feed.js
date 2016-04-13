@@ -1,6 +1,15 @@
 import _ from "lodash";
 
 /**
+ * @typedef {Object} FeedData
+ * @property {string}     title - Title of the feed.
+ * @property {string}     url - URL of the page to view the feed contents.
+ * @property {string}     siteName - Name of the site.
+ * @property {?string}    siteId - ID of the site if it is Site in Novelous.
+ * @property {FeedItem[]} items - Feed items in the feed.
+ */
+
+/**
  * @typedef {Object} FeedItem
  * @property {string}   id - ID of the item.
  * @property {string}   title - Title of the item.
@@ -22,12 +31,7 @@ import _ from "lodash";
  */
 export default class Feed {
   /**
-   * @param {Object} data - Feed data.
-   * @param {string} data.title - Title of the feed.
-   * @param {string} data.url - URL of the page to view the feed contents.
-   * @param {string} data.siteName - Name of the site.
-   * @param {?string} data.siteId - ID of the site if it is Site in Novelous.
-   * @param {FeedItem[]} data.items - Feed items in the feed.
+   * @param {FeedData} data - Feed data.
    */
   constructor(data) {
     this.data = _.extend({

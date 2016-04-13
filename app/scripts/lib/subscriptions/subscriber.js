@@ -2,7 +2,7 @@ import url from "url";
 import _ from "lodash";
 import EventEmitter from "eventemitter3";
 import promises from "../util/promises";
-import Subscription from "./subscription";
+import SubscriptionFactory from "./subscription-factory";
 const logger = debug("subscriber");
 
 /**
@@ -10,7 +10,7 @@ const logger = debug("subscriber");
  */
 export default class Subscriber extends EventEmitter {
   /**
-   * @param {Object[]} subscriptionSettings
+   * @param {SubscriptionData[]} subscriptionSettings
    */
   constructor(subscriptionSettings) {
     super();
@@ -18,17 +18,20 @@ export default class Subscriber extends EventEmitter {
   }
 
   /**
-   * @return {Object[]}
+   * @return {SubscriptionData[]}
    */
   get subscriptionSettings() {
     return _.invokeMap(this.subscriptions, "toObject");
   }
 
   /**
-   * @param {Object[]} subscriptionSettings
+   * @param {SubscriptionData[]} subscriptionSettings
    */
   set subscriptionSettings(subscriptionSettings) {
-    this._subscriptions = _.map(subscriptionSettings || [], sub => new Subscription(sub));
+    this._subscriptions = _.map(subscriptionSettings || [], data => {
+      return SubscriptionFactory.create(data);
+    });
+    this._typeToSubscriptions = _.groupBy(this._subscriptions, sub => sub.type);
   }
 
   /**
@@ -48,23 +51,17 @@ export default class Subscriber extends EventEmitter {
   }
 
   /**
-   * Subscribe a new subscription.
-   *
-   * @param {Subscription|Subscription[]} subscription
+   * @return {Subscription[]}
    */
-  subscribe(subscription) {
-    this._subscriptions = this._subscriptions.concat(subscription);
-    this.emit("update");
+  getSubscriptionsForType(type) {
+    return this._typeToSubscriptions[type] || [];
   }
 
   /**
-   * Unsubscribe a subscription.
-   *
-   * @param {Subscription|Subscription[]} subscription
+   * @return {ItemsSubscription[]}
    */
-  unsubscribe(subscription) {
-    _.pullAll(this._subscriptions, _.castArray(subscription));
-    this.emit("update");
+  get itemsSubscriptions() {
+    return this.getSubscriptionsForType("items");
   }
 
   /**
@@ -125,11 +122,11 @@ export default class Subscriber extends EventEmitter {
   }
 
   /**
-   * Clear specific unread item in subscription.
+   * Clear specific unread item in ItemsSubscription.
    */
   clearUnreadItem(subscription, item) {
     if (_.isString(subscription)) {
-      subscription = _.find(this.subscriptions, ["id", subscription]);
+      subscription = _.find(this.itemsSubscriptions, ["id", subscription]);
     }
     if (subscription) {
       if (subscription.clearUnreadItem(item)) {
@@ -139,21 +136,21 @@ export default class Subscriber extends EventEmitter {
   }
 
   /**
-   * Clear all unread items in subscriptions.
+   * Clear all unread items in ItemsSubscription.
    */
   clearUnreadItems() {
-    _.each(this.subscriptions, sub => {
+    _.each(this.itemsSubscriptions, sub => {
       sub.clearUnreadItems();
     });
     this.emit("update");
   }
 
   /**
-   * Get total count of unread items in subscriptions.
+   * Get total count of unread items in ItemsSubscription.
    *
    * @return {number} Total unread items count.
    */
   getUnreadItemsCount() {
-    return _.sumBy(this.subscriptions, "unreadItemsCount");
+    return _.sumBy(this.itemsSubscriptions, "unreadItemsCount");
   }
 }

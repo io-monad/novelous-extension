@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
 import { translate } from "../../util/chrome-util";
-import Subscription from "../../subscriptions/subscription";
+import ItemsSubscription from "../../subscriptions/subscription/items";
 import SubscriptionItem from "./subscription-item";
 import FeedItem from "./feed-item";
 
@@ -68,7 +68,7 @@ SubscriptionList.viewModes = [
 SubscriptionList.defaultViewMode = SubscriptionList.viewModes[0].name;
 
 SubscriptionList.propTypes = {
-  subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(Subscription)).isRequired,
+  subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(ItemsSubscription)).isRequired,
   unreadItemIds: PropTypes.object.isRequired,
   viewMode: PropTypes.oneOf(_.map(SubscriptionList.viewModes, "name")),
 };

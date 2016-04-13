@@ -76,7 +76,7 @@ export default class SubscriberNotifier {
     });
   }
   _handleSubscriberUpdate() {
-    _.each(this.subscriber.subscriptions, sub => {
+    _.each(this.subscriber.itemsSubscriptions, sub => {
       _.each(sub.lastFoundItems, item => this.notifyItem(sub, item));
     });
   }
