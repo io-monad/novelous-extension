@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import "./lib/util/debug";
 import "./lib/background/livereload";
 import BackgroundController from "./lib/background/controller";

@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import "./lib/util/debug";
 import OptionsController from "./lib/options/controller";
 
