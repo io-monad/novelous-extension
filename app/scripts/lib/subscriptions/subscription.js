@@ -13,7 +13,6 @@ export default class Subscription {
    * @param {Object}  data - Subscription data.
    * @param {string}  data.feedUrl - Feed URL.
    * @param {Object}  [data.feedData] - Feed data (feed.toObject)
-   * @param {Object}  [data.fetchOptions] - Options for feed fetcher.
    * @param {string}  [data.watch="set"] - Watch strategy name.
    * @param {Object}  [data.watchState] - Watch strategy state.
    * @param {Object}  [data.watchOptions] - Options for watch strategy.
@@ -24,7 +23,6 @@ export default class Subscription {
     this.data = _.extend({
       feedUrl: null,
       feedData: null,
-      fetchOptions: null,
       watch: "set",
       watchState: null,
       watchOptions: null,
@@ -32,7 +30,7 @@ export default class Subscription {
       lastUpdatedAt: null,
     }, data);
     this._feed = this.data.feedData && new Feed(this.data.feedData);
-    this._feedFetcher = FetcherFactory.create(this.data.feedUrl, this.data.fetchOptions);
+    this._feedFetcher = FetcherFactory.create(this.data.feedUrl);
     this._watchStrategy = WatchStrategies.create(this.data.watch, this.data.watchOptions);
   }
 
