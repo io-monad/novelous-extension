@@ -1,7 +1,6 @@
 import _ from "lodash";
 import Feed from "../feeds/feed";
 import FetcherFactory from "../feeds/fetcher-factory";
-import WatchStrategies from "./watch-strategies";
 
 /**
  * Subscription of a feed.
@@ -13,9 +12,7 @@ export default class Subscription {
    * @param {Object}  data - Subscription data.
    * @param {string}  data.feedUrl - Feed URL.
    * @param {Object}  [data.feedData] - Feed data (feed.toObject)
-   * @param {string}  [data.watch="set"] - Watch strategy name.
-   * @param {Object}  [data.watchState] - Watch strategy state.
-   * @param {Object}  [data.watchOptions] - Options for watch strategy.
+   * @param {Set}     [data.readItemIds] - Set of read item IDs.
    * @param {boolean} [data.enabled=true] - `false` if disabled.
    * @param {number}  [data.lastUpdatedAt] - Timestamp of last update.
    */
@@ -23,18 +20,18 @@ export default class Subscription {
     this.data = _.extend({
       feedUrl: null,
       feedData: null,
-      watch: "set",
-      watchState: null,
-      watchOptions: null,
+      readItemIds: null,
       enabled: true,
       lastUpdatedAt: null,
     }, data);
     this._feed = this.data.feedData && new Feed(this.data.feedData);
     this._feedFetcher = FetcherFactory.create(this.data.feedUrl);
-    this._watchStrategy = WatchStrategies.create(this.data.watch, this.data.watchOptions);
+    this._readItemIds = new Set(this.data.readItemIds || []);
   }
 
   toObject() {
+    this.data.feedData = this._feed ? this._feed.toObject() : null;
+    this.data.readItemIds = Array.from(this._readItemIds);
     return _.clone(this.data);
   }
 
@@ -61,7 +58,6 @@ export default class Subscription {
   set feed(newFeed) {
     if (this._feed !== newFeed) {
       this._feed = newFeed;
-      this.data.feedData = newFeed ? newFeed.toObject() : null;
       this._clearCache();
     }
   }
@@ -84,7 +80,7 @@ export default class Subscription {
 
   get unreadItems() {
     if (!this._unreadItems) {
-      this._unreadItems = this._watchStrategy.filterNewItems(this.items, this.data.watchState);
+      this._unreadItems = _.reject(this.items, it => this._readItemIds.has(it.id));
     }
     return this._unreadItems;
   }
@@ -118,8 +114,7 @@ export default class Subscription {
       this.feed = feed;
       this.data.lastUpdatedAt = _.now();
       if (oldFeed) {
-        const oldState = this._watchStrategy.getAllClearedState(oldFeed.items);
-        this._lastFoundItems = this._watchStrategy.filterNewItems(this.items, oldState);
+        this._lastFoundItems = _.differenceBy(this.items, oldFeed.items, "id");
       } else {
         this.clearUnreadItems();
         this._lastFoundItems = [];
@@ -132,21 +127,18 @@ export default class Subscription {
    * Clear an item in feed to mark it as read.
    */
   clearUnreadItem(item) {
-    if (!this.feed) return false;
-    if (_.isString(item)) item = _.find(this.items, ["id", item]);
-    if (!item) return false;
-    this.data.watchState = this._watchStrategy.getOneClearedState(item, this.data.watchState);
+    if (!this.feed) return;
+    this._readItemIds.add(_.isString(item) ? item : item.id);
     this._clearCache();
-    return true;
   }
 
   /**
    * Clear all unread items in feed to mark them as read.
    */
   clearUnreadItems() {
-    if (this.feed) {
-      this.data.watchState = this._watchStrategy.getAllClearedState(this.feed.items);
-    }
+    if (!this.feed) return;
+    this._readItemIds.clear();
+    this.feed.items.forEach(it => this._readItemIds.add(it.id));
     this._clearCache();
   }
 

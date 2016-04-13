@@ -1,6 +1,7 @@
 import { _, test, factory, sinonsb } from "../../common";
 import Subscription from "../../../app/scripts/lib/subscriptions/subscription";
 import Feed from "../../../app/scripts/lib/feeds/feed";
+import helpers from "./helpers";
 
 test.beforeEach(t => {
   t.context.settings = factory.buildSync("subscriptionSettings");
@@ -17,15 +18,26 @@ test("has properties", t => {
   t.is(sub.feedUrl, settings.feedUrl);
   t.is(sub.enabled, settings.enabled);
   t.is(sub.lastUpdatedAt, settings.lastUpdatedAt);
-  t.truthy(sub.feed instanceof Feed);
+
+  t.true(sub.feed instanceof Feed);
+  t.is(sub.title, settings.feedData.title);
+  t.is(sub.url, settings.feedData.url);
+  t.is(sub.siteName, settings.feedData.siteName);
+  t.is(sub.siteId, settings.feedData.siteId);
+  t.deepEqual(sub.items, settings.feedData.items);
+
   t.deepEqual(sub.unreadItems, []);
   t.is(sub.unreadItemsCount, 0);
+  t.deepEqual(sub.readItems, sub.items);
+  t.is(sub.readItemsCount, sub.items.length);
+  t.deepEqual(sub.lastFoundItems, []);
+  t.is(sub.lastFoundItemsCount, 0);
 });
 
 test.serial("#update updates holding feed", t => {
   const { sub } = t.context;
   const feed = factory.buildSync("feed");
-  const stub = sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(feed));
+  const stub = helpers.stubFetchFeed(sub, feed);
   sinonsb.stub(_, "now").returns(1234567890);
 
   return sub.update().then(foundItems => {
@@ -39,7 +51,7 @@ test.serial("#update updates holding feed", t => {
 test("#update clears all unread items on first time", t => {
   const { sub } = t.context;
   const feed = factory.buildSync("feed");
-  sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(feed));
+  helpers.stubFetchFeed(sub, feed);
 
   sub.feed = null;
   return sub.update().then(foundItems => {
@@ -51,12 +63,9 @@ test("#update clears all unread items on first time", t => {
 
 test("#update does not clear unread items not on first time", async t => {
   const { sub } = t.context;
+  const [newFeed, newFeedItem] = helpers.getFeedWithNewItem(sub.feed);
+  helpers.stubFetchFeed(sub, newFeed);
 
-  const newFeedItem = factory.buildSync("feedItem");
-  const newFeed = new Feed(_.cloneDeep(sub.feed.toObject()));
-  newFeed.items.push(newFeedItem);
-
-  sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(newFeed));
   return sub.update().then(foundItems => {
     t.is(sub.feed, newFeed);
     t.deepEqual(sub.unreadItems, [newFeedItem]);
@@ -66,21 +75,18 @@ test("#update does not clear unread items not on first time", async t => {
 
 test("#update returns newly found items", async t => {
   const { sub } = t.context;
+  const [newFeed, newFeedItem] = helpers.getFeedWithNewItem(sub.feed);
+  const stub1 = helpers.stubFetchFeed(sub, newFeed);
 
-  const newFeedItem = factory.buildSync("feedItem");
-  const newFeed = new Feed(_.cloneDeep(sub.feed.toObject()));
-  newFeed.items.push(newFeedItem);
-
-  const stub1 = sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(newFeed));
   return sub.update().then(foundItems => {
     t.deepEqual(foundItems, [newFeedItem]);
     t.deepEqual(sub.unreadItems, [newFeedItem]);
 
     stub1.restore();
-    const newFeedItem2 = factory.buildSync("feedItem");
-    const newFeed2 = new Feed(_.cloneDeep(newFeed.toObject()));
-    newFeed2.items.push(newFeedItem2);
-    sinonsb.stub(sub._feedFetcher, "fetchFeed").returns(Promise.resolve(newFeed2));
+
+    const [newFeed2, newFeedItem2] = helpers.getFeedWithNewItem(newFeed);
+    helpers.stubFetchFeed(sub, newFeed2);
+
     return sub.update().then(foundItems2 => {
       t.deepEqual(foundItems2, [newFeedItem2]);
       t.deepEqual(sub.unreadItems, [newFeedItem, newFeedItem2]);
@@ -88,19 +94,30 @@ test("#update returns newly found items", async t => {
   });
 });
 
-test("#clearUnreadItems clears unread items", t => {
+test("#clearUnreadItem clears an unread item", t => {
   const { sub } = t.context;
-  t.deepEqual(sub.unreadItems, []);
-  t.is(sub.unreadItemsCount, 0);
-
-  const newFeedItem = factory.buildSync("feedItem");
-  const newFeed = new Feed(_.cloneDeep(sub.feed.toObject()));
-  newFeed.items.push(newFeedItem);
+  const [newFeed, newFeedItems] = helpers.getFeedWithNewItems(sub.feed, 3);
   sub.feed = newFeed;
-  t.deepEqual(sub.unreadItems, [newFeedItem]);
-  t.is(sub.unreadItemsCount, 1);
+
+  t.deepEqual(sub.unreadItems, newFeedItems);
+  t.is(sub.unreadItemsCount, newFeedItems.length);
+
+  sub.clearUnreadItem(newFeedItems[0]);
+
+  t.deepEqual(sub.unreadItems, newFeedItems.slice(1));
+  t.is(sub.unreadItemsCount, newFeedItems.length - 1);
+});
+
+test("#clearUnreadItems clears all unread items", t => {
+  const { sub } = t.context;
+  const [newFeed, newFeedItems] = helpers.getFeedWithNewItems(sub.feed, 3);
+  sub.feed = newFeed;
+
+  t.deepEqual(sub.unreadItems, newFeedItems);
+  t.is(sub.unreadItemsCount, newFeedItems.length);
 
   sub.clearUnreadItems();
+
   t.deepEqual(sub.unreadItems, []);
   t.is(sub.unreadItemsCount, 0);
 });

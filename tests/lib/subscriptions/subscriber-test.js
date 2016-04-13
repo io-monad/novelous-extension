@@ -1,6 +1,6 @@
 import { _, test, factory, sinon, sinonsb } from "../../common";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
-import Feed from "../../../app/scripts/lib/feeds/feed";
+import helpers from "./helpers";
 
 test.beforeEach(t => {
   t.context.settings = _.range(3).map(() => factory.buildSync("subscriptionSettings"));
@@ -112,15 +112,9 @@ test("#getUnreadItemsCount", async t => {
   const { subscriber } = t.context;
   t.is(subscriber.getUnreadItemsCount(), 0);
 
-  addUnreadItems(subscriber.subscriptions[0], 2);
-  addUnreadItems(subscriber.subscriptions[1], 1);
+  const subs = subscriber.subscriptions;
+  subs[0].feed = helpers.getFeedWithNewItems(subs[0].feed, 2)[0];
+  subs[1].feed = helpers.getFeedWithNewItems(subs[1].feed, 1)[0];
 
   t.is(subscriber.getUnreadItemsCount(), 3);
 });
-
-function addUnreadItems(subscription, num) {
-  const unreadItems = _.range(num).map(() => factory.buildSync("feedItem"));
-  const feedData = _.cloneDeep(subscription.feed.toObject());
-  feedData.items = feedData.items.concat(unreadItems);
-  subscription.feed = new Feed(feedData);
-}
