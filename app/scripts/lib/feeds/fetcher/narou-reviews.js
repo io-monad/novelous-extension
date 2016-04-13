@@ -30,7 +30,7 @@ export default class FetcherNarouReviews {
       return _.map(reviews, review => ({
         id: review.id,
         title: review.title,
-        url: this.pageUrl,
+        url: Narou.URL.getMyReceivedReviewsURL(),
         body: review.body,
         type: "review",
         authorName: review.userName,
