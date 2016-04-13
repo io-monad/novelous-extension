@@ -1,4 +1,5 @@
 import ItemsSubscription from "./subscription/items";
+import StatsSubscription from "./subscription/stats";
 
 /**
  * Enum for subscription type.
@@ -7,6 +8,7 @@ import ItemsSubscription from "./subscription/items";
  */
 const SubscriptionType = {
   items: ItemsSubscription,
+  stats: StatsSubscription,
 };
 
 /**

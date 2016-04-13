@@ -2,6 +2,7 @@ import _ from "lodash";
 import factory from "factory-girl";
 import Feed from "../../app/scripts/lib/feeds/feed";
 import ItemsSubscription from "../../app/scripts/lib/subscriptions/subscription/items";
+import StatsSubscription from "../../app/scripts/lib/subscriptions/subscription/stats";
 
 factory.define("feed", Feed, {
   title: factory.seq(n => `Feed title ${n}`),
@@ -9,6 +10,14 @@ factory.define("feed", Feed, {
   siteName: "Syosetuka ni narou",
   siteId: "narou",
   items: () => _.range(5).map(() => factory.buildSync("feedItem")),
+});
+
+factory.define("novelsFeed", Feed, {
+  title: factory.seq(n => `Novels Feed title ${n}`),
+  url: "http://syosetu.com/usernovel/list/",
+  siteName: "Syosetuka ni narou",
+  siteId: "narou",
+  items: () => _.range(5).map(() => factory.buildSync("novelFeedItem")),
 });
 
 factory.define("feedItem", Object, {
@@ -22,6 +31,27 @@ factory.define("feedItem", Object, {
   createdAt: () => 1462073640000 + _.random(0, 100000),
 });
 
+factory.define("novelFeedItem", Object, {
+  id: factory.seq(n => n.toString()),
+  title: factory.seq(n => `Test novel ${n}`),
+  url: () => `http://ncode.syosetu.com/n${_.random(1, 100000)}ab/`,
+  type: "novel",
+  body: factory.seq(n => `Test novel description ${n}\nHello, world!`),
+  authorName: factory.seq(n => `Author${n}`),
+  authorUrl: () => `http://mypage.syosetu.com/${_.random(1, 1000000)}/`,
+  createdAt: () => 1462073640000 + _.random(0, 100000),
+  updatedAt() { return this.createdAt + _.random(0, 10000); },
+  stats: () => factory.buildSync("novelFeedItemStats"),
+});
+
+factory.define("novelFeedItemStats", Object, {
+  point: () => _.random(1000, 100000),
+  bookmarkCount: () => _.random(0, 1000),
+  reviewCount: () => _.random(0, 100),
+  rateCount: () => _.random(0, 100),
+  episodeCount: () => _.random(1, 100),
+});
+
 const itemsSubscriptionSchema = {
   type: "items",
   feedUrl: "novelous-feed://narou/messages",
@@ -33,5 +63,17 @@ const itemsSubscriptionSchema = {
 
 factory.define("itemsSubscription", ItemsSubscription, itemsSubscriptionSchema);
 factory.define("itemsSubscriptionData", Object, itemsSubscriptionSchema);
+
+const statsSubscriptionSchema = {
+  type: "stats",
+  feedUrl: "novelous-feed://narou/novels",
+  feedData: () => factory.buildSync("novelsFeed").toObject(),
+  enabled: true,
+  lastUpdatedAt: null,
+  statsLogs: null,
+};
+
+factory.define("statsSubscription", StatsSubscription, statsSubscriptionSchema);
+factory.define("statsSubscriptionData", Object, statsSubscriptionSchema);
 
 module.exports = factory;

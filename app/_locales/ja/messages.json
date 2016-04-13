@@ -22,6 +22,9 @@
   "narouMessagesFeed": {
     "message": "メッセージ"
   },
+  "narouNovelsFeed": {
+    "message": "小説"
+  },
   "narouCommentsFeed": {
     "message": "小説の感想"
   },

@@ -33,6 +33,16 @@ export default class ItemsSubscription extends Subscription {
     this._lastFoundItems = null;
   }
 
+  get feed() {
+    return this._feed;
+  }
+  set feed(newFeed) {
+    if (this._feed !== newFeed) {
+      this._feed = newFeed;
+      this._clearCache();
+    }
+  }
+
   get unreadItems() {
     if (!this._unreadItems) {
       this._unreadItems = _.reject(this.items, it => this._readItemIds.has(it.id));

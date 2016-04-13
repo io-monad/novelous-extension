@@ -8,6 +8,7 @@
  */
 export default {
   narou: {
+    "/novels": () => require("./fetcher/narou-novels").default,
     "/messages": () => require("./fetcher/narou-messages").default,
     "/comments": () => require("./fetcher/narou-comments").default,
     "/blog-comments": () => require("./fetcher/narou-blog-comments").default,

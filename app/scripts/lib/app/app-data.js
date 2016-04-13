@@ -8,6 +8,7 @@ const logger = debug("app-data");
 const DEFAULTS = _.extend(jsonSchemaDefaults(appOptionsSchema), {
   lastUpdatedAt: null,
   subscriptionSettings: [
+    { type: "stats", feedUrl: "novelous-feed://narou/novels" },
     { type: "items", feedUrl: "novelous-feed://narou/messages" },
     { type: "items", feedUrl: "novelous-feed://narou/comments" },
     { type: "items", feedUrl: "novelous-feed://narou/blog-comments" },
@@ -135,7 +136,7 @@ export default class AppData extends EventEmitter {
   set subscriptionSettings(settings) {
     // Fill missing keys with default values
     settings = (settings || []).concat(DEFAULTS.subscriptionSettings);
-    settings = _.uniqBy(settings, "feedUrl");
+    settings = _.uniqWith(settings, (a, b) => a.type === b.type && a.feedUrl === b.feedUrl);
     this._setData("subscriptionSettings", settings);
   }
 

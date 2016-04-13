@@ -24,6 +24,7 @@ import _ from "lodash";
  * @property {?string}  imageUrl - URL of the image attached to the item.
  * @property {?number}  createdAt - Timestamp when the item was created.
  * @property {?number}  updatedAt - Timestamp when the item was updated.
+ * @property {?Object}  stats - Map of stats numbers of the item.
  */
 
 /**

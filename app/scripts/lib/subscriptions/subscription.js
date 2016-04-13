@@ -67,10 +67,7 @@ export default class Subscription {
     return this._feed;
   }
   set feed(newFeed) {
-    if (this._feed !== newFeed) {
-      this._feed = newFeed;
-      this._clearCache();
-    }
+    this._feed = newFeed;
   }
 
   get title() {
