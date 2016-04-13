@@ -21,7 +21,7 @@ const SourceTypeIcons = {
 export default class FeedItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { expanded: false };
+    this.state = { expanded: this.props.isUnread };
     this.handleClick = this.handleClick.bind(this);
   }
   shouldComponentUpdate(nextProps, nextState) {
