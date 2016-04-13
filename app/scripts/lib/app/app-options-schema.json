@@ -8,15 +8,16 @@
   "properties": {
     "updatePeriodMinutes": {
       "type": "integer",
-      "minimum": 15,
+      "minimum": 30,
       "default": 30,
-      "enum": [15, 30, 60, 120, 180],
+      "enum": [30, 60, 120, 180, 720, 1440],
       "enumNames": [
-        "every 15 minutes",
         "every 30 minutes",
         "every 1 hour",
         "every 2 hours",
-        "every 3 hours"
+        "every 3 hours",
+        "every 12 hours",
+        "every 24 hours"
       ]
     },
     "notificationSettings": {

@@ -80,9 +80,6 @@
   "updatePeriodMinutes": {
     "message": "各サイトの更新チェック間隔"
   },
-  "every15Minutes": {
-    "message": "15分ごと"
-  },
   "every30Minutes": {
     "message": "30分ごと"
   },
@@ -94,6 +91,12 @@
   },
   "every3Hours": {
     "message": "3時間ごと"
+  },
+  "every12Hours": {
+    "message": "12時間ごと"
+  },
+  "every24Hours": {
+    "message": "24時間ごと"
   },
   "notificationSettings": {
     "message": "通知設定"
