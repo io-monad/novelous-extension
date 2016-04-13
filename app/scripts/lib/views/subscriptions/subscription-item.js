@@ -8,29 +8,28 @@ import FeedItem from "./feed-item";
 export default class SubscriptionItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { unreadOnly: true };
+    this.state = { expanded: false };
     this.handleClick = this.handleClick.bind(this);
   }
   handleClick(ev) {
     ev.stopPropagation();
     ev.preventDefault();
-    this.setState({ unreadOnly: !this.state.unreadOnly });
+    this.setState({ expanded: !this.state.expanded });
   }
   render() {
     const { subscription, unreadItemIds } = this.props;
-    const { unreadOnly } = this.state;
+    const { expanded } = this.state;
     if (subscription.items.length === 0) return null;
 
     const items = _.sortBy(subscription.items, it => -it.createdAt);
     const unreadCount = _.sumBy(items, it => (unreadItemIds[it.id] ? 1 : 0));
-    const visibleCount = unreadOnly ? unreadCount : items.length;
     return (
       <article
         className={classNames({
           "subscription-item": true,
-          "subscription-item--has-items": visibleCount > 0,
           "subscription-item--has-unread-items": unreadCount > 0,
-          "subscription-item--unread-items-only": unreadOnly,
+          "subscription-item--expanded": expanded,
+          "subscription-item--collapsed": !expanded,
           panel: true,
           "panel-default": true,
         })}
@@ -38,7 +37,7 @@ export default class SubscriptionItem extends React.Component {
         <header className="subscription-item__header panel-heading" onClick={this.handleClick}>
           <h1 className="subscription-item__title">
             <a href="#" onClick={this.handleClick}>
-              <Icon name={`caret-${unreadOnly ? "right" : "down"}`} />
+              <Icon name={`caret-${expanded ? "right" : "down"}`} />
             </a>
             {subscription.siteId &&
               <img src={`/images/sites/${subscription.siteId}.png`} />
@@ -71,7 +70,7 @@ export default class SubscriptionItem extends React.Component {
               key={item.id}
               item={item}
               isUnread={!!unreadItemIds[item.id]}
-              isHidden={unreadOnly && !unreadItemIds[item.id]}
+              isHidden={!expanded}
             />
           )}
         </div>
