@@ -1,11 +1,11 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
 import classNames from "classnames";
-import Subscription from "../../subscriptions/subscription";
+import ItemsSubscription from "../../subscriptions/subscription/items";
 import Icon from "../common/icon";
 import FeedItem from "./feed-item";
 
-export default class SubscriptionItem extends React.Component {
+export default class ItemsSubscriptionItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = { expanded: false };
@@ -26,18 +26,21 @@ export default class SubscriptionItem extends React.Component {
     return (
       <article
         className={classNames({
-          "subscription-item": true,
-          "subscription-item--has-unread-items": unreadCount > 0,
-          "subscription-item--expanded": expanded,
-          "subscription-item--collapsed": !expanded,
+          "items-subscription-item": true,
+          "items-subscription-item--has-unread-items": unreadCount > 0,
+          "items-subscription-item--expanded": expanded,
+          "items-subscription-item--collapsed": !expanded,
           panel: true,
           "panel-default": true,
         })}
       >
-        <header className="subscription-item__header panel-heading" onClick={this.handleClick}>
-          <h1 className="subscription-item__title">
+        <header
+          className="items-subscription-item__header panel-heading"
+          onClick={this.handleClick}
+        >
+          <h1 className="items-subscription-item__title">
             <a href="#" onClick={this.handleClick}>
-              <Icon name={`caret-${expanded ? "right" : "down"}`} />
+              <Icon name={`caret-${expanded ? "down" : "right"}`} />
             </a>
             {subscription.siteId &&
               <img src={`/images/sites/${subscription.siteId}.png`} />
@@ -46,25 +49,25 @@ export default class SubscriptionItem extends React.Component {
               `${subscription.siteName}: ${subscription.title}` : subscription.title
             }
           </h1>
-          <div className="subscription-item__links">
+          <div className="items-subscription-item__links">
             <a href={subscription.url} target="_blank" className="btn btn-default btn-xs"
               onClick={(ev) => { ev.stopPropagation(); }}
             >
               <Icon name="external-link" />
             </a>
           </div>
-          <div className="subscription-item__counts">
+          <div className="items-subscription-item__counts">
             {unreadCount > 0 &&
-              <span className="subscription-item__unread-count">
+              <span className="items-subscription-item__unread-count">
                 {unreadCount}
               </span>
             }
-            <span className="subscription-item__item-count">
+            <span className="items-subscription-item__item-count">
               {items.length}
             </span>
           </div>
         </header>
-        <div className="subscription-item__items panel-body">
+        <div className="items-subscription-item__items panel-body">
           {items.map(item =>
             <FeedItem
               key={item.id}
@@ -79,7 +82,7 @@ export default class SubscriptionItem extends React.Component {
   }
 }
 
-SubscriptionItem.propTypes = {
-  subscription: PropTypes.instanceOf(Subscription).isRequired,
+ItemsSubscriptionItem.propTypes = {
+  subscription: PropTypes.instanceOf(ItemsSubscription).isRequired,
   unreadItemIds: PropTypes.object.isRequired,
 };

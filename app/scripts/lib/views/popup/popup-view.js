@@ -1,8 +1,9 @@
 import React, { PropTypes } from "react";
-import SubscriptionList from "../subscriptions/subscription-list";
 import Subscriber from "../../subscriptions/subscriber";
 import { translate, getStorePageUrl } from "../../util/chrome-util";
 import AppInfo from "../../../../../package.json";
+import ItemsSubscriptionFlat from "../subscriptions/items-subscription-flat";
+import ItemsSubscriptionList from "../subscriptions/items-subscription-list";
 import ViewModeSwitch from "./view-mode-switch";
 import OptionButton from "./option-button";
 
@@ -35,11 +36,19 @@ export default class PopupView extends React.Component {
             <ViewModeSwitch viewMode={viewMode} onChange={this.handleViewModeChange} />
           </div>
         </div>
-        <SubscriptionList
-          categorized={viewMode === "categorized"}
-          subscriptions={subscriber.itemsSubscriptions}
-          unreadItemIds={unreadItemIds}
-        />
+
+        {viewMode === "categorized"
+          ?
+            <ItemsSubscriptionList
+              subscriptions={subscriber.itemsSubscriptions}
+              unreadItemIds={unreadItemIds}
+            />
+          :
+            <ItemsSubscriptionFlat
+              subscriptions={subscriber.itemsSubscriptions}
+              unreadItemIds={unreadItemIds}
+            />
+        }
       </div>
     );
   }

@@ -1,11 +1,9 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
-import ItemsSubscription from "../../subscriptions/subscription/items";
+import Subscription from "../../subscriptions/subscription";
 import FeedItem from "./feed-item";
 
-const MAX_FLAT_ITEMS = 50;  // Not customizable currently
-
-const SubscriptionFlatList = ({ subscriptions, unreadItemIds }) => {
+const ItemsSubscriptionFlat = ({ subscriptions, unreadItemIds }) => {
   const entries = _.flatMap(subscriptions, subscription => {
     const unread = unreadItemIds[subscription.id] || {};
     return _.map(subscription.items, item => ({
@@ -17,10 +15,10 @@ const SubscriptionFlatList = ({ subscriptions, unreadItemIds }) => {
   });
   const flattenedEntries = _.sortBy(entries, entry => (
     -entry.item.createdAt * (entry.isUnread ? 2 : 1),  // Prioritize unread
-  )).slice(0, MAX_FLAT_ITEMS);
+  ));
 
   return (
-    <section className="subscription-flat-list panel panel-default">
+    <section className="items-subscription-flat panel panel-default">
       <div className="panel-body">
         {_.map(flattenedEntries, (entry) =>
           <FeedItem key={entry.id} {...entry} />
@@ -30,9 +28,9 @@ const SubscriptionFlatList = ({ subscriptions, unreadItemIds }) => {
   );
 };
 
-SubscriptionFlatList.propTypes = {
-  subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(ItemsSubscription)).isRequired,
+ItemsSubscriptionFlat.propTypes = {
+  subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(Subscription)).isRequired,
   unreadItemIds: PropTypes.object.isRequired,
 };
 
-export default SubscriptionFlatList;
+export default ItemsSubscriptionFlat;
