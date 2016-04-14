@@ -1,11 +1,17 @@
 import React, { PropTypes } from "react";
 import classNames from "classnames";
 import Icon from "../common/icon";
+import { translate } from "../../util/chrome-util";
 
-const ViewModeSwitch = ({ allViewModes, viewMode, onChange }) => {
+const viewModes = [
+  { name: "flat", title: translate("viewModeFlat"), icon: "list-ul" },
+  { name: "categorized", title: translate("viewModeCategorized"), icon: "folder" },
+];
+
+const ViewModeSwitch = ({ viewMode, onChange }) => {
   return (
     <div className="view-mode-switch btn-group">
-      {allViewModes.map(mode =>
+      {viewModes.map(mode =>
         <button
           key={mode.name}
           title={mode.title}
@@ -25,12 +31,10 @@ const ViewModeSwitch = ({ allViewModes, viewMode, onChange }) => {
   );
 };
 
+ViewModeSwitch.viewModes = viewModes;
+ViewModeSwitch.defaultViewMode = viewModes[0].name;
+
 ViewModeSwitch.propTypes = {
-  allViewModes: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-  })).isRequired,
   viewMode: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };

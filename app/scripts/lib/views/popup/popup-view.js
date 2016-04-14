@@ -1,15 +1,15 @@
 import React, { PropTypes } from "react";
 import SubscriptionList from "../subscriptions/subscription-list";
 import Subscriber from "../../subscriptions/subscriber";
-import { translate, getStorePageUrl, openOptionsPage } from "../../util/chrome-util";
-import Icon from "../common/icon";
+import { translate, getStorePageUrl } from "../../util/chrome-util";
 import AppInfo from "../../../../../package.json";
 import ViewModeSwitch from "./view-mode-switch";
+import OptionButton from "./option-button";
 
 export default class PopupView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { viewMode: SubscriptionList.defaultViewMode };
+    this.state = { viewMode: ViewModeSwitch.defaultViewMode };
     this.handleViewModeChange = this.handleViewModeChange.bind(this);
   }
 
@@ -31,23 +31,12 @@ export default class PopupView extends React.Component {
             </a>
           </div>
           <div className="popup-view__buttons btn-toolbar">
-            <button
-              title={translate("openOptions")}
-              className="popup-view__options-button btn btn-sm btn-link"
-              onClick={openOptionsPage}
-            >
-              <Icon name="cog" />
-              {` ${translate("options")}`}
-            </button>
-            <ViewModeSwitch
-              allViewModes={SubscriptionList.viewModes}
-              viewMode={viewMode}
-              onChange={this.handleViewModeChange}
-            />
+            <OptionButton />
+            <ViewModeSwitch viewMode={viewMode} onChange={this.handleViewModeChange} />
           </div>
         </div>
         <SubscriptionList
-          viewMode={viewMode}
+          categorized={viewMode === "categorized"}
           subscriptions={subscriber.itemsSubscriptions}
           unreadItemIds={unreadItemIds}
         />
