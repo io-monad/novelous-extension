@@ -15,7 +15,8 @@
     "starCount": 0,
     "followerCount": 0,
     "reviewCount": 0,
-    "latestEpisodeUrl": null
+    "latestEpisodeUrl": null,
+    "updatedAt": 1459609440000
   },
   {
     "authorName": "入出もなど",
@@ -33,6 +34,7 @@
     "starCount": 43,
     "followerCount": 50,
     "reviewCount": 17,
-    "latestEpisodeUrl": "https://kakuyomu.jp/works/4852201425154996024/episodes/1177354054880768333"
+    "latestEpisodeUrl": "https://kakuyomu.jp/works/4852201425154996024/episodes/1177354054880768333",
+    "updatedAt": 1459594200000
   }
 ]

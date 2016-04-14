@@ -18,6 +18,7 @@ import KakuyomuURL from "../url";
  * @property {number}   reviewCount - Count of reviews on the novel.
  * @property {number}   followerCount - Count of followers on the novel.
  * @property {number}   starCount - Count of stars on the novel.
+ * @property {number}   updatedAt - Timestamp when the latest episode was published.
  * @property {boolean}  isPrivate - `true` if the novel is private.
  * @property {string}   editUrl - URL of the page of editting the novel.
  * @property {string}   newEpisodeUrl - URL of the page of submitting a new episode.
@@ -103,6 +104,9 @@ export default class KakuyomuMyNovelLister {
 
       novel.latestEpisodeUrl =
         resolve($item.find(".works-workEpisodes-labelTitle").last().attr("href"));
+
+      const times = _.map($item.find(".works-workEpisodes-labelDate"), el => $.localTime(el));
+      novel.updatedAt = _.max(times) || null;
 
       return novel;
     });
