@@ -93,9 +93,11 @@ export default class Subscription {
    */
   update() {
     return this._feedFetcher.fetchFeed(this.feedUrl).then(feed => {
-      this.feed = feed;
-      this.data.lastUpdatedAt = _.now();
-      return feed;
+      if (!_.isEqual(this.feed, feed)) {
+        this.feed = feed;
+        this.data.lastUpdatedAt = _.now();
+      }
+      return this.feed;
     });
   }
 }
