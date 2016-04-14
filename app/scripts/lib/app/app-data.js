@@ -13,6 +13,7 @@ const DEFAULTS = _.extend(jsonSchemaDefaults(appOptionsSchema), {
     { type: "items", feedUrl: "novelous-feed://narou/comments" },
     { type: "items", feedUrl: "novelous-feed://narou/blog-comments" },
     { type: "items", feedUrl: "novelous-feed://narou/reviews" },
+    { type: "stats", feedUrl: "novelous-feed://kakuyomu/novels" },
     { type: "items", feedUrl: "novelous-feed://kakuyomu/reviews" },
   ],
 });

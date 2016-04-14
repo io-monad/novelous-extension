@@ -15,6 +15,7 @@ export default {
     "/reviews": () => require("./fetcher/narou-reviews").default,
   },
   kakuyomu: {
+    "/novels": () => require("./fetcher/kakuyomu-novels").default,
     "/reviews": () => require("./fetcher/kakuyomu-reviews").default,
   },
 };
