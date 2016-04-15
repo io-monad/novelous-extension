@@ -65,6 +65,13 @@ export default class Subscriber extends EventEmitter {
   }
 
   /**
+   * @return {StatsSubscription[]}
+   */
+  get statsSubscriptions() {
+    return this.getSubscriptionsForType("stats");
+  }
+
+  /**
    * Update all subscriptions.
    *
    * This returns the same Promise for parallel runs.

@@ -74,6 +74,8 @@
     "react-addons-shallow-compare": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-jsonschema-form": "^0.23.1",
+    "react-sparklines": "^1.5.1",
+    "react-tooltip": "^1.2.0",
     "require-dir": "^0.3.0",
     "sinon": "^1.17.3",
     "sinon-chrome": "^1.1.2",

@@ -73,11 +73,50 @@
   "openOptions": {
     "message": "設定画面を開く"
   },
-  "viewModeFlat": {
+  "viewModeDashboard": {
+    "message": "ダッシュボード"
+  },
+  "viewModeEvents": {
     "message": "全てのアイテムを時系列順に並べて表示"
   },
-  "viewModeCategorized": {
+  "viewModeCategories": {
     "message": "アイテムの種類ごとに分類して表示"
+  },
+
+  "labelTimestamp": {
+    "message": "記録日時"
+  },
+  "labelPoint": {
+    "message": "総合評価"
+  },
+  "labelStarCount": {
+    "message": "もらった★の数"
+  },
+  "labelRatePoint": {
+    "message": "評価ポイント"
+  },
+  "labelBookmarkCount": {
+    "message": "ブックマーク"
+  },
+  "labelFollowerCount": {
+    "message": "フォロワー"
+  },
+  "labelReviewCount": {
+    "message": "レビュー"
+  },
+
+  "unitPoints": {
+    "message": "pt"
+  },
+  "unitPeople": {
+    "message": "人"
+  },
+
+  "linkManage": {
+    "message": "管理"
+  },
+  "linkNewEpisode": {
+    "message": "次の話を投稿"
   },
 
   "updatePeriodMinutes": {

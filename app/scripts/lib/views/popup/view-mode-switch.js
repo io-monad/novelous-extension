@@ -4,8 +4,9 @@ import Icon from "../common/icon";
 import { translate } from "../../util/chrome-util";
 
 const viewModes = [
-  { name: "flat", title: translate("viewModeFlat"), icon: "list-ul" },
-  { name: "categorized", title: translate("viewModeCategorized"), icon: "folder" },
+  { name: "dashboard", title: translate("viewModeDashboard"), icon: "tachometer" },
+  { name: "events", title: translate("viewModeEvents"), icon: "list-ul" },
+  { name: "categories", title: translate("viewModeCategories"), icon: "folder" },
 ];
 
 const ViewModeSwitch = ({ viewMode, onChange }) => {

@@ -1,0 +1,45 @@
+.stats-item {
+  position: relative;
+  vertical-align: middle;
+  display: table-cell;
+  text-align: center;
+  border-left: 1px dotted #ddd;
+
+  &:first-child {
+    border-left: none;
+  }
+
+  &__current {
+    a {
+      color: inherit;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+    i.fa {
+      font-size: 14px;
+      color: #999999;
+      vertical-align: 2px;
+    }
+  }
+  &__value {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 5px;
+    border-bottom: 1px solid transparent;
+
+    a & {
+      border-bottom-color: #ddd;
+    }
+    a:hover & {
+      border-bottom-color: #000;
+    }
+  }
+  &__unit {
+    margin-left: 5px;
+  }
+
+  &__sparkline {
+    margin-top: 10px;
+  }
+}

@@ -1,14 +1,14 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
 import ItemsSubscription from "../../subscriptions/subscription/items";
-import ItemsSubscriptionItem from "./items-subscription-item";
+import ItemsSubscriptionCategory from "./items-subscription-category";
 
-const ItemsSubscriptionList = ({ subscriptions, unreadItemIds }) => {
+const ItemsSubscriptionCategories = ({ subscriptions, unreadItemIds }) => {
   subscriptions = _.sortBy(subscriptions, sub => -sub.unreadItemsCount);
   return (
-    <section className="items-subscription-list">
+    <section className="items-subscription-categories">
       {_.map(subscriptions, sub =>
-        <ItemsSubscriptionItem
+        <ItemsSubscriptionCategory
           key={sub.id}
           subscription={sub}
           unreadItemIds={unreadItemIds[sub.id] || {}}
@@ -18,9 +18,9 @@ const ItemsSubscriptionList = ({ subscriptions, unreadItemIds }) => {
   );
 };
 
-ItemsSubscriptionList.propTypes = {
+ItemsSubscriptionCategories.propTypes = {
   subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(ItemsSubscription)).isRequired,
   unreadItemIds: PropTypes.object.isRequired,
 };
 
-export default ItemsSubscriptionList;
+export default ItemsSubscriptionCategories;
