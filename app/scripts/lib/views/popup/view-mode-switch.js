@@ -19,10 +19,10 @@ const ViewModeSwitch = ({ viewMode, onChange }) => {
           onClick={() => onChange(mode.name)}
           className={classNames({
             "view-mode-switch__item": true,
-            btn: true,
+            "btn": true,
             "btn-sm": true,
             "btn-default": true,
-            active: mode.name === viewMode,
+            "active": mode.name === viewMode,
           })}
         >
           <Icon name={mode.icon} />

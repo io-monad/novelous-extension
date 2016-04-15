@@ -31,7 +31,7 @@ export default class ItemsSubscriptionCategory extends React.Component {
           [`${cls}--has-unread-items`]: unreadCount > 0,
           [`${cls}--expanded`]: expanded,
           [`${cls}--collapsed`]: !expanded,
-          panel: true,
+          "panel": true,
           "panel-default": true,
         })}
       >

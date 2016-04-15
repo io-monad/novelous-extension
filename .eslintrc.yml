@@ -20,6 +20,9 @@ rules:
   no-param-reassign: off
   no-use-before-define: off
   no-else-return: off
+  quote-props:
+    - error
+    - consistent
   quotes:
     - error
     - double
