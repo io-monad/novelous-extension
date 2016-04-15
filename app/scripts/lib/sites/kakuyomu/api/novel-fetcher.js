@@ -23,7 +23,7 @@ import KakuyomuURL from "../url";
  * @property {boolean}  isFinished - `true` if the novel is marked as finished.
  * @property {boolean}  isFunFiction - `true` if the novel is a fun-fiction.
  * @property {?string}  originalTitle - Title of the original work of the novel.
- * @property {number}   reviewCount - Count of reviews on the novel.
+ * @property {number}   rateCount - Count of rates on the novel.
  * @property {number}   followerCount - Count of followers on the novel.
  * @property {number}   starCount - Count of stars on the novel.
  * @property {number}   createdAt - Timestamp when the first episode was published.
@@ -100,7 +100,7 @@ export default class KakuyomuNovelFetcher {
     novel.characterCount = $.number(data["総文字数"]);
     novel.createdAt = $.localTime(data["公開日"]);
     novel.updatedAt = $.localTime(data["最終更新日"]);
-    novel.reviewCount = $.number(data["おすすめレビュー"]);
+    novel.rateCount = $.number(data["おすすめレビュー"]);
     novel.followerCount = $.number(data["小説フォロー数"]);
 
     novel.reviews = _.map($("#reviews [itemscope][itemtype$='/Review']"), (item) => {

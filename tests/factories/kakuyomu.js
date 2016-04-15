@@ -19,7 +19,7 @@ factory.define("kakuyomuNovel", Object, {
   isFinished: false,
   isFunFiction: false,
   originalTitle: null,
-  reviewCount: () => _.random(0, 1000),
+  rateCount: () => _.random(0, 1000),
   followerCount: () => _.random(0, 1000),
   starCount: () => _.random(0, 1000),
   createdAt: () => 1458466620000 + _.random(0, 100000),

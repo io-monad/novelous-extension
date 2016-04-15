@@ -15,7 +15,7 @@ import KakuyomuURL from "../url";
  * @property {number}   episodeCount - Count of episodes in the novel.
  * @property {?string}  latestEpisodeUrl - URL of the latest episode.
  * @property {boolean}  isFinished - `true` if the novel is marked as finished.
- * @property {number}   reviewCount - Count of reviews on the novel.
+ * @property {number}   rateCount - Count of rates on the novel.
  * @property {number}   followerCount - Count of followers on the novel.
  * @property {number}   starCount - Count of stars on the novel.
  * @property {number}   updatedAt - Timestamp when the latest episode was published.
@@ -99,8 +99,8 @@ export default class KakuyomuMyNovelLister {
       novel.starCount = $.number($meta, /★([\d,]+)/);
       novel.followerCount = $.number($meta, /([\d,]+)人のフォロワー/);
 
-      const reviewTooltip = $meta.find("[data-ui-tooltip-label$='の評価']").data("uiTooltipLabel");
-      novel.reviewCount = $.number(reviewTooltip);
+      const rateTooltip = $meta.find("[data-ui-tooltip-label$='の評価']").data("uiTooltipLabel");
+      novel.rateCount = $.number(rateTooltip);
 
       novel.latestEpisodeUrl =
         resolve($item.find(".works-workEpisodes-labelTitle").last().attr("href"));

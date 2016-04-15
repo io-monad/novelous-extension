@@ -14,7 +14,7 @@
     "characterCount": 0,
     "starCount": 0,
     "followerCount": 0,
-    "reviewCount": 0,
+    "rateCount": 0,
     "latestEpisodeUrl": null,
     "updatedAt": 1459609440000
   },
@@ -33,7 +33,7 @@
     "characterCount": 263019,
     "starCount": 43,
     "followerCount": 50,
-    "reviewCount": 17,
+    "rateCount": 17,
     "latestEpisodeUrl": "https://kakuyomu.jp/works/4852201425154996024/episodes/1177354054880768333",
     "updatedAt": 1459594200000
   }
