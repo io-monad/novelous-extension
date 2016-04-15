@@ -40,6 +40,10 @@ export default class KakuyomuURL {
     const encodedId = encodeURIComponent(novelId);
     return `${this.base}/works/${encodedId}/reviews`;
   }
+  static getNovelFollowersURL(novelId) {
+    const encodedId = encodeURIComponent(novelId);
+    return `${this.base}/works/${encodedId}/followers`;
+  }
   static getUserNovelsURL(userId) {
     const encodedId = encodeURIComponent(userId);
     return `${this.base}/users/${encodedId}/works`;

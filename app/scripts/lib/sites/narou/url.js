@@ -69,6 +69,14 @@ export default class NarouURL {
     const encodedId = encodeURIComponent(novelId.toLowerCase());
     return `${this.ncodeBase}/novelview/infotop/ncode/${encodedId}/`;
   }
+  static getNovelCommentsURL(novelId) {
+    const encodedId = encodeURIComponent(novelId.toLowerCase());
+    return `${this.ncodeBase}/impression/list/ncode/${encodedId}/`;
+  }
+  static getNovelReviewsURL(novelId) {
+    const encodedId = encodeURIComponent(novelId.toLowerCase());
+    return `${this.ncodeBase}/novelreview/list/ncode/${encodedId}/`;
+  }
 
   static getUserTopURL(userId) {
     const encodedId = encodeURIComponent(userId);

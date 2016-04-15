@@ -25,6 +25,7 @@ import NarouGenres from "../genres";
  * @property {number}   reviewCount - Count of reviews on the novel.
  * @property {number}   bookmarkCount - Count of bookmarks on the novel.
  * @property {number}   rateCount - Count of rates on the novel.
+ * @property {number}   ratePoint - Total point of rates on the novel.
  * @property {number}   point - Total point of the novel.
  * @property {number}   createdAt - Timestamp when the first episode was published.
  * @property {number}   updatedAt - Timestamp when the latest episode was published.

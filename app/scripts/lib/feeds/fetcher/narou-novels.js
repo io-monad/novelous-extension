@@ -31,18 +31,24 @@ export default class FetcherNarouNovels {
         id: novel.id,
         title: novel.title,
         url: novel.url,
-        body: novel.description,
         type: "novel",
         authorName: novel.authorName,
         authorUrl: novel.authorUrl,
         createdAt: novel.createdAt,
         updatedAt: novel.updatedAt,
+        links: {
+          manage: novel.manageUrl,
+          newEpisode: novel.newEpisodeUrl,
+          stats: {
+            point: novel.manageUrl,
+            reviewCount: Narou.URL.getNovelReviewsURL(novel.id),
+          },
+        },
         stats: {
           point: novel.point,
           bookmarkCount: novel.bookmarkCount,
           reviewCount: novel.reviewCount,
-          rateCount: novel.rateCount,
-          episodeCount: novel.episodeCount,
+          ratePoint: novel.ratePoint,
         },
       }));
     });

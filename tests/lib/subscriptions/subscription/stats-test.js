@@ -40,8 +40,7 @@ test.serial("#update records current stats to statsLogs", async t => {
     point: [newFeedItem.stats.point],
     bookmarkCount: [newFeedItem.stats.bookmarkCount],
     reviewCount: [newFeedItem.stats.reviewCount],
-    rateCount: [newFeedItem.stats.rateCount],
-    episodeCount: [newFeedItem.stats.episodeCount],
+    ratePoint: [newFeedItem.stats.ratePoint],
   });
 });
 
@@ -60,8 +59,7 @@ test.serial("#update appends current stats to existing statsLogs", async t => {
     point: [firstStats.point, secondStats.point],
     bookmarkCount: [firstStats.bookmarkCount, secondStats.bookmarkCount],
     reviewCount: [firstStats.reviewCount, secondStats.reviewCount],
-    rateCount: [firstStats.rateCount, secondStats.rateCount],
-    episodeCount: [firstStats.episodeCount, secondStats.episodeCount],
+    ratePoint: [firstStats.ratePoint, secondStats.ratePoint],
   });
 });
 

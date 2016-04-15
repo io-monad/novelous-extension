@@ -48,8 +48,7 @@ factory.define("novelFeedItemStats", Object, {
   point: () => _.random(1000, 100000),
   bookmarkCount: () => _.random(0, 1000),
   reviewCount: () => _.random(0, 100),
-  rateCount: () => _.random(0, 100),
-  episodeCount: () => _.random(1, 100),
+  ratePoint: () => _.random(0, 1000),
 });
 
 const itemsSubscriptionSchema = {
