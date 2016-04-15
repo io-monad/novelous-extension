@@ -12,7 +12,7 @@
   },
   "scripts": {
     "prepublish": "bower install",
-    "test": "ava --serial --verbose",
+    "test": "ava --verbose",
     "build": "gulp build --vendor=chrome",
     "watch": "gulp build --watch --vendor=chrome",
     "pack:chrome": "gulp pack --production --vendor=chrome",

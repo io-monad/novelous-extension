@@ -1,6 +1,6 @@
 # Novelous Extension
 
-[![Build Status](https://travis-ci.org/io-monad/novelous-extension.svg?branch=master)](https://travis-ci.org/io-monad/novelous-extension)
+[![wercker status](https://app.wercker.com/status/49bea2b1aed53fb3fb3bb9dfec202111/s/master "wercker status")](https://app.wercker.com/project/bykey/49bea2b1aed53fb3fb3bb9dfec202111)
 
 ![](app/images/logo.png)
 
