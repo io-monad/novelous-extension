@@ -1,7 +1,7 @@
 import _ from "lodash";
 import Subscription from "../subscription";
 
-const STATS_LOG_TTL = 1000 * 60 * 60 * 24 * 7;  // Limit stats to past one week.
+const STATS_LOG_TTL = 1000 * 60 * 60 * 24 * 3;  // Limit stats to three days.
 
 /**
  * @typedef {Object} StatsSubscriptionData
@@ -21,7 +21,7 @@ const STATS_LOG_TTL = 1000 * 60 * 60 * 24 * 7;  // Limit stats to past one week.
  *     If a new key is added, past values are filled with `0` so that
  *     it keeps the same index with `timestamps`.
  *
- *     It only stores values of the past one week (`STATS_LOG_TTL`) and
+ *     It only stores values of the past three days (`STATS_LOG_TTL`) and
  *     older values are removed automatically on update.
  */
 
