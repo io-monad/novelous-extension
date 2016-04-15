@@ -5,7 +5,7 @@ import Link from "../common/link";
 
 const BrandLink = () => (
   <Link href={getStorePageUrl()} title={`${translate("appName")} ver ${AppInfo.version}`}>
-    <img src="/images/icon-38.png" />
+    <img src="/images/icon-38.png" alt={translate("appName")} />
   </Link>
 );
 
