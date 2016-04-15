@@ -1,9 +1,8 @@
 import React, { PropTypes } from "react";
 import Subscriber from "../../subscriptions/subscriber";
-import { translate, getStorePageUrl } from "../../util/chrome-util";
-import AppInfo from "../../../../../package.json";
 import ItemsSubscriptionFlat from "../subscriptions/items-subscription-flat";
 import ItemsSubscriptionList from "../subscriptions/items-subscription-list";
+import BrandLink from "./brand-link";
 import ViewModeSwitch from "./view-mode-switch";
 import OptionButton from "./option-button";
 
@@ -25,11 +24,7 @@ export default class PopupView extends React.Component {
       <div className="popup-view">
         <div className="popup-view__header">
           <div className="popup-view__brand">
-            <a href={getStorePageUrl()} target="_blank"
-              title={`${translate("appName")} ver ${AppInfo.version}`}
-            >
-              <img src="/images/icon-38.png" />
-            </a>
+            <BrandLink />
           </div>
           <div className="popup-view__buttons btn-toolbar">
             <OptionButton />
