@@ -2,17 +2,9 @@ import "babel-polyfill";
 import test from "ava";
 import sinon from "sinon";
 import chrome from "sinon-chrome";
-import lodash from "lodash";
 import debug from "debug";
-import factory from "factory-girl";
-import bluebird from "bluebird";
-import requireDir from "require-dir";
-import fixture from "./test-utils/fixture-loader";
 import fakeSererRequest from "./test-utils/fake-server-request";
 import fakeServerConf from "./fake-server.conf";
-import FactoryAdapter from "./test-utils/factory-adapter";
-
-requireDir("./factories");
 
 global.__ENV__ = "test";
 global.__VENDOR__ = "chrome";
@@ -34,13 +26,40 @@ test.afterEach(() => {
   sinonsb.restore();
 });
 
-factory.setAdapter(new FactoryAdapter());
+class TestExports {
+  static get _() {
+    if (this._lodash) return this._lodash;
+    this._lodash = require("lodash");
+    return this._lodash;
+  }
+  static get test() {
+    return test;
+  }
+  static get sinon() {
+    return sinon;
+  }
+  static get sinonsb() {
+    return sinonsb;
+  }
+  static get fixture() {
+    if (this._fixture) return this._fixture;
+    this._fixture = require("./test-utils/fixture-loader").default;
+    return this._fixture;
+  }
+  static get factory() {
+    if (this._factory) return this._factory;
 
-module.exports = {
-  _: lodash,
-  test,
-  sinon,
-  sinonsb,
-  fixture,
-  factory: factory.promisify(bluebird),
-};
+    const factory = require("factory-girl");
+    const bluebird = require("bluebird");
+    const requireDir = require("require-dir");
+    const FactoryAdapter = require("./test-utils/factory-adapter").default;
+
+    requireDir("./factories");
+    factory.setAdapter(new FactoryAdapter());
+
+    this._factory = factory.promisify(bluebird);
+    return factory;
+  }
+}
+
+module.exports = TestExports;
