@@ -104,7 +104,7 @@ module.exports = {
     }
     key = _.camelCase(key);
     const translated = chrome.i18n.getMessage(key, substitutions);
-    if (!translated && !fallback && __ENV__ === "development") {
+    if (!translated && _.isUndefined(fallback) && __ENV__ === "development") {
       console.error(`No translation for "${key}"`);
     }
     return translated || fallback;
