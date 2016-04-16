@@ -167,6 +167,9 @@
   "after10Seconds": {
     "message": "10秒後"
   },
+  "enabledSubscriptionIds": {
+    "message": "通知する新着情報"
+  },
 
   "saveOptions": {
     "message": "保存"

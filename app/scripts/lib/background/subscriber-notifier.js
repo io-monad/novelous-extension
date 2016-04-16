@@ -1,6 +1,7 @@
 import _ from "lodash";
 import AppVars from "../app/app-vars";
 import AppData from "../app/app-data";
+const logger = debug("notifier");
 
 const DEFAULTS = AppData.defaults.notificationSettings;
 
@@ -9,7 +10,7 @@ const DEFAULTS = AppData.defaults.notificationSettings;
  */
 export default class SubscriberNotifier {
   constructor(subscriber, options) {
-    this.options = _.extend({}, DEFAULTS, options);
+    this.options = _.defaultsDeep({}, options, DEFAULTS);
     this.subscriber = subscriber;
     this.notifiedItemIds = {};
     this.clickHandlers = {};
@@ -30,13 +31,29 @@ export default class SubscriberNotifier {
     return this.options.autoCloseSeconds;
   }
 
+  isEnabledSubscription(sub) {
+    const enabled = this.options.enabledSubscriptionIds[sub.id];
+    if (_.isUndefined(enabled)) return true;  // Enabled by default
+    return !!enabled;
+  }
+
   notifyItem(subscription, item) {
-    if (!this.enabled || this.notifiedItemIds[item.id]) {
+    if (!this.enabled) {
+      logger("Skipped: Both alert and sound disabled", item);
+      return Promise.resolve(false);
+    }
+    if (!this.isEnabledSubscription(subscription)) {
+      logger(`Skipped: Subscription ${subscription.id} disabled`, item);
+      return Promise.resolve(false);
+    }
+    if (this.notifiedItemIds[item.id]) {
+      logger("Skipped: Already notified", item);
       return Promise.resolve(false);
     }
     this.notifiedItemIds[item.id] = true;
 
     return new Promise(resolve => {
+      logger("Notifying item", item);
       if (this.soundEnabled && this.sound) {
         this.sound.play();
       }
@@ -95,6 +112,7 @@ export default class SubscriberNotifier {
     const subId = subscription.id;
     const itemId = item.id;
     this.clickHandlers[notificationId] = () => {
+      logger("Notification clicked", item);
       this._openPage(itemUrl);
       this._markItemAsRead(subId, itemId);
     };

@@ -49,6 +49,7 @@ export default class BackgroundController {
     this.appData.on("update", this._handleAppDataUpdate.bind(this));
 
     this._setupSubscriber();
+    this._setupNotifier();
     this._setupUpdateTimer();
   }
 
@@ -61,8 +62,13 @@ export default class BackgroundController {
       this.appData.save();
     });
     this.badge.setCount(this.subscriber.getUnreadItemsCount());
-    this.notifier = new SubscriberNotifier(this.subscriber);
     logger("Initialized Subscriber", this.subscriber);
+  }
+
+  _setupNotifier() {
+    this.notifier = new SubscriberNotifier(this.subscriber,
+      this.appData.notificationSettings);
+    logger("Initialized Notifier", this.notifier);
   }
 
   _setupUpdateTimer() {

@@ -19,6 +19,7 @@ export default class ItemsSubscription extends Subscription {
   constructor(data = {}) {
     super(data);
     this._readItemIds = new Set(this.data.readItemIds || []);
+    this._lastFoundItems = [];
   }
 
   toObject() {
@@ -30,7 +31,6 @@ export default class ItemsSubscription extends Subscription {
   _clearCache() {
     this._unreadItems = null;
     this._readItems = null;
-    this._lastFoundItems = null;
   }
 
   get feed() {
@@ -62,7 +62,7 @@ export default class ItemsSubscription extends Subscription {
     return this.readItems.length;
   }
   get lastFoundItems() {
-    return this._lastFoundItems || (this._lastFoundItems = []);
+    return this._lastFoundItems;
   }
   get lastFoundItemsCount() {
     return this.lastFoundItems.length;
@@ -70,13 +70,13 @@ export default class ItemsSubscription extends Subscription {
 
   update() {
     const oldFeed = this.feed;
+    this._lastFoundItems = [];
     return super.update().then(feed => {
       if (oldFeed) {
         this._lastFoundItems = _.differenceBy(this.items, oldFeed.items, "id");
       } else {
         // Clear all unread items on first fetch
         this.clearUnreadItems();
-        this._lastFoundItems = [];
       }
       return feed;
     });

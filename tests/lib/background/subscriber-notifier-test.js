@@ -74,6 +74,17 @@ test.serial("#notifyItem ignores notified item", t => {
   });
 });
 
+test.serial("#notifyItem ignores disabled subscription", t => {
+  const { subscription, notifier } = t.context;
+  const item = subscription.items[0];
+  notifier.options.enabledSubscriptionIds[subscription.id] = false;
+
+  return notifier.notifyItem(subscription, item).then(notified => {
+    t.false(notified);
+    t.false(chrome.notifications.create.calledOnce);
+  });
+});
+
 test.serial("#notifyItem respects alertEnabled setting", t => {
   const { sound, subscription, notifier } = t.context;
 

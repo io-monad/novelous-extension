@@ -110,4 +110,10 @@ module.exports = {
     return translated || fallback;
   },
 
+  translateMessage(message) {
+    return _.toString(message).replace(/__MSG_(\w+)__/g, (m, key) => {
+      return chrome.i18n.getMessage(key);
+    });
+  },
+
 };
