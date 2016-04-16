@@ -23,8 +23,8 @@ export default class KakuyomuAPI {
     if (!(this.options.client instanceof SiteClient)) {
       this.options.client = new SiteClient(_.extend({
         sessionCookies: ["dlsc"],
-        loginFormUrlTester: (url) => _.startsWith(url, KakuyomuURL.getLoginFormURL()),
-        loginRequiredUrlTester: (url) => _.startsWith(url, KakuyomuURL.getMyTopURL()),
+        loginFormUrlTester: (url) => KakuyomuURL.isLoginFormURL(url),
+        loginRequiredUrlTester: (url) => KakuyomuURL.isLoginRequiredURL(url),
       }, this.options.client));
     }
     this._api = {};

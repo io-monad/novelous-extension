@@ -1,4 +1,5 @@
 import url from "url";
+import _ from "lodash";
 
 const BASE_URL = "http://syosetu.com";
 const SSL_BASE_URL = "https://ssl.syosetu.com";
@@ -28,6 +29,13 @@ export default class NarouURL {
 
   static resolve(path) {
     return url.resolve(this.base, path);
+  }
+
+  static isLoginFormURL(testURL) {
+    return _.startsWith(testURL, this.getLoginFormURL());
+  }
+  static isLoginRequiredURL(testURL) {
+    return _.startsWith(testURL, this.getBaseURL()) && testURL !== this.getTopURL();
   }
 
   static getBaseURL() {

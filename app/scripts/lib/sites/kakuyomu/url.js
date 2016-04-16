@@ -1,4 +1,5 @@
 import url from "url";
+import _ from "lodash";
 
 const BASE_URL = "https://kakuyomu.jp";
 
@@ -14,6 +15,14 @@ export default class KakuyomuURL {
     return url.resolve(this.base, path);
   }
 
+  static isLoginFormURL(testURL) {
+    return _.startsWith(testURL, this.getLoginFormURL());
+  }
+  static isLoginRequiredURL(testURL) {
+    return _.startsWith(testURL, this.getMyTopURL()) ||
+      _.startsWith(testURL, this.getSettingsURL());
+  }
+
   static getBaseURL() {
     return this.base;
   }
@@ -25,6 +34,9 @@ export default class KakuyomuURL {
   }
   static getLoginFormURL() {
     return `${this.base}/login`;
+  }
+  static getSettingsURL() {
+    return `${this.base}/settings`;
   }
 
   static getNewEpisodeFormURL(novelId) {

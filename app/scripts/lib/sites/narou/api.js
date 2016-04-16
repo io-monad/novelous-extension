@@ -26,8 +26,8 @@ export default class NarouAPI {
     if (!(this.options.client instanceof SiteClient)) {
       this.options.client = new SiteClient(_.extend({
         sessionCookies: ["autologin", "userl"],
-        loginFormUrlTester: (url) => _.startsWith(url, NarouURL.getLoginFormURL()),
-        loginRequiredUrlTester: (url) => _.startsWith(url, NarouURL.getBaseURL()),
+        loginFormUrlTester: (url) => NarouURL.isLoginFormURL(url),
+        loginRequiredUrlTester: (url) => NarouURL.isLoginRequiredURL(url),
       }, this.options.client));
     }
     this._api = {};
