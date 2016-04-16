@@ -7,4 +7,6 @@ export default {
   },
   logoUrl: "/images/logo.png",
   notificationSoundUrl: "/sounds/notification.mp3",
+  twitterUrl: "https://twitter.com/io_monad",
+  githubUrl: "https://github.com/io-monad/novelous-extension",
 };

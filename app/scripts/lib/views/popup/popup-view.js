@@ -2,7 +2,7 @@ import React, { PropTypes } from "react";
 import Subscriber from "../../subscriptions/subscriber";
 import ItemsSubscriptionFlatItems from "../subscriptions/items-subscription-flat-items";
 import ItemsSubscriptionCategories from "../subscriptions/items-subscription-categories";
-import BrandLink from "./brand-link";
+import BrandLink from "../common/brand-link";
 import ViewModeSwitch from "./view-mode-switch";
 import OptionButton from "./option-button";
 import Dashboard from "./dashboard";
