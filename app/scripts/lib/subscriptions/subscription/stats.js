@@ -51,6 +51,7 @@ export default class StatsSubscription extends Subscription {
           logs[item.id] = this._updateStatsLogs(logs[item.id], item.stats);
         }
       });
+      this.data.lastUpdatedAt = _.now(); // Always update timestamp
       return feed;
     });
   }
