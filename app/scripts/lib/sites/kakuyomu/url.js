@@ -60,4 +60,8 @@ export default class KakuyomuURL {
     const encodedId = encodeURIComponent(userId);
     return `${this.base}/users/${encodedId}/works`;
   }
+  static getUserNewsURL(userId) {
+    const encodedId = encodeURIComponent(userId);
+    return `${this.base}/users/${encodedId}/news`;
+  }
 }

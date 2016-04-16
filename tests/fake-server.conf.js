@@ -12,6 +12,10 @@ export default {
     "kakuyomu/review-list-empty.html",
   "https://kakuyomu.jp/users/kadokawabooks/works":
     "kakuyomu/user-novel-list.html",
+  "https://kakuyomu.jp/users/io-monad/news":
+    "kakuyomu/user-news-list.html",
+  "https://kakuyomu.jp/settings":
+    "kakuyomu/settings.html",
 
   "http://ncode.syosetu.com/novelview/infotop/ncode/n5191dd/":
     "narou/novel.html",

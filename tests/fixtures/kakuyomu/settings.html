@@ -1,0 +1,447 @@
+<!-- Original: https://kakuyomu.jp/settings -->
+
+
+
+<!DOCTYPE html>
+<html lang="ja" data-route="public:settings" data-is-guest="0">
+<head>
+<meta charset="utf-8">
+
+
+<title>アカウント設定 - カクヨム</title>
+<link rel="stylesheet" href="https://cdn-static.kakuyomu.jp/css/kakuyomu.css?iAFCTpucYJYg" />
+<meta name="description" content="カクヨムは、KADOKAWA × はてな がおくる「書ける、読める、伝えられる」新しい小説投稿サイトです。人気タイトルの二次創作小説も楽しめます。" />
+<meta name="keywords" content="カクヨム,kakuyomu,kaku-yomu,KADOKAWA,はてな,小説,ライトノベル,投稿,二次創作,かくよむ,書く読む" />
+<link rel="icon" sizes="256x256" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/app-256.png?eAT04G0Rt23A" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-180.png?jD1Ujts_O5bh" />
+<link rel="apple-touch-icon" sizes="152x152" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-152.png?tcQNUOKPRkaP" />
+<link rel="apple-touch-icon" sizes="120x120" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-120.png?mh0uoEa8gNOP" />
+<link rel="apple-touch-icon" sizes="76x76" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-76.png?erVa27mMO7Yf" />
+<link rel="apple-touch-icon" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/ios-60.png?rlrrWzJp_nxx" />
+<link rel="shortcut icon" href="https://cdn-static.kakuyomu.jp/images/brand/favicons/favicon.ico?XLwj7_gTNs6l" />
+<link rel="manifest" href="/manifest.json" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<!--[if lt IE 9]>
+<script>
+  (function (elements) {
+    for (var i = 0, l = elements.length; i < l; ++i)
+      document.createElement(elements[i]);
+  })('abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video'.split(/\s+/));
+</script>
+<![endif]-->
+
+</head>
+<body id="page-settings" class="wrapper isPC">
+<script>
+ dataLayer = [{
+   'visitorType': 'user',
+   'accessedFrom': 'Web'
+ }];
+</script>
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-5CGN6D"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5CGN6D');</script>
+<!-- End Google Tag Manager -->
+
+
+
+<div id="globalHeader-sp">
+  <p id="globalHeader-sp-button"><label for="globalHeader-toggleButton"><i class="icon-menu"></i></label></p>
+  <p id="globalHeader-sp-logo"><a href="/">
+    <img src="https://cdn-static.kakuyomu.jp/images/brand/kakuyomu-logo.png?TdK0yPPPxQpL" alt="カクヨム" />
+  </a></p>
+</div>
+<input type="checkbox" id="globalHeader-toggleButton" />
+<header id="globalHeader" class="test-header isSignedInUser">
+  <div id="globalHeader-inner" class="float-parent">
+    <div class="float-left float-parent">
+      <h1 id="globalHeader-logo" class="float-left"><a href="/">
+        <img src="https://cdn-static.kakuyomu.jp/images/brand/kakuyomu-logo.png?TdK0yPPPxQpL" alt="カクヨム" />
+      </a></h1>
+      <p id="globalHeader-sp-screenName"><a href="/users/io-monad"><span><span id="globalHeader-sp-screenName-label">ログイン中</span><span id="globalHeader-sp-screenName-name">@io-monad</span></span></a></p>
+      <nav class="float-left">
+        <ul id="globalHeader-globalNav"><li id="globalHeader-home"><a href="/"><span>ホーム</span></a></li><li id="globalHeader-antenna"><a href="/my/antenna/works"><span>マイページ</span></a></li><li><a href="/trends"><span>小説を探す</span></a></li>
+        </ul>
+      </nav>
+    </div>
+    <nav class="float-right">
+      <ul id="globalHeader-subNav">
+          <li id="globalHeader-writeWork" tabindex="0" onclick=""><a href="/my/works/new"><span>新しい小説を作成</span></a></li><li id="globalHeader-my"><a href="/my"><span>小説管理</span></a></li><li class="ui-contextMenu" tabindex="0" onclick="">
+            <a id="globalHeader-profileLabel" href="/users/io-monad"><span>@io-monad <i class="icon-bottom"></i></span></a>
+            <div class="ui-contextMenu-content ui-contextMenu-content-isRight">
+              <ul>
+                <li id="globalHeader-my-inContextMenu"><a href="/my">小説管理</a></li>
+                <li><a href="/users/io-monad">プロフィール</a></li>
+                <li class="contextMenu-border"><a href="/users/io-monad/works">公開済小説一覧</a></li>
+                <li class="contextMenu-border" id="globalHeader-writeWork-inContextMenu"><a href="/my/works/new">新しい小説を作成</a></li>
+                <li><a href="/settings" class="isActive">アカウント設定</a></li>
+                <li class="contextMenu-border"><a href="/site_feedback?location=%2Fsettings">要望を送る</a></li>
+                <li><form action="/logout" method="POST" id="globalHeader-subNav-logoutForm">
+                  <input type="hidden" name="csrf_token" value="xxxxxxxxx">
+                  <button type="submit" class="ui-button-silent"><i class="icon-logout"></i> ログアウト</button>
+                </form></li>
+              </ul>
+            </div>
+          </li><li id="globalHeader-info" class="ui-contextMenu" tabindex="0" onclick="">
+          <span id="globalHeader-infoLabel"><i class="icon-ellipsis"></i></span>
+          <div class="ui-contextMenu-content ui-contextMenu-content-isRight">
+            <ul>
+              <li><a href="https://kakuyomu.jp/help/">ヘルプ</a></li>
+              <li class="contextMenu-border"><a href="https://kakuyomu.jp/info/">ブログ</a></li>
+              <li><a href="/legal/tos">利用規約</a></li>
+              <li><a href="/legal/guideline">ガイドライン</a></li>
+              <li class="contextMenu-border"><a href="http://www.kadokawa.co.jp/privacy/" target="_blank">プライバシーポリシー</a></li>
+              <li><a href="/violation_report?url=https%3A%2F%2Fkakuyomu.jp%2Fsettings">このページを通報</a></li>
+            </ul>
+          </div>
+        </li></ul>
+    </nav>
+  </div>
+</header>
+
+
+
+
+<div id="container">
+  <div id="container-inner">
+
+
+<form action="/settings" method="POST">
+  <div id="accountInfo-header">
+    <h2 class="heading-level2"><span>プロフィール・</span><span>アカウント設定</span></h2>
+    <p><strong>入出もなど</strong> @io-monad</p>
+  </div>
+
+  <section id="accountInfo-profile" class="widget-column widget-column-clear-800">
+    <div class="widget-column-left widget-column-1">
+      <h3 class="heading-level4"><span>プロフィール</span></h3>
+    </div>
+    <div class="widget-column-right widget-column-remainder-1">
+        <div class="ui-settingList" id="accountInfo-screenName">
+          <div class="ui-settingList-heading">
+            <h4 class="ui-settingList-label">ユーザーID</h4>
+          </div>
+          <div class="ui-settingList-content">
+            <p id="accountInfo-screenName-currentValue">@io-monad</p>
+            <p class="ui-input-description">ユーザーIDは変更できません。</p>
+          </div>
+        </div>
+        <div class="ui-settingList">
+          <div class="ui-settingList-heading">
+            <h4 class="ui-settingList-label">ペンネーム</h4>
+          </div>
+          <div class="ui-settingList-content">
+            <p class="ui-input-description">20文字まで。日本語が使えます。</p>
+            <p><input name="pen_name" type="text" value="入出もなど" placeholder="入出もなど" /></p>
+          </div>
+        </div>
+        <div class="ui-settingList">
+          <div class="ui-settingList-heading">
+            <h4 class="ui-settingList-label">公開プロフィール</h4>
+          </div>
+          <div class="ui-settingList-content">
+            <p class="ui-input-description">ユーザーページに任意のプロフィールを掲載することができます。1万文字まで設定できます。</p>
+            <p><textarea name="profile_text">
+入出は「いりで」と読みます。
+趣味は小説とプログラミングと魔法です。
+皆様に愛される小説作りを心がけております。
+
+Twitter: @io_monad
+https://twitter.com/io_monad
+
+Blog: もなでぃっく
+http://io-monad.hatenablog.com/
+
+GitHub: @io-monad
+https://github.com/io-monad</textarea></p>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section id="accountInfo-private" class="widget-column widget-column-clear-800">
+    <div class="widget-column-left widget-column-1">
+      <h3 class="heading-level4"><i class="icon-key" title="非公開"></i> 非公開情報</h3>
+    </div>
+    <div class="widget-column-right widget-column-remainder-1">
+      <p id="accountInfo-private-description">一般には公開されません。各編集レーベル担当者が作家スカウト等の必要に応じて閲覧する場合があります。</p>
+      <div class="ui-settingList" id="accountInfo-private-sex">
+        <div class="ui-settingList-heading">
+          <h4 class="ui-settingList-label">性別</h4>
+        </div>
+        <div class="ui-settingList-content">
+          <p>
+            <span class="ui-radiobutton">
+              <input type="radio" name="sex" id="input-sex-male" value="male" />
+              <span class="ui-radiobutton-alternate"></span>
+            </span><label class="ui-radiobutton-label" for="input-sex-male">男性</label>
+            <span class="ui-radiobutton">
+              <input type="radio" name="sex" id="input-sex-female" value="female" />
+              <span class="ui-radiobutton-alternate"></span>
+            </span><label class="ui-radiobutton-label" for="input-sex-female">女性</label>
+          </p>
+        </div>
+      </div>
+      <div class="ui-settingList">
+        <div class="ui-settingList-heading">
+          <h4 class="ui-settingList-label">生年月日</h4>
+        </div>
+        <div class="ui-settingList-content">
+          <p>
+            <span class="ui-select">
+              <select name="birthday-year" aria-label="年">
+                <option value="">年</option>
+                <option value="1910" >1910年</option>
+                <option value="1911" >1911年</option>
+                <option value="1912" >1912年</option>
+                <option value="1913" >1913年</option>
+                <option value="1914" >1914年</option>
+                <option value="1915" >1915年</option>
+                <option value="1916" >1916年</option>
+                <option value="1917" >1917年</option>
+                <option value="1918" >1918年</option>
+                <option value="1919" >1919年</option>
+                <option value="1920" >1920年</option>
+                <option value="1921" >1921年</option>
+                <option value="1922" >1922年</option>
+                <option value="1923" >1923年</option>
+                <option value="1924" >1924年</option>
+                <option value="1925" >1925年</option>
+                <option value="1926" >1926年</option>
+                <option value="1927" >1927年</option>
+                <option value="1928" >1928年</option>
+                <option value="1929" >1929年</option>
+                <option value="1930" >1930年</option>
+                <option value="1931" >1931年</option>
+                <option value="1932" >1932年</option>
+                <option value="1933" >1933年</option>
+                <option value="1934" >1934年</option>
+                <option value="1935" >1935年</option>
+                <option value="1936" >1936年</option>
+                <option value="1937" >1937年</option>
+                <option value="1938" >1938年</option>
+                <option value="1939" >1939年</option>
+                <option value="1940" >1940年</option>
+                <option value="1941" >1941年</option>
+                <option value="1942" >1942年</option>
+                <option value="1943" >1943年</option>
+                <option value="1944" >1944年</option>
+                <option value="1945" >1945年</option>
+                <option value="1946" >1946年</option>
+                <option value="1947" >1947年</option>
+                <option value="1948" >1948年</option>
+                <option value="1949" >1949年</option>
+                <option value="1950" >1950年</option>
+                <option value="1951" >1951年</option>
+                <option value="1952" >1952年</option>
+                <option value="1953" >1953年</option>
+                <option value="1954" >1954年</option>
+                <option value="1955" >1955年</option>
+                <option value="1956" >1956年</option>
+                <option value="1957" >1957年</option>
+                <option value="1958" >1958年</option>
+                <option value="1959" >1959年</option>
+                <option value="1960" >1960年</option>
+                <option value="1961" >1961年</option>
+                <option value="1962" >1962年</option>
+                <option value="1963" >1963年</option>
+                <option value="1964" >1964年</option>
+                <option value="1965" >1965年</option>
+                <option value="1966" >1966年</option>
+                <option value="1967" >1967年</option>
+                <option value="1968" >1968年</option>
+                <option value="1969" >1969年</option>
+                <option value="1970" >1970年</option>
+                <option value="1971" >1971年</option>
+                <option value="1972" >1972年</option>
+                <option value="1973" >1973年</option>
+                <option value="1974" >1974年</option>
+                <option value="1975" >1975年</option>
+                <option value="1976" >1976年</option>
+                <option value="1977" >1977年</option>
+                <option value="1978" >1978年</option>
+                <option value="1979" >1979年</option>
+                <option value="1980" >1980年</option>
+                <option value="1981" >1981年</option>
+                <option value="1982" >1982年</option>
+                <option value="1983" >1983年</option>
+                <option value="1984" >1984年</option>
+                <option value="1985" >1985年</option>
+                <option value="1986" >1986年</option>
+                <option value="1987" >1987年</option>
+                <option value="1988" >1988年</option>
+                <option value="1989" >1989年</option>
+                <option value="1990" >1990年</option>
+                <option value="1991" >1991年</option>
+                <option value="1992" >1992年</option>
+                <option value="1993" >1993年</option>
+                <option value="1994" >1994年</option>
+                <option value="1995" >1995年</option>
+                <option value="1996" >1996年</option>
+                <option value="1997" >1997年</option>
+                <option value="1998" >1998年</option>
+                <option value="1999" >1999年</option>
+                <option value="2000" >2000年</option>
+                <option value="2001" >2001年</option>
+                <option value="2002" >2002年</option>
+                <option value="2003" >2003年</option>
+                <option value="2004" >2004年</option>
+                <option value="2005" >2005年</option>
+                <option value="2006" >2006年</option>
+                <option value="2007" >2007年</option>
+                <option value="2008" >2008年</option>
+                <option value="2009" >2009年</option>
+                <option value="2010" >2010年</option>
+                <option value="2011" >2011年</option>
+                <option value="2012" >2012年</option>
+                <option value="2013" >2013年</option>
+                <option value="2014" >2014年</option>
+                <option value="2015" >2015年</option>
+                <option value="2016" >2016年</option>
+              </select>
+            </span>
+            <span class="ui-select">
+              <select name="birthday-month" aria-label="月">
+                <option value="">月</option>
+                <option value="1" >1月</option>
+                <option value="2" >2月</option>
+                <option value="3" >3月</option>
+                <option value="4" >4月</option>
+                <option value="5" >5月</option>
+                <option value="6" >6月</option>
+                <option value="7" >7月</option>
+                <option value="8" >8月</option>
+                <option value="9" >9月</option>
+                <option value="10" >10月</option>
+                <option value="11" >11月</option>
+                <option value="12" >12月</option>
+              </select>
+            </span>
+            <span class="ui-select">
+              <select name="birthday-day" aria-label="日">
+                <option value="">日</option>
+                <option value="1" >1日</option>
+                <option value="2" >2日</option>
+                <option value="3" >3日</option>
+                <option value="4" >4日</option>
+                <option value="5" >5日</option>
+                <option value="6" >6日</option>
+                <option value="7" >7日</option>
+                <option value="8" >8日</option>
+                <option value="9" >9日</option>
+                <option value="10" >10日</option>
+                <option value="11" >11日</option>
+                <option value="12" >12日</option>
+                <option value="13" >13日</option>
+                <option value="14" >14日</option>
+                <option value="15" >15日</option>
+                <option value="16" >16日</option>
+                <option value="17" >17日</option>
+                <option value="18" >18日</option>
+                <option value="19" >19日</option>
+                <option value="20" >20日</option>
+                <option value="21" >21日</option>
+                <option value="22" >22日</option>
+                <option value="23" >23日</option>
+                <option value="24" >24日</option>
+                <option value="25" >25日</option>
+                <option value="26" >26日</option>
+                <option value="27" >27日</option>
+                <option value="28" >28日</option>
+                <option value="29" >29日</option>
+                <option value="30" >30日</option>
+                <option value="31" >31日</option>
+              </select>
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="ui-settingList" id="accountInfo-mailAddress">
+        <div class="ui-settingList-heading">
+          <h4 class="ui-settingList-label">メールアドレス</h4>
+        </div>
+        <div class="ui-settingList-content">
+          <p id="accountInfo-mailAddress-currentValue">xxxxxx</span>
+          <p><a href="/settings/email_change">メールアドレスを変更する <i class="icon-triangle-right"></i></a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="accountInfo-preference" class="widget-column widget-column-clear-800">
+    <div class="widget-column-left widget-column-1">
+      <h3 class="heading-level4">設定</h3>
+    </div>
+    <div class="widget-column-right widget-column-remainder-1">
+      <div class="ui-settingList">
+        <div class="ui-settingList-heading">
+          <h4 class="ui-settingList-label">近況ノートコメント</h4>
+        </div>
+        <div class="ui-settingList-content">
+          <p class="ui-input-description">コメントを許可するかどうかを選択できます。近況ノートの全記事に反映されます。</p>
+          <p>
+            <span class="ui-radiobutton">
+              <input type="radio" name="user_news-is_comment_accepted" id="input-newsComments-enabled" value="1" checked />
+              <span class="ui-radiobutton-alternate"></span>
+            </span><label class="ui-radiobutton-label" for="input-newsComments-enabled">ログインユーザーのみ許可</label>
+            <span class="ui-radiobutton-info">ログインしているカクヨムユーザーの全員がコメントできます。</span>
+          </p>
+          <p>
+            <span class="ui-radiobutton">
+              <input type="radio" name="user_news-is_comment_accepted" id="input-newsComments-disabled" value="0" />
+              <span class="ui-radiobutton-alternate"></span>
+            </span><label class="ui-radiobutton-label" for="input-newsComments-disabled">許可しない</label>
+            <span class="ui-radiobutton-info">コメントを許可しません。過去に投稿されたコメントは非表示になります。</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="accountInfo-footer">
+    <p>
+      <input type="hidden" name="csrf_token" value="xxxxxxxx" />
+      <button type="submit" class="ui-button-blue">変更を保存</button>
+    </p>
+  </div>
+
+  <section id="accountInfo-account" class="widget-column widget-column-clear-800">
+    <div class="widget-column-left widget-column-1">
+      <h3 class="heading-level4">アカウント</h3>
+    </div>
+    <div class="widget-column-right widget-column-remainder-1">
+      <p><a href="/password_reset">パスワードを変更する <i class="icon-next-large"></i></a></p>
+      <p id="retire"><a href="/settings/retire">退会する <i class="icon-next-large"></i></a></p>
+    </div>
+  </section>
+</form>
+
+  </div>
+</div>
+
+
+<script src="https://cdn-static.kakuyomu.jp/js/public.js?Nf9j2KMkUepK"></script>
+
+<script type="text/javascript">
+ (function () {
+     var tagjs = document.createElement("script");
+     var s = document.getElementsByTagName("script")[0];
+     tagjs.async = true;
+     tagjs.src = "//s.yjtag.jp/tag.js#site=nrWs82K";
+     s.parentNode.insertBefore(tagjs, s);
+ }());
+</script>
+<noscript>
+  <iframe src="//b.yjtag.jp/iframe?c=nrWs82K" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+</noscript>
+
+
+
+</body>
+</html>

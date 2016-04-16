@@ -40,6 +40,9 @@
   "kakuyomuReviewsFeed": {
     "message": "小説レビュー"
   },
+  "kakuyomuNewsCommentsFeed": {
+    "message": "近況ノートコメント"
+  },
 
   "narouCommentTitle": {
     "message": "$authorName$さんの感想",
@@ -51,6 +54,12 @@
     "message": "$authorName$さんのコメント",
     "placeholders": {
       "authorName": { "content": "$1" }
+    }
+  },
+  "kakuyomuNewsCommentTitle": {
+    "message": "$number$番目のコメント",
+    "placeholders": {
+      "number": { "content": "$1" }
     }
   },
 

@@ -17,5 +17,6 @@ export default {
   kakuyomu: {
     "/novels": () => require("./fetcher/kakuyomu-novels").default,
     "/reviews": () => require("./fetcher/kakuyomu-reviews").default,
+    "/news-comments": () => require("./fetcher/kakuyomu-news-comments").default,
   },
 };

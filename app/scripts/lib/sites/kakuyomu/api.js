@@ -6,6 +6,8 @@ const APIClasses = {
   NovelFetcher: () => require("./api/novel-fetcher").default,
   ReviewLister: () => require("./api/review-lister").default,
   UserNovelLister: () => require("./api/user-novel-lister").default,
+  UserNewsLister: () => require("./api/user-news-lister").default,
+  MyUserFetcher: () => require("./api/my-user-fetcher").default,
   MyNovelLister: () => require("./api/my-novel-lister").default,
 };
 
@@ -51,6 +53,14 @@ export default class KakuyomuAPI {
 
   listNovelsByUserId(userId) {
     return this._getAPI("UserNovelLister").listNovelsOfUser(userId);
+  }
+
+  listNewsByUserId(userId) {
+    return this._getAPI("UserNewsLister").listNewsOfUser(userId);
+  }
+
+  getMyUser() {
+    return this._getAPI("MyUserFetcher").fetchUser();
   }
 
   listMyNovelIds() {

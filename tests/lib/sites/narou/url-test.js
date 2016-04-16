@@ -6,6 +6,16 @@ test("#resolve", t => {
   t.is(resolved, "http://syosetu.com/abc");
 });
 
+test("#isLoginFormURL", t => {
+  t.true(NarouURL.isLoginFormURL(NarouURL.getLoginFormURL()));
+  t.false(NarouURL.isLoginFormURL(NarouURL.getTopURL()));
+});
+
+test("#isLoginRequiredURL", t => {
+  t.true(NarouURL.isLoginRequiredURL(NarouURL.getMyNovelsURL()));
+  t.false(NarouURL.isLoginRequiredURL(NarouURL.getTopURL()));
+});
+
 [
   ["getBaseURL"],
   ["getTopURL"],

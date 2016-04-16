@@ -40,7 +40,7 @@ export default class KakuyomuMyNovelLister {
   /**
    * Get IDs of my own novels.
    *
-   * @return {Promise.<Array<string>} Novel IDs.
+   * @return {Promise.<string[]>} Novel IDs.
    */
   listNovelIds() {
     return this.client.fetch(KakuyomuURL.getMyTopURL())
@@ -48,14 +48,7 @@ export default class KakuyomuMyNovelLister {
   }
 
   /**
-   * @return {Promise.<Array<KakuyomuMyNovel|KakuyomuMyDetailedNovel>}
-   *     If `fetchDetails` is set to `true`, returns a Promise of an array of
-   *     `KakuyomuMyDetailedNovel` for public novels and
-   *     `KakuyomuMyNovel` for private novels.
-   *     It fetches details for each novel from Kakuyomu server.
-   *
-   *     If `fetchDetails` is set to `false`, returns a Promise of an array of
-   *     `KakuyomuMyNovel` only. It never fetches details from the server.
+   * @return {Promise.<KakuyomuMyNovel[]>} List of novels.
    */
   listNovels() {
     return this.client.fetch(KakuyomuURL.getMyTopURL())

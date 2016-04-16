@@ -7,6 +7,7 @@ const TypeToIcon = {
   comment: "comment-o",
   review: "pencil",
   blog: "file-text-o",
+  news: "file-text-o",
   other: "asterisk",
 };
 

@@ -28,6 +28,14 @@ const apiTests = {
     call: (api) => api.listNovelsByUserId("test"),
     expect: ["UserNovelLister", "listNovelsOfUser", "test"],
   },
+  "#listNewsByUserId": {
+    call: (api) => api.listNewsByUserId("test"),
+    expect: ["UserNewsLister", "listNewsOfUser", "test"],
+  },
+  "#getMyUser": {
+    call: (api) => api.getMyUser(),
+    expect: ["MyUserFetcher", "fetchUser"],
+  },
   "#listMyNovelIds": {
     call: (api) => api.listMyNovelIds(),
     expect: ["MyNovelLister", "listNovelIds"],

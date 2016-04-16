@@ -74,6 +74,11 @@
               "title": "__MSG_kakuyomu__: __MSG_kakuyomuReviewsFeed__",
               "type": "boolean",
               "default": true
+            },
+            "novelous-feed://kakuyomu/news-comments": {
+              "title": "__MSG_kakuyomu__: __MSG_kakuyomuNewsCommentsFeed__",
+              "type": "boolean",
+              "default": true
             }
           }
         }

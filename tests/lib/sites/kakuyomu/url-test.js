@@ -6,15 +6,28 @@ test("#resolve", t => {
   t.is(resolved, "https://kakuyomu.jp/abc");
 });
 
+test("#isLoginFormURL", t => {
+  t.true(KakuyomuURL.isLoginFormURL(KakuyomuURL.getLoginFormURL()));
+  t.false(KakuyomuURL.isLoginFormURL(KakuyomuURL.getTopURL()));
+});
+
+test("#isLoginRequiredURL", t => {
+  t.true(KakuyomuURL.isLoginRequiredURL(KakuyomuURL.getMyTopURL()));
+  t.true(KakuyomuURL.isLoginRequiredURL(KakuyomuURL.getSettingsURL()));
+  t.false(KakuyomuURL.isLoginRequiredURL(KakuyomuURL.getTopURL()));
+});
+
 [
   ["getBaseURL"],
   ["getTopURL"],
   ["getMyTopURL"],
   ["getLoginFormURL"],
+  ["getSettingsURL"],
   ["getNewEpisodeFormURL", "12345"],
   ["getNovelURL", "1234"],
   ["getNovelReviewsURL", "12345"],
   ["getUserNovelsURL", "12345"],
+  ["getUserNewsURL", "12345"],
 ]
 .forEach(([method, ...args]) => {
   test(`#${method}`, t => {
