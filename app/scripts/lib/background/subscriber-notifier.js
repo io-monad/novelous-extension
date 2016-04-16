@@ -62,8 +62,10 @@ export default class SubscriberNotifier {
         const options = {
           type: "basic",
           iconUrl: AppVars.iconUrl[128],
-          title: subscription.title,
-          message: item.title,
+          title: _.compact([subscription.siteName, subscription.title]).join(": "),
+          message: item.title +
+            (item.authorName ? `\n${item.authorName}` : "") +
+            (item.sourceTitle ? `\n${item.sourceTitle}` : ""),
           contextMessage: item.body || undefined,
           isClickable: true,
         };

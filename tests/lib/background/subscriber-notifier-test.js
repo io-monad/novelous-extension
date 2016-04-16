@@ -49,8 +49,8 @@ test.serial("#notifyItem creates notification", t => {
     t.deepEqual(options, {
       type: "basic",
       iconUrl: AppVars.iconUrl[128],
-      title: subscription.title,
-      message: item.title,
+      title: `${subscription.siteName}: ${subscription.title}`,
+      message: `${item.title}\n${item.authorName}`,
       contextMessage: item.body,
       isClickable: true,
     });
