@@ -1,9 +1,9 @@
 import React, { PropTypes } from "react";
-import Chart from "chart.js";
 import { getLabelDisplay } from "./stat";
 
 export default class StatsChart extends React.Component {
   componentDidMount() {
+    const Chart = require("chart.js");
     const ctx = this.canvasElement.getContext("2d");
     this.chart = new Chart(ctx, {
       type: "line",
