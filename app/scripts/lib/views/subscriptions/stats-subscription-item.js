@@ -5,6 +5,7 @@ import classNames from "classnames";
 import StatsSubscription from "../../subscriptions/subscription/stats";
 import { Link, Icon, SiteIcon, Str, Time } from "../common";
 import StatsList from "./stats-list";
+import StatsChartList from "./stats-chart-list";
 
 const LINK_ORDERS = ["manage", "newEpisode"];
 const LINK_ICONS = {
@@ -14,11 +15,20 @@ const LINK_ICONS = {
 };
 
 export default class StatsSubscriptionItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { expanded: false };
+    this.handleExpand = this.handleExpand.bind(this);
+  }
   shouldComponentUpdate(nextProps, nextState) {
     return shallowCompare(this, nextProps, nextState);
   }
+  handleExpand() {
+    this.setState({ expanded: !this.state.expanded });
+  }
   render() {
     const { subscription, item } = this.props;
+    const { expanded } = this.state;
     const statsLog = subscription.statsLogs[item.id];
     const statsLinks = _.get(item, "links.stats");
 
@@ -33,8 +43,11 @@ export default class StatsSubscriptionItem extends React.Component {
       <article
         className={classNames({
           [cls]: true,
-          [`${cls}--collapsed`]: true,
+          [`${cls}--expandable`]: statsLog.timestamps.length > 1,
+          [`${cls}--collapsed`]: !expanded,
+          [`${cls}--expanded`]: expanded,
         })}
+        onClick={this.handleExpand}
       >
         <header className={`${cls}__header`}>
           <h1 className={`${cls}__title`}>
@@ -45,6 +58,11 @@ export default class StatsSubscriptionItem extends React.Component {
         </header>
         {statsLog &&
           <div className={`${cls}__body`}>
+            {expanded &&
+              <div className={`${cls}__chart`}>
+                <StatsChartList statsLog={statsLog} />
+              </div>
+            }
             <StatsList
               statsLog={statsLog}
               links={statsLinks}

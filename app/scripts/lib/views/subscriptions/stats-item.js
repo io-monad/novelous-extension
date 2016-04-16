@@ -1,23 +1,19 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
 import { Sparklines, SparklinesLine } from "react-sparklines";
-import { Link, Icon, Num } from "../common";
-import { translate } from "../../util/chrome-util";
+import { Link } from "../common";
+import { Stat, getLabelDisplay } from "./stat";
 
-const StatsItem = ({ label, link, icon, unit, values }) => {
+const StatsItem = ({ label, link, values }) => {
   return (
     <div
       className={`stats-item stats-item--stat-${_.kebabCase(label)}`}
-      data-tip={translate(`label-${label}`, _.startCase(label))}
+      data-tip={getLabelDisplay(label)}
       data-for="stats-tooltip"
     >
       <div className="stats-item__current">
         <Link href={link}>
-          <Icon name={icon} />
-          <span className="stats-item__value"><Num>{_.last(values)}</Num></span>
-          {unit &&
-            <span className="stats-item__unit">{translate(unit)}</span>
-          }
+          <Stat label={label} value={_.last(values)} />
         </Link>
       </div>
       {values.length > 1 &&
@@ -34,8 +30,6 @@ const StatsItem = ({ label, link, icon, unit, values }) => {
 StatsItem.propTypes = {
   label: PropTypes.string.isRequired,
   link: PropTypes.string,
-  icon: PropTypes.string.isRequired,
-  unit: PropTypes.string,
   timestamps: PropTypes.arrayOf(PropTypes.number).isRequired,
   values: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
