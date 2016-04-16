@@ -133,7 +133,7 @@ export default class AppData extends EventEmitter {
   }
 
   get subscriptionSettings() {
-    return this.data.subscriptionSettings;
+    return _.cloneDeep(this.data.subscriptionSettings);
   }
   set subscriptionSettings(settings) {
     // Fill missing keys with default values
@@ -143,7 +143,7 @@ export default class AppData extends EventEmitter {
   }
 
   get notificationSettings() {
-    return this.data.notificationSettings;
+    return _.cloneDeep(this.data.notificationSettings);
   }
   set notificationSettings(settings) {
     settings = _.defaults(settings, DEFAULTS.notificationSettings);
