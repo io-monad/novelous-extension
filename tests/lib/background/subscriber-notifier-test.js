@@ -119,34 +119,6 @@ test.serial("#notifyItem skips notification if both disabled", t => {
   });
 });
 
-test.serial("#notifyItem closes alert after autoCloseSeconds", t => {
-  const { subscription, notifier } = t.context;
-
-  const clock = sinonsb.useFakeTimers();
-  notifier.options.autoCloseSeconds = 5;
-
-  return notifier.notifyItem(subscription, subscription.items[0]).then(() => {
-    t.false(chrome.notifications.clear.called);
-
-    clock.tick(5000);
-    t.true(chrome.notifications.clear.calledOnce);
-  });
-});
-
-test.serial("#notifyItem doesn't close alert if autoCloseSeconds = 0", t => {
-  const { subscription, notifier } = t.context;
-
-  const clock = sinonsb.useFakeTimers();
-  notifier.options.autoCloseSeconds = 0;
-
-  return notifier.notifyItem(subscription, subscription.items[0]).then(() => {
-    t.false(chrome.notifications.clear.called);
-
-    clock.tick(30000);
-    t.false(chrome.notifications.clear.called);
-  });
-});
-
 test.serial("clicking notification opens page and marks it as read", t => {
   const { subscriber, subscription, notifier } = t.context;
   const item = subscription.items[0];

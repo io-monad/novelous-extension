@@ -31,19 +31,6 @@
           "type": "boolean",
           "default": true
         },
-        "autoCloseSeconds": {
-          "type": "number",
-          "minimum": 0,
-          "default": 0,
-          "enum": [0, 3, 5, 7, 10],
-          "enumNames": [
-            "__MSG_neverClose__",
-            "__MSG_after3Seconds__",
-            "__MSG_after5Seconds__",
-            "__MSG_after7Seconds__",
-            "__MSG_after10Seconds__"
-          ]
-        },
         "enabledSubscriptionIds": {
           "type": "object",
           "additionalProperties": {
@@ -95,7 +82,6 @@
       "ui:order": [
         "soundEnabled",
         "alertEnabled",
-        "autoCloseSeconds",
         "enabledSubscriptionIds"
       ]
     }

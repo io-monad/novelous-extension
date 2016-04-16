@@ -158,24 +158,6 @@
   "soundEnabled": {
     "message": "通知音を再生する"
   },
-  "autoCloseSeconds": {
-    "message": "デスクトップ通知を自動で閉じる秒数"
-  },
-  "neverClose": {
-    "message": "自動で閉じない"
-  },
-  "after3Seconds": {
-    "message": "3秒後"
-  },
-  "after5Seconds": {
-    "message": "5秒後"
-  },
-  "after7Seconds": {
-    "message": "7秒後"
-  },
-  "after10Seconds": {
-    "message": "10秒後"
-  },
   "enabledSubscriptionIds": {
     "message": "通知する新着情報"
   },

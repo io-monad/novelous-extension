@@ -27,9 +27,6 @@ export default class SubscriberNotifier {
   get enabled() {
     return this.alertEnabled || this.soundEnabled;
   }
-  get autoCloseSeconds() {
-    return this.options.autoCloseSeconds;
-  }
 
   isEnabledSubscription(sub) {
     const enabled = this.options.enabledSubscriptionIds[sub.id];
@@ -70,11 +67,6 @@ export default class SubscriberNotifier {
           isClickable: true,
         };
         chrome.notifications.create(notificationId, options, () => {
-          if (this.autoCloseSeconds > 0) {
-            setTimeout(() => {
-              chrome.notifications.clear(notificationId);
-            }, this.autoCloseSeconds * 1000);
-          }
           resolve(true);
         });
       } else {
