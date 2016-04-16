@@ -8,13 +8,58 @@
 
 :information_source: 「小説家になろう」は株式会社ヒナプロジェクトの登録商標です。
 
-:construction: Work In Progress!
-
 ## 機能
 
-まだ開発中です。
+### 自分の作品のブックマーク数などをチェック
 
-### 各小説サイトの新規投稿画面を開く
+![ブックマーク数などの統計情報を表示](resources/screenshots/screen1.png)
+
+自分の作品への評価やブックマーク数などを記録して表示します。
+
+#### 表示する項目
+
+- 小説家になろう
+    - 総合評価
+    - 評価ポイント
+    - ブックマーク数
+    - レビュー数
+- カクヨム
+    - もらった★の数
+    - フォロワー数
+
+### 感想やレビューなどをその場で確認
+
+![感想やレビューを時系列順に表示](resources/screenshots/screen2.png)
+
+![カテゴリ別に表示](resources/screenshots/screen3.png)
+
+自分の作品についた感想やレビューなどの内容を確認できます。（一部、本文がその場で読めないものもあります）
+
+#### 確認できる項目
+
+基本的に最新何件かのみの表示となります。
+
+- 小説家になろう
+    - 作品についた感想
+    - 作品についたレビュー
+    - 活動報告についたコメント
+    - 受信したメッセージ（本文は確認できません）
+- カクヨム
+    - 作品についたレビュー
+    - 近況ノートについたコメント（件数のチェックのみ・本文は確認できません）
+
+### 新着の感想やコメントなどを通知
+
+![新着をデスクトップ通知](resources/screenshots/screen4.png)
+
+自分の作品についた感想やレビューなどの新着を、音とメッセージでお知らせします。
+
+- お知らせする項目は確認できる項目と同様です。
+- 設定で種類ごとに通知の ON/OFF が設定できます。
+
+### (開発者向け) 各小説サイトの新規投稿画面を開く
+
+:wrench: こちらの機能は開発者に向けたものとなっています。
 
 以下のような JavaScript を localhost のページ上で実行すると、送信されたメッセージを元に各小説サイトの新規投稿画面に各情報を入力した状態で開きます。
 
@@ -61,16 +106,18 @@ chrome.runtime.sendMessage(
 );
 ```
 
-## ビルド方法
+## 開発情報
+
+### ビルド方法
 
     $ npm install
     $ npm run build
 
 ビルドされた拡張機能は `dist/chrome` 内に生成されます。Chrome の拡張機能設定画面で「パッケージ化されていない拡張機能を読み込む」から、`dist/chrome` を指定する事で読み込めます。
 
-## タスク
+### タスク
 
-### ビルド
+#### ビルド
 
 すべてビルドして `dist` ディレクトリ以下に出力します。
 
@@ -84,7 +131,7 @@ chrome.runtime.sendMessage(
 | `--vendor` | 他のブラウザ向けにビルドします (chrome, moz, opera)  デフォルト: chrome |
 | `--sourcemaps` | ソースマップを強制的に作成します. デフォルト: !production |
 
-### テスト
+#### テスト
 
 ユニットテストを実行します。
 
@@ -96,7 +143,7 @@ chrome.runtime.sendMessage(
 | `--verbose` | ログ出力を詳細にします |
 | `--serial` | テストの実行を並列的ではなく直列的に行います |
 
-### パック
+#### パック
 
 本番向けの zip ファイル (または xpi ファイル) を `packages` ディレクトリ内に生成します。
 
@@ -104,7 +151,7 @@ chrome.runtime.sendMessage(
 	$ npm run pack:moz      // For Firefox
 	$ npm run pack:opera    // For Opera
 
-### バージョンバンプ
+#### バージョンバンプ
 
 `manifest.json` と `package.json` にあるバージョンをバンプして、その変更を git リポジトリにコミットし、git のタグを作ります。
 
@@ -112,7 +159,7 @@ chrome.runtime.sendMessage(
     $ gulp feature    // => 0.X.0
     $ gulp release    // => X.0.0
 
-## Contributing
+### Contributing
 
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -120,6 +167,6 @@ chrome.runtime.sendMessage(
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-## License
+### License
 
 MIT (See [LICENSE.txt](LICENSE.txt))
