@@ -78,6 +78,9 @@
       "notificationSettings"
     ],
     "ui:rootFieldId": "options",
+    "updatePeriodMinutes": {
+      "ui:widget": "hidden"
+    },
     "notificationSettings": {
       "ui:order": [
         "soundEnabled",
