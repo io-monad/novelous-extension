@@ -1,15 +1,11 @@
 import url from "url";
 import _ from "lodash";
 
-const BASE_URL = "https://kakuyomu.jp";
-
 /**
  * Kakuyomu URL utility
  */
 export default class KakuyomuURL {
-  static get base() {
-    return BASE_URL;
-  }
+  static base = "https://kakuyomu.jp";
 
   static resolve(path) {
     return url.resolve(this.base, path);

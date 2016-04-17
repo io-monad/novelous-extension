@@ -3,21 +3,22 @@ import React, { PropTypes } from "react";
 import Sites from "../../sites";
 import { translate } from "../../util/chrome-util";
 
-const SiteIcon = ({ name }) => {
-  const site = Sites[name];
-  const displayName = site ? translate(site.name) : _.startCase(name);
-  return (
-    <img
-      src={site ? site.iconUrl : "/images/sites/other.png"}
-      title={displayName}
-      alt={displayName}
-      className="site-icon"
-    />
-  );
-};
+export default class SiteIcon extends React.Component {
+  static propTypes = {
+    name: PropTypes.string,
+  };
 
-SiteIcon.propTypes = {
-  name: PropTypes.string,
-};
-
-export default SiteIcon;
+  render() {
+    const { name } = this.props;
+    const site = Sites[name];
+    const displayName = site ? translate(site.name) : _.startCase(name);
+    return (
+      <img
+        src={site ? site.iconUrl : "/images/sites/other.png"}
+        title={displayName}
+        alt={displayName}
+        className="site-icon"
+      />
+    );
+  }
+}

@@ -6,6 +6,13 @@ import { Link, Icon, SiteIcon, Time, CollapsedText } from "../common";
 import TypeIcon from "./type-icon";
 
 export default class ItemsSubscriptionItem extends React.Component {
+  static propTypes = {
+    subscription: PropTypes.instanceOf(Subscription),
+    item: PropTypes.object.isRequired,
+    isUnread: PropTypes.bool,
+    isHidden: PropTypes.bool,
+  };
+
   constructor(props) {
     super(props);
     this.state = { expanded: this.props.isUnread };
@@ -88,10 +95,3 @@ export default class ItemsSubscriptionItem extends React.Component {
     );
   }
 }
-
-ItemsSubscriptionItem.propTypes = {
-  subscription: PropTypes.instanceOf(Subscription),
-  item: PropTypes.object.isRequired,
-  isUnread: PropTypes.bool,
-  isHidden: PropTypes.bool,
-};

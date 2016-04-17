@@ -10,6 +10,7 @@ const Reasons = {
 };
 
 class RequestError extends Error {
+  static Reasons = Reasons;
   constructor(reason, message, xhr, url) {
     super(message);
     this.name = "RequestError";
@@ -21,7 +22,6 @@ class RequestError extends Error {
     return this.xhr.responseURL;
   }
 }
-RequestError.Reasons = Reasons;
 
 /**
  * Simple wrapper of XMLHttpRequest with Promise

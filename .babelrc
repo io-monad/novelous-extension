@@ -4,5 +4,18 @@
     "stage-2",
     "react"
   ],
-  "ignore": ["node_modules"]
+  "plugins": [
+    "transform-runtime",
+    "transform-class-properties"
+  ],
+  "env": {
+    "production": {
+      "presets": [
+        "es2015",
+        "stage-2",
+        "react",
+        "react-optimize"
+      ]
+    }
+  }
 }

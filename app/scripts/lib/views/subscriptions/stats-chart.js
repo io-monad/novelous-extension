@@ -2,6 +2,12 @@ import React, { PropTypes } from "react";
 import { getLabelDisplay } from "./stat";
 
 export default class StatsChart extends React.Component {
+  static propTypes = {
+    label: PropTypes.string.isRequired,
+    xValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+    yValues: PropTypes.arrayOf(PropTypes.number).isRequired,
+  };
+
   componentDidMount() {
     const Chart = require("chart.js");
     const ctx = this.canvasElement.getContext("2d");
@@ -47,9 +53,3 @@ export default class StatsChart extends React.Component {
     );
   }
 }
-
-StatsChart.propTypes = {
-  label: PropTypes.string.isRequired,
-  xValues: PropTypes.arrayOf(PropTypes.string).isRequired,
-  yValues: PropTypes.arrayOf(PropTypes.number).isRequired,
-};

@@ -31,9 +31,8 @@ test.serial("#fetch caches response", t => {
 });
 
 test.serial.cb("#fetch waits for interval", t => {
-  const clock = sinonsb.useFakeTimers(1000);
-  const nowStub = sinonsb.stub(_, "now").returns(1000);
-  const callback = sinonsb.spy();
+  const clock = sinonsb.useFakeTimers(0);
+  const nowStub = sinonsb.stub(_, "now").returns(0);
   const client = new SiteClient({ fetchInterval: 5000 });
 
   const tick = (ms, fn) => {
@@ -42,17 +41,20 @@ test.serial.cb("#fetch waits for interval", t => {
     if (fn) setImmediate(fn);
   };
 
+  t.plan(2);
   client.fetch("https://kakuyomu.jp/my").then(() => {
-    client.fetch("https://kakuyomu.jp/works/4852201425154996024").then(callback);
+    let resolved = false;
+    client.fetch("https://kakuyomu.jp/works/4852201425154996024").then(() => {
+      resolved = true;
+      t.is(_.now(), 5000);
+      t.end();
+    });
     tick(3000, () => {
-      t.false(callback.called);
-      tick(5000, () => {
-        t.true(callback.calledOnce);
-        t.end();
-      });
+      t.false(resolved);
+      tick(2000);
     });
   });
-  tick(1); // for Promise
+  tick(0); // for Promise
 });
 
 test.serial("#fetch rejects with LoginRequiredError if no session cookies", t => {

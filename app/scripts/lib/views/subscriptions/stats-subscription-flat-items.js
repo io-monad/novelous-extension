@@ -3,24 +3,25 @@ import StatsSubscription from "../../subscriptions/subscription/stats";
 import flattenSubscriptions from "../helpers/flatten-subscriptions";
 import StatsSubscriptionItem from "./stats-subscription-item";
 
-const StatsSubscriptionFlatItems = ({ subscriptions }) => {
-  const entries = flattenSubscriptions(subscriptions, { order: "newerFirst" });
-  if (entries.length === 0) {
-    return null;
+export default class StatsSubscriptionFlatItems extends React.Component {
+  static propTypes = {
+    subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(StatsSubscription)).isRequired,
+  };
+
+  render() {
+    const { subscriptions } = this.props;
+    const entries = flattenSubscriptions(subscriptions, { order: "newerFirst" });
+    if (entries.length === 0) {
+      return null;
+    }
+    return (
+      <section className="stats-subscription-flat-items panel panel-default">
+        <div className="panel-body" style={{ padding: 0 }}>
+          {entries.map(entry =>
+            <StatsSubscriptionItem key={entry.key} {...entry.props} />
+          )}
+        </div>
+      </section>
+    );
   }
-  return (
-    <section className="stats-subscription-flat-items panel panel-default">
-      <div className="panel-body" style={{ padding: 0 }}>
-        {entries.map(entry =>
-          <StatsSubscriptionItem key={entry.key} {...entry.props} />
-        )}
-      </div>
-    </section>
-  );
-};
-
-StatsSubscriptionFlatItems.propTypes = {
-  subscriptions: PropTypes.arrayOf(PropTypes.instanceOf(StatsSubscription)).isRequired,
-};
-
-export default StatsSubscriptionFlatItems;
+}

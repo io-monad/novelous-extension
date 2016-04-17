@@ -1,4 +1,3 @@
-import "babel-polyfill";
 import "./lib/util/debug";
 import PopupController from "./lib/popup/controller";
 

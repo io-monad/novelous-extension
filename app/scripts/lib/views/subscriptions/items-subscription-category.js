@@ -6,6 +6,11 @@ import { Link, Icon, SiteIcon } from "../common";
 import ItemsSubscriptionItem from "./items-subscription-item";
 
 export default class ItemsSubscriptionCategory extends React.Component {
+  static propTypes = {
+    subscription: PropTypes.instanceOf(ItemsSubscription).isRequired,
+    unreadItemIds: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = { expanded: false };
@@ -75,8 +80,3 @@ export default class ItemsSubscriptionCategory extends React.Component {
     );
   }
 }
-
-ItemsSubscriptionCategory.propTypes = {
-  subscription: PropTypes.instanceOf(ItemsSubscription).isRequired,
-  unreadItemIds: PropTypes.object.isRequired,
-};

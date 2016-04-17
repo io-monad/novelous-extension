@@ -3,6 +3,12 @@ import React, { PropTypes } from "react";
 import classNames from "classnames";
 
 export default class CollapsedText extends React.Component {
+  static propTypes = {
+    children: PropTypes.any.isRequired,
+    expanded: PropTypes.bool,
+    defaultExpanded: PropTypes.bool,
+  };
+
   constructor(props) {
     super(props);
     this.state = { expanded: this.props.defaultExpanded || false };
@@ -35,9 +41,3 @@ export default class CollapsedText extends React.Component {
     );
   }
 }
-
-CollapsedText.propTypes = {
-  children: PropTypes.any.isRequired,
-  expanded: PropTypes.bool,
-  defaultExpanded: PropTypes.bool,
-};

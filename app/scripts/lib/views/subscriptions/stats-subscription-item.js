@@ -15,6 +15,11 @@ const LINK_ICONS = {
 };
 
 export default class StatsSubscriptionItem extends React.Component {
+  static propTypes = {
+    subscription: PropTypes.instanceOf(StatsSubscription).isRequired,
+    item: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = { expanded: false };
@@ -93,8 +98,3 @@ export default class StatsSubscriptionItem extends React.Component {
     );
   }
 }
-
-StatsSubscriptionItem.propTypes = {
-  subscription: PropTypes.instanceOf(StatsSubscription).isRequired,
-  item: PropTypes.object.isRequired,
-};

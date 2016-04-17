@@ -9,35 +9,36 @@ const viewModes = [
   { name: "categories", title: translate("viewModeCategories"), icon: "folder" },
 ];
 
-const ViewModeSwitch = ({ viewMode, onChange }) => {
-  return (
-    <div className="view-mode-switch btn-group">
-      {viewModes.map(mode =>
-        <button
-          key={mode.name}
-          title={mode.title}
-          onClick={() => onChange(mode.name)}
-          className={classNames({
-            "view-mode-switch__item": true,
-            "btn": true,
-            "btn-sm": true,
-            "btn-default": true,
-            "active": mode.name === viewMode,
-          })}
-        >
-          <Icon name={mode.icon} />
-        </button>
-      )}
-    </div>
-  );
-};
+export default class ViewModeSwitch extends React.Component {
+  static viewModes = viewModes;
+  static defaultViewMode = viewModes[0].name;
 
-ViewModeSwitch.viewModes = viewModes;
-ViewModeSwitch.defaultViewMode = viewModes[0].name;
+  static propTypes = {
+    viewMode: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
 
-ViewModeSwitch.propTypes = {
-  viewMode: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
-
-export default ViewModeSwitch;
+  render() {
+    const { viewMode, onChange } = this.props;
+    return (
+      <div className="view-mode-switch btn-group">
+        {viewModes.map(mode =>
+          <button
+            key={mode.name}
+            title={mode.title}
+            onClick={() => onChange(mode.name)}
+            className={classNames({
+              "view-mode-switch__item": true,
+              "btn": true,
+              "btn-sm": true,
+              "btn-default": true,
+              "active": mode.name === viewMode,
+            })}
+          >
+            <Icon name={mode.icon} />
+          </button>
+        )}
+      </div>
+    );
+  }
+}

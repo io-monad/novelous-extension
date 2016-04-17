@@ -1,31 +1,15 @@
 import url from "url";
 import _ from "lodash";
 
-const BASE_URL = "http://syosetu.com";
-const SSL_BASE_URL = "https://ssl.syosetu.com";
-const API_BASE_URL = "http://api.syosetu.com";
-const NCODE_BASE_URL = "http://ncode.syosetu.com";
-const MYPAGE_BASE_URL = "http://mypage.syosetu.com";
-
 /**
  * Narou URL utility
  */
 export default class NarouURL {
-  static get base() {
-    return BASE_URL;
-  }
-  static get sslBase() {
-    return SSL_BASE_URL;
-  }
-  static get apiBase() {
-    return API_BASE_URL;
-  }
-  static get ncodeBase() {
-    return NCODE_BASE_URL;
-  }
-  static get mypageBase() {
-    return MYPAGE_BASE_URL;
-  }
+  static base = "http://syosetu.com";
+  static sslBase = "https://ssl.syosetu.com";
+  static apiBase = "http://api.syosetu.com";
+  static ncodeBase = "http://ncode.syosetu.com";
+  static mypageBase = "http://mypage.syosetu.com";
 
   static resolve(path) {
     return url.resolve(this.base, path);

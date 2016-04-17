@@ -1,4 +1,3 @@
-import "babel-polyfill";
 import test from "ava";
 import sinon from "sinon";
 import chrome from "sinon-chrome";

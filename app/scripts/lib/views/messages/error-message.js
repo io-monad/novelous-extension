@@ -1,15 +1,16 @@
 import React from "react";
 import MessageBox from "../common/message-box";
 
-const ErrorMessage = ({ reason }) => {
-  const details = __ENV__ === "development" ? reason : null;
-  return (
-    <MessageBox message="wentWrong" details={details} icon="exclamation-triangle" />
-  );
-};
+export default class ErrorMessage extends React.Component {
+  static propTypes = {
+    reason: React.PropTypes.string,
+  };
 
-ErrorMessage.propTypes = {
-  reason: React.PropTypes.string,
-};
-
-export default ErrorMessage;
+  render() {
+    const { reason } = this.props;
+    const details = __ENV__ === "development" ? reason : null;
+    return (
+      <MessageBox message="wentWrong" details={details} icon="exclamation-triangle" />
+    );
+  }
+}

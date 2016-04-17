@@ -1,21 +1,22 @@
 import React, { PropTypes } from "react";
 import classNames from "classnames";
 
-const Icon = ({ name, spin }) => {
-  return (
-    <i
-      className={classNames({
-        "fa": true,
-        [`fa-${name}`]: true,
-        "fa-spin": spin,
-      })}
-    />
-  );
-};
+export default class Icon extends React.Component {
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    spin: PropTypes.bool,
+  };
 
-Icon.propTypes = {
-  name: PropTypes.string.isRequired,
-  spin: PropTypes.bool,
-};
-
-export default Icon;
+  render() {
+    const { name, spin } = this.props;
+    return (
+      <i
+        className={classNames({
+          "fa": true,
+          [`fa-${name}`]: true,
+          "fa-spin": spin,
+        })}
+      />
+    );
+  }
+}

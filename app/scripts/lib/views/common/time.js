@@ -4,6 +4,18 @@ import shallowCompare from "react-addons-shallow-compare";
 import moment from "../../util/moment";
 
 export default class Time extends React.Component {
+  static propTypes = {
+    format: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.instanceOf(Date),
+    ]).isRequired,
+  };
+  static defaultProps = {
+    format: "relative",
+  };
+
   constructor(props) {
     super(props);
     this.otherProps = _.without(this.props, _.keys(Time.propTypes));
@@ -48,15 +60,3 @@ export default class Time extends React.Component {
     );
   }
 }
-
-Time.propTypes = {
-  format: PropTypes.string,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.instanceOf(Date),
-  ]).isRequired,
-};
-Time.defaultProps = {
-  format: "relative",
-};

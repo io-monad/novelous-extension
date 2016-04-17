@@ -15,6 +15,16 @@ class LoginRequiredError extends Error {
  * Client for fetching contents from remote site.
  */
 export default class SiteClient {
+  static LoginRequiredError = LoginRequiredError;
+  static DefaultOptions = {
+    sessionCookies: [],
+    loginFormUrlTester: null,
+    loginRequiredUrlTester: null,
+    fetchInterval: 3 * 1000,
+    caching: true,
+    cacheExpiresIn: 5 * 60 * 1000,
+  };
+
   /**
    * @param {Object} settings - Settings.
    * @param {string[]} settings.sessionCookies
@@ -138,14 +148,3 @@ export default class SiteClient {
     }
   }
 }
-
-SiteClient.DefaultOptions = {
-  sessionCookies: [],
-  loginFormUrlTester: null,
-  loginRequiredUrlTester: null,
-  fetchInterval: 3 * 1000,
-  caching: true,
-  cacheExpiresIn: 5 * 60 * 1000,
-};
-
-SiteClient.LoginRequiredError = LoginRequiredError;

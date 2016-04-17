@@ -8,6 +8,11 @@ import OptionButton from "./option-button";
 import Dashboard from "./dashboard";
 
 export default class PopupView extends React.Component {
+  static propTypes = {
+    subscriber: PropTypes.instanceOf(Subscriber).isRequired,
+    unreadItemIds: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = { viewMode: ViewModeSwitch.defaultViewMode };
@@ -58,8 +63,3 @@ export default class PopupView extends React.Component {
     );
   }
 }
-
-PopupView.propTypes = {
-  subscriber: PropTypes.instanceOf(Subscriber).isRequired,
-  unreadItemIds: PropTypes.object.isRequired,
-};
