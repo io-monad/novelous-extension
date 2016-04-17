@@ -1,0 +1,4 @@
+--recursive
+--slow 1000
+--timeout 3000
+--compilers js:babel-register
