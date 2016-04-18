@@ -24,8 +24,26 @@ import _ from "lodash";
  * @property {?string}  imageUrl - URL of the image attached to the item.
  * @property {?number}  createdAt - Timestamp when the item was created.
  * @property {?number}  updatedAt - Timestamp when the item was updated.
- * @property {?Object}  links - Map of linked URLs of the item.
- * @property {?Object}  stats - Map of stats numbers of the item.
+ * @property {?LinkItem[]} links - Map of link items of the item.
+ * @property {?StatItem[]} stats - Map of stat items of the item.
+ */
+
+/**
+ * @typedef {Object} LinkItem
+ * @property {string}  key - Key of the link item.
+ * @property {string}  url - URL of the link item.
+ * @property {string}  [label] - Label text of the link item.
+ * @property {string}  [icon] - Icon of the link item. Name of Font-Awesome icon.
+ */
+
+/**
+ * @typedef {Object} StatItem
+ * @property {string}  key - Key of the stat item.
+ * @property {number}  value - Current value of the stat item.
+ * @property {string}  [label] - Label text of the stat item.
+ * @property {string}  [icon] - Icon of the stat item. Name of Font-Awesome icon.
+ * @property {string}  [unit] - Unit of the stat item value.
+ * @property {string}  [link] - URL of the link of the stat item.
  */
 
 /**

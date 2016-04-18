@@ -42,7 +42,8 @@ export default class FeedTestHelpers {
       const time = startTime + n * 24 * 60 * 60 * 1000;
       const feed = this.cloneFeed(sub.feed);
       _.each(feed.items, item => {
-        item.stats = factory.buildSync("novelFeedItemStats");
+        const newItem = factory.buildSync("novelFeedItem");
+        item.stats = newItem.stats;
       });
       if (customFeed) customFeed(feed);
 

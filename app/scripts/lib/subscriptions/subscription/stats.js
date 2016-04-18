@@ -74,7 +74,7 @@ export default class StatsSubscription extends Subscription {
     statsLogs.timestamps.push(timestamp);
 
     const updatedKeys = {};
-    _.each(newStats, (value, key) => {
+    _.each(newStats, ({ key, value }) => {
       // Skip non-number value
       if (isNaN(value)) return;
 

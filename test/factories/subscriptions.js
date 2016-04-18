@@ -41,14 +41,45 @@ factory.define("novelFeedItem", Object, {
   authorUrl: () => `http://mypage.syosetu.com/${_.random(1, 1000000)}/`,
   createdAt: () => 1462073640000 + _.random(0, 100000),
   updatedAt() { return this.createdAt + _.random(0, 10000); },
-  stats: () => factory.buildSync("novelFeedItemStats"),
-});
-
-factory.define("novelFeedItemStats", Object, {
-  point: () => _.random(1000, 100000),
-  bookmarkCount: () => _.random(0, 1000),
-  reviewCount: () => _.random(0, 100),
-  ratePoint: () => _.random(0, 1000),
+  links: () => [
+    {
+      key: "manage",
+      url: `http://syosetu.com/usernovelmanage/top/ncode/${_.random(1, 100000)}/`,
+      label: "Manage",
+      icon: "cog",
+    },
+    {
+      key: "newEpisode",
+      url: `http://syosetu.com/usernovelmanage/ziwainput/ncode/${_.random(1, 100000)}/`,
+      label: "New Episode",
+      icon: "pencil-square-o",
+    },
+  ],
+  stats: () => [
+    {
+      key: "point",
+      value: _.random(1000, 100000),
+      label: "Point",
+      icon: "plus",
+      unit: "pt",
+      link: `http://syosetu.com/usernovelmanage/top/ncode/${_.random(1, 100000)}/`,
+    },
+    {
+      key: "ratePoint",
+      order: 2,
+      value: _.random(0, 1000),
+      label: "Rate Point",
+      icon: "star",
+      unit: "pt",
+    },
+    {
+      key: "bookmarkCount",
+      order: 3,
+      value: _.random(0, 100),
+      label: "Bookmarks",
+      icon: "bookmark",
+    },
+  ],
 });
 
 const itemsSubscriptionSchema = {

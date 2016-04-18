@@ -1,18 +1,11 @@
-import _ from "lodash";
 import React, { PropTypes } from "react";
 import shallowCompare from "react-addons-shallow-compare";
 import classNames from "classnames";
 import StatsSubscription from "../../subscriptions/subscription/stats";
-import { Link, Icon, SiteIcon, Str, Time } from "../common";
+import { Link, Icon, SiteIcon, Time } from "../common";
 import StatsList from "./stats-list";
 import StatsChartList from "./stats-chart-list";
-
-const LINK_ORDERS = ["manage", "newEpisode"];
-const LINK_ICONS = {
-  manage: "cog",
-  newEpisode: "pencil-square-o",
-  other: "link",
-};
+import LinkList from "./link-list";
 
 export default class StatsSubscriptionItem extends React.Component {
   static propTypes = {
@@ -35,13 +28,6 @@ export default class StatsSubscriptionItem extends React.Component {
     const { subscription, item } = this.props;
     const { expanded } = this.state;
     const statsLog = subscription.statsLogs[item.id];
-    const statsLinks = _.get(item, "links.stats");
-
-    let links;
-    if (item.links) {
-      const filtered = _.pickBy(item.links, _.isString);
-      links = _.sortBy(_.entries(filtered), ([k]) => LINK_ORDERS[k] || Infinity);
-    }
 
     const cls = "stats-subscription-item";  // Prefix for className
     return (
@@ -65,13 +51,10 @@ export default class StatsSubscriptionItem extends React.Component {
           <div className={`${cls}__body`}>
             {expanded &&
               <div className={`${cls}__chart`}>
-                <StatsChartList statsLog={statsLog} />
+                <StatsChartList stats={item.stats} statsLog={statsLog} />
               </div>
             }
-            <StatsList
-              statsLog={statsLog}
-              links={statsLinks}
-            />
+            <StatsList stats={item.stats} statsLog={statsLog} />
           </div>
         }
         <footer className={`${cls}__footer`}>
@@ -83,16 +66,11 @@ export default class StatsSubscriptionItem extends React.Component {
               </li>
             }
           </ul>
-          <ul className={`${cls}__footer-left`}>
-            {links && links.map(([label, url]) => (
-              <li key={label} className={`${cls}__link`}>
-                <Link key={label} href={url}>
-                  <Icon name={LINK_ICONS[label] || LINK_ICONS.other} />
-                  <Str name={`link-${label}`} defaults={_.startCase(label)} />
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className={`${cls}__footer-left`}>
+            {item.links &&
+              <LinkList links={item.links} />
+            }
+          </div>
         </footer>
       </article>
     );

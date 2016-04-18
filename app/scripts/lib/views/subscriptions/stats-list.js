@@ -1,32 +1,33 @@
-import _ from "lodash";
 import React, { PropTypes } from "react";
 import ReactTooltip from "react-tooltip";
 import StatsItem from "./stats-item";
-import { sortLabels } from "./stat";
 
 export default class StatsList extends React.Component {
   static propTypes = {
+    stats: PropTypes.arrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+      label: PropTypes.string,
+      icon: PropTypes.string,
+      unit: PropTypes.string,
+      link: PropTypes.string,
+    })).isRequired,
     statsLog: PropTypes.shape({
-      timestamps: PropTypes.arrayOf(PropTypes.number).isRequired,
       stats: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.number)).isRequired,
     }).isRequired,
-    links: PropTypes.objectOf(PropTypes.string),
   };
 
   render() {
-    const { statsLog, links } = this.props;
-    const labels = sortLabels(_.keys(statsLog.stats));
+    const { stats, statsLog } = this.props;
     return (
       <div className="stats-list">
         <ReactTooltip id="stats-tooltip" effect="solid" />
         <div className="stats-list__items">
-          {labels.map(label =>
+          {stats.map(stat =>
             <StatsItem
-              key={label}
-              label={label}
-              link={links && links[label]}
-              timestamps={statsLog.timestamps}
-              values={statsLog.stats[label]}
+              key={stat.key}
+              stat={stat}
+              values={statsLog.stats[stat.key]}
             />
           )}
         </div>

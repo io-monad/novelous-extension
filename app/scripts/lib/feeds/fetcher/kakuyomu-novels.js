@@ -35,18 +35,36 @@ export default class FetcherKakuyomuNovels {
         authorName: novel.authorName,
         authorUrl: novel.authorUrl,
         updatedAt: novel.updatedAt,
-        links: {
-          manage: Kakuyomu.URL.getMyTopURL(),
-          newEpisode: novel.newEpisodeUrl,
-          stats: {
-            starCount: Kakuyomu.URL.getNovelReviewsURL(novel.id),
-            followerCount: Kakuyomu.URL.getNovelFollowersURL(novel.id),
+        links: [
+          {
+            key: "manage",
+            url: Kakuyomu.URL.getMyTopURL(),
+            label: translate("linkManage"),
+            icon: "cog",
           },
-        },
-        stats: {
-          starCount: novel.starCount,
-          followerCount: novel.followerCount,
-        },
+          {
+            key: "newEpisode",
+            url: novel.newEpisodeUrl,
+            label: translate("linkNewEpisode"),
+            icon: "pencil-square-o",
+          },
+        ],
+        stats: [
+          {
+            key: "starCount",
+            value: novel.starCount,
+            label: translate("labelStarCount"),
+            icon: "star",
+            link: Kakuyomu.URL.getNovelReviewsURL(novel.id),
+          },
+          {
+            key: "followerCount",
+            value: novel.followerCount,
+            label: translate("labelFollowerCount"),
+            icon: "bookmark",
+            link: Kakuyomu.URL.getNovelFollowersURL(novel.id),
+          },
+        ],
       }));
     });
   }

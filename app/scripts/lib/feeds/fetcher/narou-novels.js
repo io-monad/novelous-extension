@@ -36,20 +36,43 @@ export default class FetcherNarouNovels {
         authorUrl: novel.authorUrl,
         createdAt: novel.createdAt,
         updatedAt: novel.updatedAt,
-        links: {
-          manage: novel.manageUrl,
-          newEpisode: novel.newEpisodeUrl,
-          stats: {
-            point: novel.manageUrl,
-            reviewCount: Narou.URL.getNovelReviewsURL(novel.id),
+        links: [
+          {
+            key: "manage",
+            url: novel.manageUrl,
+            label: translate("linkManage"),
+            icon: "cog",
           },
-        },
-        stats: {
-          point: novel.point,
-          bookmarkCount: novel.bookmarkCount,
-          reviewCount: novel.reviewCount,
-          ratePoint: novel.ratePoint,
-        },
+          {
+            key: "newEpisode",
+            url: novel.newEpisodeUrl,
+            label: translate("linkNewEpisode"),
+            icon: "pencil-square-o",
+          },
+        ],
+        stats: [
+          {
+            key: "point",
+            value: novel.point,
+            label: translate("labelPoint"),
+            icon: "plus",
+            unit: translate("unitPoints"),
+            link: novel.manageUrl,
+          },
+          {
+            key: "ratePoint",
+            value: novel.ratePoint,
+            label: translate("labelRatePoint"),
+            icon: "star",
+            unit: translate("unitPoints"),
+          },
+          {
+            key: "bookmarkCount",
+            value: novel.bookmarkCount,
+            label: translate("labelBookmarkCount"),
+            icon: "bookmark",
+          },
+        ],
       }));
     });
   }

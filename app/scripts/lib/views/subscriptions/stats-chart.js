@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
 import moment from "../../util/moment";
-import { getLabelDisplay } from "./stat";
 
 export default class StatsChart extends React.Component {
   static propTypes = {
@@ -63,7 +62,7 @@ export default class StatsChart extends React.Component {
     return {
       labels: timestamps,
       datasets: [{
-        label: getLabelDisplay(label),
+        label,
         fill: true,
         borderColor: "rgb(24, 143, 201)",
         backgroundColor: "rgba(24, 143, 201, 0.2)",
