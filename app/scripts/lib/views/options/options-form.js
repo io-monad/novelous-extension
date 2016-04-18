@@ -8,7 +8,7 @@ const FormFields = {
   SchemaField: CustomSchemaField,
 };
 
-export default class OptionsView extends React.Component {
+export default class OptionsForm extends React.Component {
   static propTypes = {
     schema: PropTypes.object.isRequired,
     uiSchema: PropTypes.object,
