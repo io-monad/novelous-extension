@@ -2,8 +2,11 @@ import assert from "power-assert";
 import sinon from "sinon";
 import chrome from "sinon-chrome";
 import debug from "debug";
+import assertExtension from "./test-utils/assert-extension";
 import fakeSererRequest from "./test-utils/fake-server-request";
 import fakeServerConf from "./fake-server.conf";
+
+assertExtension(assert);
 
 global.__ENV__ = "test";
 global.__VENDOR__ = "chrome";
@@ -57,7 +60,13 @@ class TestExports {
     factory.setAdapter(new FactoryAdapter());
 
     this._factory = factory.promisify(bluebird);
-    return factory;
+    return this._factory;
+  }
+
+  static get render() {
+    if (this._render) return this._render;
+    this._render = require("react-shallow-renderer");
+    return this._render;
   }
 }
 

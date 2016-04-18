@@ -12,7 +12,7 @@ export default class Str extends React.Component {
 
   render() {
     const { name, args, defaults, children } = this.props;
-    const otherProps = _.without(this.props, _.keys(Str.propTypes));
+    const otherProps = _.omit(this.props, _.keys(Str.propTypes));
 
     if (!name && !children) {
       console.error("Missing translation name");
