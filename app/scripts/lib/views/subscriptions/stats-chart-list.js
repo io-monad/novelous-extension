@@ -1,6 +1,5 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
-import moment from "../../util/moment";
 import { StatIcon, sortLabels, getLabelDisplay } from "./stat";
 import StatsChart from "./stats-chart";
 
@@ -15,7 +14,6 @@ export default class StatsChartList extends React.Component {
   render() {
     const { statsLog: { timestamps, stats } } = this.props;
     const statLables = sortLabels(_.keys(stats));
-    const xValues = _.map(timestamps, t => moment(t).format("H:mm"));
     return (
       <section className="stats-chart-list">
         {statLables.map(label =>
@@ -26,8 +24,8 @@ export default class StatsChartList extends React.Component {
             </h1>
             <StatsChart
               label={label}
-              xValues={xValues}
-              yValues={stats[label]}
+              timestamps={timestamps}
+              values={stats[label]}
             />
           </section>
         )}

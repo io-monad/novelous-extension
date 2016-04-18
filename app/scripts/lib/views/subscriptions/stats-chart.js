@@ -1,24 +1,54 @@
+import _ from "lodash";
 import React, { PropTypes } from "react";
+import moment from "../../util/moment";
 import { getLabelDisplay } from "./stat";
 
 export default class StatsChart extends React.Component {
   static propTypes = {
     label: PropTypes.string.isRequired,
-    xValues: PropTypes.arrayOf(PropTypes.string).isRequired,
-    yValues: PropTypes.arrayOf(PropTypes.number).isRequired,
+    timestamps: PropTypes.arrayOf(PropTypes.number).isRequired,
+    values: PropTypes.arrayOf(PropTypes.number).isRequired,
+  };
+  static chartOption = {
+    type: "line",
+    options: {
+      title: { display: false },
+      legend: { display: false },
+      tooltips: {
+        callbacks: {
+          title: (items, data) => {
+            const timestamp = data.labels[items[0].index];
+            return moment(timestamp).format("L LT");
+          },
+        },
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            callback: (timestamp) => moment(timestamp).format("H:mm"),
+            maxTicksLimit: 20,
+          },
+        }],
+        yAxes: [{
+          ticks: {
+            callback: (value) => {
+              value = value.toString();
+              return /\./.test(value) ? "" : value;
+            },
+          },
+        }],
+      },
+    },
   };
 
   componentDidMount() {
     const Chart = require("chart.js");
     const ctx = this.canvasElement.getContext("2d");
-    this.chart = new Chart(ctx, {
-      type: "line",
-      data: this.buildChartData(),
-      options: {
-        title: { display: false },
-        legend: { display: false },
-      },
-    });
+    const options = _.extend(
+      { data: this.buildChartData() },
+      StatsChart.chartOption,
+    );
+    this.chart = new Chart(ctx, options);
   }
   componentWillReceiveProps() {
     this.chart.data = this.buildChartData();
@@ -29,15 +59,15 @@ export default class StatsChart extends React.Component {
     this.chart = null;
   }
   buildChartData() {
-    const { label, xValues, yValues } = this.props;
+    const { label, timestamps, values } = this.props;
     return {
-      labels: xValues,
+      labels: timestamps,
       datasets: [{
         label: getLabelDisplay(label),
         fill: true,
         borderColor: "rgb(24, 143, 201)",
         backgroundColor: "rgba(24, 143, 201, 0.2)",
-        data: yValues,
+        data: values,
       }],
     };
   }
