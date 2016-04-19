@@ -22,7 +22,7 @@ describe("MessageBox", () => {
         <MessageBox message="helloTest" icon="check" details="Details test" />
       );
       const details = actual.findByClassName("message-box__details");
-      assert(details.children === "Details test");
+      assert(details.text === "Details test");
     });
 
     it("renders children", () => {
