@@ -4,10 +4,18 @@ import { createRenderer, isElement } from "react-addons-test-utils";
 export default function render(element) {
   const renderer = createRenderer();
   renderer.render(element);
-  return new RenderedElement(renderer.getRenderOutput(), renderer);
+  return RenderedElement.wrapIfElement(renderer.getRenderOutput(), renderer);
 }
 
 class RenderedElement {
+  static wrapIfElement(value, renderer) {
+    if (isElement(value) && !(value instanceof RenderedElement)) {
+      return new RenderedElement(value, renderer);
+    } else {
+      return value;
+    }
+  }
+
   constructor(element, renderer) {
     this.element = element;
     this._renderer = renderer;
@@ -44,24 +52,27 @@ class RenderedElement {
   get children() {
     if (!this._caches.children) {
       if (this.props && _.isArray(this.props.children)) {
-        this._caches.children = this.props.children.map(el => this._wrapIfElement(el));
+        this._caches.children = this.props.children.map(el => {
+          return RenderedElement.wrapIfElement(el);
+        });
       } else {
-        this._caches.children = this._wrapIfElement(this.props.children);
+        this._caches.children = RenderedElement.wrapIfElement(this.props.children);
       }
     }
     return this._caches.children;
   }
 
-  hasClassName(className) {
-    return this.classNames.indexOf(className) >= 0;
+  get text() {
+    if (!this._caches.text) {
+      this._caches.text = _.castArray(this.children).map(child => {
+        return child && _.isString(child.text) ? child.text : _.toString(child);
+      }).join("");
+    }
+    return this._caches.text;
   }
 
-  _wrapIfElement(value) {
-    if (isElement(value) && !(value instanceof RenderedElement)) {
-      return new RenderedElement(value);
-    } else {
-      return value;
-    }
+  hasClassName(className) {
+    return this.classNames.indexOf(className) >= 0;
   }
 
   render() {
