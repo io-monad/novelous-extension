@@ -14,8 +14,8 @@ describe("OptionsForm", () => {
       };
 
       const actual = render(<OptionsForm {...props} />);
-      assert(actual.props.className === "options-form");
-      assert(actual.props.children.type === (<Form {...props} />).type);
+      assert(actual.hasClassName("options-form"));
+      assert(actual.children.type === Form);
     });
   });
 });

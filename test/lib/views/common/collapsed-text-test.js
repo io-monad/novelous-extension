@@ -55,11 +55,13 @@ describe("CollapsedText", () => {
       const element = render(<CollapsedText defaultExpanded>Test</CollapsedText>);
       element.props.onClick();
       element.render();
-      assert(element.props.className === "collapsed-text collapsed-text--collapsed");
+      assert(element.hasClassName("collapsed-text--collapsed"));
+      assert(!element.hasClassName("collapsed-text--expanded"));
 
       element.props.onClick();
       element.render();
-      assert(element.props.className === "collapsed-text collapsed-text--expanded");
+      assert(!element.hasClassName("collapsed-text--collapsed"));
+      assert(element.hasClassName("collapsed-text--expanded"));
     });
   });
 });

@@ -7,53 +7,31 @@ describe("MessageBox", () => {
   describe("#render", () => {
     it("renders .message-box", () => {
       const actual = render(<MessageBox message="helloTest" icon="check" />);
-      const expected = (
-        <div className="message-box message-box--hello-test-message">
-          <div className="message-box__icon">
-            <Icon name="check" />
-          </div>
-          <p className="message-box__text">
-            <Str name="helloTest" />
-          </p>
-        </div>
-      );
-      assert.reactEqual(actual, expected);
+      assert(actual.hasClassName("message-box"));
+      assert(actual.hasClassName("message-box--hello-test-message"));
+
+      const icon = actual.findByClassName("message-box__icon");
+      assert.reactEqual(icon.children, <Icon name="check" />);
+
+      const text = actual.findByClassName("message-box__text");
+      assert.reactEqual(text.children, <Str name="helloTest" />);
     });
 
     it("renders details if given", () => {
       const actual = render(
         <MessageBox message="helloTest" icon="check" details="Details test" />
       );
-      const expected = (
-        <div className="message-box message-box--hello-test-message">
-          <div className="message-box__icon">
-            <Icon name="check" />
-          </div>
-          <p className="message-box__text">
-            <Str name="helloTest" />
-          </p>
-          <p className="message-box__details">Details test</p>
-        </div>
-      );
-      assert.reactEqual(actual, expected);
+      const details = actual.findByClassName("message-box__details");
+      assert(details.children === "Details test");
     });
 
     it("renders children", () => {
+      const testChild = <p className="testChild">Test children</p>;
       const actual = render(
-        <MessageBox message="helloTest" icon="check">Test children</MessageBox>
+        <MessageBox message="helloTest" icon="check">{testChild}</MessageBox>
       );
-      const expected = (
-        <div className="message-box message-box--hello-test-message">
-          <div className="message-box__icon">
-            <Icon name="check" />
-          </div>
-          <p className="message-box__text">
-            <Str name="helloTest" />
-          </p>
-          Test children
-        </div>
-      );
-      assert.reactEqual(actual, expected);
+      const children = actual.findByClassName("testChild");
+      assert.reactEqual(children, testChild);
     });
   });
 });

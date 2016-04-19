@@ -22,7 +22,7 @@ export default class ItemsSubscriptionFlatItems extends React.Component {
     }
 
     return (
-      <section className="items-subscription-flat panel panel-default">
+      <section className="items-subscription-flat-items panel panel-default">
         <div className="panel-body" style={{ padding: 0 }}>
           {entries.map(entry =>
             <ItemsSubscriptionItem key={entry.key} {...entry.props} />

@@ -1,12 +1,8 @@
-import assert from "power-assert";
 import sinon from "sinon";
 import chrome from "sinon-chrome";
 import debug from "debug";
-import assertExtension from "./test-utils/assert-extension";
 import fakeSererRequest from "./test-utils/fake-server-request";
 import fakeServerConf from "./fake-server.conf";
-
-assertExtension(assert);
 
 global.__ENV__ = "test";
 global.__VENDOR__ = "chrome";
@@ -35,7 +31,9 @@ class TestExports {
     return this._lodash;
   }
   static get assert() {
-    return assert;
+    if (this._assert) return this._assert;
+    this._assert = require("./test-utils/assert").default;
+    return this._assert;
   }
   static get sinon() {
     return sinon;
@@ -58,7 +56,7 @@ class TestExports {
 
   static get render() {
     if (this._render) return this._render;
-    this._render = require("react-shallow-renderer");
+    this._render = require("./test-utils/react-render").default;
     return this._render;
   }
 }
