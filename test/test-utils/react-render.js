@@ -86,7 +86,7 @@ class RenderedElement {
   findAll(test) {
     const found = [];
     this._walkElement(this, el => {
-      if (test(el)) found.push(el);
+      if (el !== this && test(el)) found.push(el);
     });
     return found;
   }
