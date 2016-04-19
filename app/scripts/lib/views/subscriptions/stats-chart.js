@@ -23,9 +23,18 @@ export default class StatsChart extends React.Component {
       },
       scales: {
         xAxes: [{
+          gridLines: { display: false },
           ticks: {
-            callback: (timestamp) => moment(timestamp).format("H:mm"),
-            maxTicksLimit: 20,
+            autoSkip: false,
+            callback: (timestamp, index, timestamps) => {
+              const md = moment(timestamp).format("M/D");
+              const pmd = index > 0 && moment(timestamps[index - 1]).format("M/D");
+              if (md !== pmd) {
+                return md;
+              } else {
+                return "";
+              }
+            },
           },
         }],
         yAxes: [{
@@ -59,14 +68,30 @@ export default class StatsChart extends React.Component {
   }
   buildChartData() {
     const { label, timestamps, values } = this.props;
+
+    const divider = Math.max(1, Math.ceil(values.length / 30));
+    const filteredTimestamps = [];
+    const filteredValues = [];
+
+    let prevValue;
+    _.each(_.zip(timestamps, values), ([timestamp, value], i) => {
+      const tick = (i % divider === 0 || i === values.length - 1);
+      const diff = (prevValue !== value);
+      if (tick || diff) {
+        filteredTimestamps.push(timestamp);
+        filteredValues.push(value);
+      }
+      prevValue = value;
+    });
+
     return {
-      labels: timestamps,
+      labels: filteredTimestamps,
       datasets: [{
         label,
         fill: true,
         borderColor: "rgb(24, 143, 201)",
         backgroundColor: "rgba(24, 143, 201, 0.2)",
-        data: values,
+        data: filteredValues,
       }],
     };
   }
