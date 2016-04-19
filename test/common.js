@@ -50,16 +50,9 @@ class TestExports {
   }
   static get factory() {
     if (this._factory) return this._factory;
-
-    const factory = require("factory-girl");
-    const bluebird = require("bluebird");
+    this._factory = require("./test-utils/factory").default;
     const requireDir = require("require-dir");
-    const FactoryAdapter = require("./test-utils/factory-adapter").default;
-
     requireDir("./factories");
-    factory.setAdapter(new FactoryAdapter());
-
-    this._factory = factory.promisify(bluebird);
     return this._factory;
   }
 

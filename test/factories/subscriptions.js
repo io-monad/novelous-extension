@@ -1,45 +1,59 @@
 import _ from "lodash";
-import factory from "factory-girl";
+import factory from "../test-utils/factory";
 import Feed from "../../app/scripts/lib/feeds/feed";
 import ItemsSubscription from "../../app/scripts/lib/subscriptions/subscription/items";
 import StatsSubscription from "../../app/scripts/lib/subscriptions/subscription/stats";
 
 factory.define("feed", Feed, {
-  title: factory.seq(n => `Feed title ${n}`),
+  title: factory.seqstr("Feed title #"),
   url: "http://syosetu.com/messagebox/top/",
   siteName: "Syosetuka ni narou",
   siteId: "narou",
-  items: () => _.range(5).map(() => factory.buildSync("feedItem")),
+  items: factory.builder(5, "feedItem"),
 });
 
 factory.define("novelsFeed", Feed, {
-  title: factory.seq(n => `Novels Feed title ${n}`),
+  title: factory.seqstr("Novels Feed title #"),
   url: "http://syosetu.com/usernovel/list/",
   siteName: "Syosetuka ni narou",
   siteId: "narou",
-  items: () => _.range(5).map(() => factory.buildSync("novelFeedItem")),
+  items: factory.builder(5, "novelFeedItem"),
+  statsLogs() {
+    const buildTimestamps = factory.timestamps(5);
+    const buildStatValues = factory.numbers(5);
+    return _.zipObject(
+      _.map(this.items, "id"),
+      _.map(this.items, item => ({
+        timestamps: buildTimestamps(),
+        stats: _.zipObject(
+          _.map(item.stats, "key"),
+          _.map(item.stats, buildStatValues)
+        ),
+      }))
+    );
+  },
 });
 
 factory.define("feedItem", Object, {
   id: factory.seq(n => n.toString()),
-  title: factory.seq(n => `Test message ${n}`),
-  url: () => `http://syosetu.com/messagebox/view/meskey/${_.random(1, 1000000)}/`,
+  title: factory.seqstr("Test message #"),
+  url() { return `http://syosetu.com/messagebox/view/meskey/${this.id}/`; },
   type: "message",
-  body: factory.seq(n => `Test message body ${n}\nHello, world!`),
-  authorName: factory.seq(n => `Sender${n}`),
-  authorUrl: () => `http://mypage.syosetu.com/${_.random(1, 1000000)}/`,
-  createdAt: () => 1462073640000 + _.random(0, 100000),
+  body: factory.seqstr("Test message body #\nHello, world!"),
+  authorName: factory.seqstr("Sender#"),
+  authorUrl: factory.numstr("http://mypage.syosetu.com/#/"),
+  createdAt: factory.timestamp(),
 });
 
 factory.define("novelFeedItem", Object, {
-  id: factory.seq(n => n.toString()),
-  title: factory.seq(n => `Test novel ${n}`),
-  url: () => `http://ncode.syosetu.com/n${_.random(1, 100000)}ab/`,
+  id: factory.seqstr("n#ab"),
+  title: factory.seqstr("Test novel #"),
+  url() { return `http://ncode.syosetu.com/${this.id}/`; },
   type: "novel",
-  body: factory.seq(n => `Test novel description ${n}\nHello, world!`),
-  authorName: factory.seq(n => `Author${n}`),
-  authorUrl: () => `http://mypage.syosetu.com/${_.random(1, 1000000)}/`,
-  createdAt: () => 1462073640000 + _.random(0, 100000),
+  body: factory.seqstr("Test novel description #\nHello, world!"),
+  authorName: factory.seqstr("Author#"),
+  authorUrl: factory.numstr("http://mypage.syosetu.com/#/"),
+  createdAt: factory.timestamp(),
   updatedAt() { return this.createdAt + _.random(0, 10000); },
   links: () => [
     {
@@ -105,5 +119,3 @@ const statsSubscriptionSchema = {
 
 factory.define("statsSubscription", StatsSubscription, statsSubscriptionSchema);
 factory.define("statsSubscriptionData", Object, statsSubscriptionSchema);
-
-module.exports = factory;
