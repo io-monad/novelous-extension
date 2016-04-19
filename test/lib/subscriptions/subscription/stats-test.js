@@ -20,7 +20,8 @@ describe("StatsSubscription", () => {
   });
 
   it("has StatsSubscription properties", () => {
-    assert.deepEqual(sub.statsLogs, {});
+    assert(_.isObject(sub.statsLogs));
+    assert.deepEqual(_.keys(sub.statsLogs).sort(), _.map(data.feedData.items, "id").sort());
   });
 
   describe("#update", () => {
@@ -49,35 +50,54 @@ describe("StatsSubscription", () => {
     });
 
     it("appends current stats to existing statsLogs", async () => {
+      const itemId = sub.feed.items[0].id;
+      const originalLog = _.cloneDeep(sub.statsLogs[itemId]);
+
       const entries = await helpers.updateSubscriptionWithRandomStats(sub, { num: 2 });
 
       const { feed: firstFeed, time: firstTime } = entries[0];
       const { feed: secondFeed, time: secondTime } = entries[1];
+      const firstValues = _.mapValues(_.keyBy(firstFeed.items[0].stats, "key"), "value");
+      const secondValues = _.mapValues(_.keyBy(secondFeed.items[0].stats, "key"), "value");
 
-      const logs = sub.statsLogs[firstFeed.items[0].id];
-      assert.deepEqual(logs.timestamps, [firstTime, secondTime]);
-
-      const expectedStats = _.transform(
-        _.zip(firstFeed.items[0].stats, secondFeed.items[0].stats),
-        (ac, [first, second]) => { ac[first.key] = [first.value, second.value]; },
-        {}
+      const updatedLog = sub.statsLogs[itemId];
+      assert(updatedLog.timestamps.length === originalLog.timestamps.length + 2);
+      assert.deepEqual(
+        updatedLog.timestamps.slice(-2),
+        [firstTime, secondTime]
       );
-      assert.deepEqual(logs.stats, expectedStats);
+
+      assert.deepEqual(
+        _.keys(updatedLog.stats).sort(),
+        _.keys(originalLog.stats).sort()
+      );
+      _.each(updatedLog.stats, (values, key) => {
+        assert(values.length === originalLog.stats[key].length + 2);
+        assert.deepEqual(
+          values.slice(-2),
+          [firstValues[key], secondValues[key]]
+        );
+      });
     });
 
     it("fills past values with 0 for new keys", async () => {
-      await helpers.updateSubscriptionWithRandomStats(sub, { num: 2 });
+      const itemId = sub.feed.items[0].id;
+      const originalLog = _.cloneDeep(sub.statsLogs[itemId]);
+
       await helpers.updateSubscriptionWithRandomStats(sub, {
         customFeed(feed) {
           feed.items[0].stats.push({ key: "testkey", value: 12345 });
         },
       });
 
-      const logs = sub.statsLogs[sub.feed.items[0].id];
-      assert.deepEqual(logs.stats.testkey, [0, 0, 12345]);
+      const updatedLog = sub.statsLogs[itemId];
+      assert(updatedLog.stats.testkey.length === originalLog.timestamps.length + 1);
+      assert(_.every(updatedLog.stats.testkey.slice(0, -1), v => v === 0));
+      assert(_.last(updatedLog.stats.testkey) === 12345);
     });
 
     it("removes expired old values", async () => {
+      sub.data.statsLogs = {};
       const entries = await helpers.updateSubscriptionWithRandomStats(sub, { num: 4 });
 
       // Let first and second logs expire
@@ -99,20 +119,22 @@ describe("StatsSubscription", () => {
     });
 
     it("maintains missing keys by filling with 0", async () => {
-      const entries = await helpers.updateSubscriptionWithRandomStats(sub, { num: 2 });
+      const itemId = sub.feed.items[0].id;
+      const originalLog = _.cloneDeep(sub.statsLogs[itemId]);
+
       await helpers.updateSubscriptionWithRandomStats(sub, {
         customFeed(feed) { feed.items[0].stats.shift(); },
       });
 
-      const logs = sub.statsLogs[sub.feed.items[0].id];
-      assert.deepEqual(logs.stats.point, [
-        entries[0].feed.items[0].stats[0].value,
-        entries[1].feed.items[0].stats[0].value,
-        0,
-      ]);
+      const updatedLog = sub.statsLogs[itemId];
+      assert(updatedLog.timestamps.length === originalLog.timestamps.length + 1);
+      assert(updatedLog.stats.point.length === originalLog.stats.point.length + 1);
+      assert.deepEqual(updatedLog.stats.point.slice(0, -1), originalLog.stats.point);
+      assert(_.last(updatedLog.stats.point) === 0);
     });
 
     it("removes keys which have completely expired", async () => {
+      sub.data.statsLogs = {};
       const entries = await helpers.updateSubscriptionWithRandomStats(sub, { num: 2 });
 
       // Expired + Missing

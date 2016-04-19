@@ -18,20 +18,6 @@ factory.define("novelsFeed", Feed, {
   siteName: "Syosetuka ni narou",
   siteId: "narou",
   items: factory.builder(5, "novelFeedItem"),
-  statsLogs() {
-    const buildTimestamps = factory.timestamps(5);
-    const buildStatValues = factory.numbers(5);
-    return _.zipObject(
-      _.map(this.items, "id"),
-      _.map(this.items, item => ({
-        timestamps: buildTimestamps(),
-        stats: _.zipObject(
-          _.map(item.stats, "key"),
-          _.map(item.stats, buildStatValues)
-        ),
-      }))
-    );
-  },
 });
 
 factory.define("feedItem", Object, {
@@ -101,7 +87,7 @@ const itemsSubscriptionSchema = {
   feedUrl: "novelous-feed://narou/messages",
   feedData: () => factory.buildSync("feed").toObject(),
   enabled: true,
-  lastUpdatedAt: null,
+  lastUpdatedAt: factory.timestamp(),
   readItemIds() { return _.map(this.feedData.items, "id"); },
 };
 
@@ -113,8 +99,21 @@ const statsSubscriptionSchema = {
   feedUrl: "novelous-feed://narou/novels",
   feedData: () => factory.buildSync("novelsFeed").toObject(),
   enabled: true,
-  lastUpdatedAt: null,
-  statsLogs: null,
+  lastUpdatedAt: factory.timestamp(),
+  statsLogs() {
+    const buildTimestamps = factory.timestamps(5);
+    const buildStatValues = factory.numbers(5);
+    return _.zipObject(
+      _.map(this.feedData.items, "id"),
+      _.map(this.feedData.items, item => ({
+        timestamps: buildTimestamps(),
+        stats: _.zipObject(
+          _.map(item.stats, "key"),
+          _.map(item.stats, buildStatValues)
+        ),
+      }))
+    );
+  },
 };
 
 factory.define("statsSubscription", StatsSubscription, statsSubscriptionSchema);
