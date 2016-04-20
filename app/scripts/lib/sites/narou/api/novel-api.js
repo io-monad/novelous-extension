@@ -112,6 +112,8 @@ export default class NarouNovelAPI {
 
   /**
    * @private
+   * @param {Object} query
+   * @returns {string}
    */
   _getURL(query) {
     const qs = querystring.stringify(_.mapValues(query || {}, value => {
@@ -126,6 +128,9 @@ export default class NarouNovelAPI {
 
   /**
    * @private
+   * @param {Object[]} response
+   * @param {Object} query
+   * @return {NarouNovelQueryResult}
    */
   _parseResponse(response, query) {
     const matchInfo = response.shift();

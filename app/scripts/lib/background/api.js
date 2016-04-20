@@ -10,6 +10,9 @@ const exportMethods = [
 
 /**
  * Build Exported API for application global
+ *
+ * @param {BackgroundController} controller
+ * @returns {Object.<string, Function>} Map of API functions.
  */
 export default function buildAPI(controller) {
   const api = {};

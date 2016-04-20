@@ -7,7 +7,7 @@ import promises from "../../util/promises";
 /**
  * Feed fetcher of received reviews in Kakuyomu
  *
- * @implements FeedFetcher
+ * @implements {FeedFetcher}
  */
 export default class FetcherKakuyomuReviews {
   isLoginRequired() {

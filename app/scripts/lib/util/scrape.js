@@ -3,7 +3,11 @@ import cheerio from "cheerio";
 import request from "./request";
 
 /**
- * Simple scraping utility using cheerio
+ * Simple scraping utility using cheerio.
+ *
+ * @param {string} html - HTML string.
+ * @return {cheerio}
+ *    It is extended with utility methods for scraping.
  */
 export default function scrape(html) {
   const $page = cheerio.load(html);

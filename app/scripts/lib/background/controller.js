@@ -25,6 +25,7 @@ export default class BackgroundController {
 
   /**
    * Start controller to handle messages and events
+   * @return {Promise}
    */
   start() {
     logger("Initializing");
@@ -41,9 +42,7 @@ export default class BackgroundController {
     return this.initializePromise;
   }
 
-  /**
-   * Called when AppData is loaded first time.
-   */
+  // Called when AppData is loaded first time.
   _setupWithAppData(appData) {
     this.appData = appData;
     this.appData.on("update", this._handleAppDataUpdate.bind(this));
@@ -89,9 +88,7 @@ export default class BackgroundController {
     logger("Initialized UpdateTimer", this.updateTimer);
   }
 
-  /**
-   * Called when AppData is updated by chrome.storage.
-   */
+  // Called when AppData is updated by chrome.storage.
   _handleAppDataUpdate(appData, keys) {
     const updated = _.keyBy(keys);
     if (updated.subscriptionSettings) {

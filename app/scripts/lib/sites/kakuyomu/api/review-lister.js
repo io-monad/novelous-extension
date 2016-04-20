@@ -18,7 +18,7 @@ export default class KakuyomuReviewLister {
 
   /**
    * @param {string} novelId
-   * @return {Promise.<Array<KakuyomuReview>}
+   * @return {Promise.<KakuyomuReview[]>}
    */
   listReviews(novelId) {
     return this.client.fetch(KakuyomuURL.getNovelReviewsURL(novelId))

@@ -5,6 +5,7 @@ import isPromiseLike from "./is-promise-like";
  * Message receiver base class for Chrome messaging spec.
  */
 export default class ChromeMessageReceiver {
+  // eslint-disable-next-line valid-jsdoc
   /**
    * @return {string[]} Known message types.
    *     This should be static since it will be cached.
@@ -25,6 +26,7 @@ export default class ChromeMessageReceiver {
     return this._messageTypeMap;
   }
 
+  // eslint-disable-next-line valid-jsdoc
   /**
    * @param {Map.<string, string>} t - Map of known message types.
    *     Both keys and values are message types. Just for shorthand.
@@ -69,6 +71,11 @@ export default class ChromeMessageReceiver {
    *
    * Use `this.listener` for `addListener` of incoming message event.
    * It is a wrapped version of `receive` by `bind(this)`.
+   *
+   * @param {Object} message - Received message.
+   * @param {Object} sender - Sender information.
+   * @param {Function} sendResponse - Callback function to send reponse.
+   * @return {boolean} Whether sendResponse is called asynchronously.
    */
   receive(message, sender, sendResponse) {
     this.logger("Received message", message, sender);

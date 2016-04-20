@@ -25,6 +25,15 @@ class RequestError extends Error {
 
 /**
  * Simple wrapper of XMLHttpRequest with Promise
+ *
+ * @param {string} url - URL to request.
+ * @param {Object} [options] - Options.
+ * @param {string} [options.method="GET"] - Request method.
+ * @param {boolean} [options.xhr=false] - If `true`, returns XHR instead of response body.
+ * @param {number} [options.timeout=30000] - Timeout milliseconds.
+ * @return {Promise.<string>|Promise.<XMLHttpRequest>}
+ *     If `options.xhr` is `true`, it returns `Promise.<XMLHttpRequest>`.
+ *     Otherwise it returns `Promise.<string>` of response body.
  */
 export default function request(url, options) {
   options = _.extend({

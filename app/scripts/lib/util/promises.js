@@ -43,6 +43,11 @@ function map(arr, options, fn) {
 
 /**
  * Array#some with Promise
+ *
+ * @param {Array} arr
+ * @param {Object} [options]
+ * @param {function(item:any):Promise.<any>} fn
+ * @return {Promise.<boolean>}
  */
 function some(arr, options, fn) {
   let hasSome = false;
@@ -57,6 +62,11 @@ function some(arr, options, fn) {
 
 /**
  * Array#every with Promise
+ *
+ * @param {Array} arr
+ * @param {Object} [options]
+ * @param {function(item:any):Promise.<any>} fn
+ * @return {Promise.<boolean>}
  */
 function every(arr, options, fn) {
   let hasEvery = true;

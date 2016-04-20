@@ -6,7 +6,7 @@ import { translate } from "../../util/chrome-util";
 /**
  * Feed fetcher of received messages in Narou
  *
- * @implements FeedFetcher
+ * @implements {FeedFetcher}
  */
 export default class FetcherNarouMessages {
   isLoginRequired() {

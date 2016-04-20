@@ -6,7 +6,7 @@ import { translate } from "../../util/chrome-util";
 /**
  * Feed fetcher of my novels in Kakuyomu
  *
- * @implements FeedFetcher
+ * @implements {FeedFetcher}
  */
 export default class FetcherKakuyomuNovels {
   isLoginRequired() {

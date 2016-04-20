@@ -22,6 +22,7 @@ export default {
    *
    * @param {SubscriptionData} data - Subscription data.
    *     Valid `type` must be specified for creation.
+   * @return {Subscription}
    */
   create(data) {
     if (!data || !data.type) {

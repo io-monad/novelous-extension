@@ -6,7 +6,7 @@ import { translate } from "../../util/chrome-util";
 /**
  * Feed fetcher of received comments to author's news in Kakuyomu
  *
- * @implements FeedFetcher
+ * @implements {FeedFetcher}
  */
 export default class FetcherKakuyomuNewsComments {
   isLoginRequired() {

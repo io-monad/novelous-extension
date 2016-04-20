@@ -6,7 +6,7 @@ import { translate } from "../../util/chrome-util";
 /**
  * Feed fetcher of received reviews in Narou
  *
- * @implements FeedFetcher
+ * @implements {FeedFetcher}
  */
 export default class FetcherNarouReviews {
   isLoginRequired() {

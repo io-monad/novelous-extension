@@ -6,7 +6,7 @@ import { translate } from "../../util/chrome-util";
 /**
  * Feed fetcher of my novels in Narou
  *
- * @implements FeedFetcher
+ * @implements {FeedFetcher}
  */
 export default class FetcherNarouNovels {
   isLoginRequired() {

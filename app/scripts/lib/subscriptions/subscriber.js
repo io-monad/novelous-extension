@@ -51,6 +51,7 @@ export default class Subscriber extends EventEmitter {
   }
 
   /**
+   * @param {string} type
    * @return {Subscription[]}
    */
   getSubscriptionsForType(type) {
@@ -130,6 +131,9 @@ export default class Subscriber extends EventEmitter {
 
   /**
    * Clear specific unread item in ItemsSubscription.
+   *
+   * @param {ItemsSubscription} subscription
+   * @param {FeedItem} item
    */
   clearUnreadItem(subscription, item) {
     if (_.isString(subscription)) {

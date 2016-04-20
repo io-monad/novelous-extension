@@ -85,7 +85,7 @@ export default class ItemsSubscription extends Subscription {
   /**
    * Clear an item in feed to mark it as read.
    *
-   * @param {FeedItem|string} Feed item or item ID to be cleared.
+   * @param {FeedItem|string} item - Feed item or item ID to be cleared.
    * @return {boolean} `true` if the item was cleared successfully.
    */
   clearUnreadItem(item) {
