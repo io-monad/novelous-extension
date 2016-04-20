@@ -1,4 +1,9 @@
 {
   "source": "./app/scripts",
-  "destination": "./docs"
+  "destination": "./docs",
+  "plugins": [
+    {
+      "name": "esdoc-es7-plugin"
+    }
+  ]
 }
