@@ -32,9 +32,10 @@ describe("ItemsSubscriptionItem", () => {
       });
 
       it("renders body", () => {
-        const body = actual.findByClassName("items-subscription-item__body");
+        const body = actual.findByTagName("ItemBody");
         assert(body);
-        assert(body.children.tagName === "CollapsedText");
+        assert(body.props.item === item);
+        assert(body.props.expanded === false);
       });
 
       it("renders time", () => {

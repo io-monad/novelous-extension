@@ -2,7 +2,7 @@
 
 .items-subscription-item {
   .feed-item-base();
-  
+
   &__title {
     float: left;
   }
@@ -14,6 +14,26 @@
   }
   &--expanded &__body {
     clear: left;
+
+    h2 {
+      margin: 15px 0 0 0;
+      font-size: 12px;
+      font-weight: bold;
+
+      .fa {
+        font-size: 14px;
+        margin-right: 5px;
+        font-weight: normal;
+        color: #999;
+      }
+    }
+    p {
+      margin: 5px 0 0 0;
+      white-space: pre-wrap;
+    }
+    h2:first-child, p:first-child {
+      margin-top: 0;
+    }
   }
 
   &__footer {

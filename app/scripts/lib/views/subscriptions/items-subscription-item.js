@@ -2,7 +2,8 @@ import React, { PropTypes } from "react";
 import shallowCompare from "react-addons-shallow-compare";
 import classNames from "classnames";
 import Subscription from "../../subscriptions/subscription";
-import { Link, Icon, SiteIcon, Time, CollapsedText } from "../common";
+import { Link, Icon, SiteIcon, Time } from "../common";
+import ItemBody from "./item-body";
 import TypeIcon from "./type-icon";
 
 export default class ItemsSubscriptionItem extends React.Component {
@@ -15,7 +16,7 @@ export default class ItemsSubscriptionItem extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { expanded: this.props.isUnread };
+    this.state = { expanded: !!this.props.isUnread };
     this.handleExpand = this.handleExpand.bind(this);
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -50,9 +51,7 @@ export default class ItemsSubscriptionItem extends React.Component {
         </header>
         {item.body &&
           <div className={`${cls}__body`}>
-            <CollapsedText expanded={expanded}>
-              {expanded ? item.body : item.body.slice(0, 100)}
-            </CollapsedText>
+            <ItemBody item={item} expanded={expanded} />
           </div>
         }
         <footer className={`${cls}__footer`}>
