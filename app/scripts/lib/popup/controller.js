@@ -23,8 +23,6 @@ export default class PopupController {
 
   start() {
     return AppData.load().then(appData => {
-      BackgroundAPI.markBadgeAsSeen();
-
       this.appData = appData;
       this.subscriber = new Subscriber(this.appData.subscriptionSettings);
       this._saveUnreadItemIds();
@@ -37,6 +35,7 @@ export default class PopupController {
       if (!this.isAnyFeedAvailable()) {
         return this.triggerUpdate().then(() => { return this; });
       }
+      BackgroundAPI.markBadgeAsSeen();
       return this;
     }).catch((e) => {
       console.error("Error while initialization in PopupController", e);

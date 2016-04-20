@@ -75,13 +75,9 @@ export default class Subscriber extends EventEmitter {
   /**
    * Update all subscriptions.
    *
-   * This returns the same Promise for parallel runs.
-   *
    * @return {Promise.<Subscriber>}
    */
   updateAll() {
-    if (this._updatePromise) return this._updatePromise;
-
     logger("Updating all subscriptions");
     const subscriptions = _.filter(this.subscriptions, "enabled");
     const hostToSubscriptions = _.groupBy(subscriptions, sub => {
@@ -92,17 +88,14 @@ export default class Subscriber extends EventEmitter {
       hostToSubscriptions,
       (subs, host) => this._updateSequence(host, subs)
     );
-    this._updatePromise = Promise.all(updatePromises).then(() => {
+    return Promise.all(updatePromises).then(() => {
       logger("Updated all subscriptions");
-      this._updatePromise = null;
       this.emit("update");
       return this;
     }).catch(e => {
       console.error("Error in subscriber.updateAll:", e);
-      this._updatePromise = null;
       throw e;
     });
-    return this._updatePromise;
   }
 
   _updateSequence(host, subscriptions) {

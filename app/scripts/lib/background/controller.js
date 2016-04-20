@@ -148,20 +148,28 @@ export default class BackgroundController {
   /**
    * Start to update all subscriptions immediately.
    *
+   * This returns the same Promise for parallel runs.
+   *
    * @return {Promise.<Subscriber>}
    */
   updateSubscriptions() {
+    if (this._updatePromise) return this._updatePromise;
+
     this.updateTimer.stop();
-    return this.getSubscriber().then(subscriber => {
+    this._updatePromise = this.getSubscriber().then(subscriber => {
       return subscriber.updateAll().then(resolved => {
         this.updateTimer.reset().start();
+        this._updatePromise = null;
         return resolved;
       });
     })
     .catch((e) => {
       this.updateTimer.reset().start();
+      this._updatePromise = null;
       throw e;
     });
+
+    return this._updatePromise;
   }
 
   /**
