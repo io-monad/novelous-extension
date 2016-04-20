@@ -90,6 +90,7 @@
     "require-dir": "^0.3.0",
     "sinon": "^1.17.3",
     "sinon-chrome": "^1.1.2",
+    "uglify-save-license": "^0.4.1",
     "vinyl-named": "^1.1.0",
     "webpack": "^1.13.0",
     "webpack-build": "^1.0.1",
