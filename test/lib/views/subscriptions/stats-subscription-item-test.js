@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, factory } from "../../../common";
+import { assert, shallow, factory } from "../../../common";
 import StatsSubscriptionItem from
   "../../../../app/scripts/lib/views/subscriptions/stats-subscription-item";
 
@@ -11,89 +11,86 @@ describe("StatsSubscriptionItem", () => {
     beforeEach(() => {
       sub = factory.buildSync("statsSubscription");
       item = sub.items[0];
-      actual = render(<StatsSubscriptionItem subscription={sub} item={item} />);
+      actual = shallow(<StatsSubscriptionItem subscription={sub} item={item} />);
     });
 
     context("collapsed", () => {
       it("renders .stats-subscription-item", () => {
-        assert(actual.hasClassName("stats-subscription-item"));
+        assert(actual.hasClass("stats-subscription-item"));
       });
 
       it("is collapsed by default", () => {
-        assert(actual.hasClassName("stats-subscription-item--collapsed"));
-        assert(!actual.hasClassName("stats-subscription-item--expanded"));
+        assert(actual.hasClass("stats-subscription-item--collapsed"));
+        assert(!actual.hasClass("stats-subscription-item--expanded"));
       });
 
       it("toggles expanded on clicked", () => {
-        actual.props.onClick();
-        actual.render();
-        assert(!actual.hasClassName("stats-subscription-item--collapsed"));
-        assert(actual.hasClassName("stats-subscription-item--expanded"));
+        actual.simulate("click");
+        assert(!actual.hasClass("stats-subscription-item--collapsed"));
+        assert(actual.hasClass("stats-subscription-item--expanded"));
       });
 
       it("renders title", () => {
-        const title = actual.findByClassName("stats-subscription-item__title");
-        assert(title);
+        const title = actual.find(".stats-subscription-item__title");
+        assert(title.length === 1);
 
-        const icon = title.findByTagName("SiteIcon");
-        assert(icon);
-        assert(icon.props.name === sub.siteId);
+        const icon = title.find("SiteIcon");
+        assert(icon.length === 1);
+        assert(icon.prop("name") === sub.siteId);
 
-        const link = title.findByTagName("Link");
-        assert(link);
-        assert(link.props.href === item.url);
-        assert(link.props.title === item.title);
+        const link = title.find("Link");
+        assert(link.length === 1);
+        assert(link.prop("href") === item.url);
+        assert(link.prop("title") === item.title);
       });
 
       it("renders body", () => {
-        const body = actual.findByClassName("stats-subscription-item__body");
-        assert(body);
+        const body = actual.find(".stats-subscription-item__body");
+        assert(body.length === 1);
 
-        const statsList = body.findByTagName("StatsList");
-        assert(statsList);
-        assert(statsList.props.stats === item.stats);
-        assert(statsList.props.statsLog === sub.statsLogs[item.id]);
+        const statsList = body.find("StatsList");
+        assert(statsList.length === 1);
+        assert(statsList.prop("stats") === item.stats);
+        assert(statsList.prop("statsLog") === sub.statsLogs[item.id]);
       });
 
       it("renders time", () => {
-        const time = actual.findByClassName("stats-subscription-item__time");
-        assert(time);
+        const time = actual.find(".stats-subscription-item__time");
+        assert(time.length === 1);
 
-        const timeel = actual.findByTagName("Time");
-        assert(timeel);
-        assert(timeel.props.value === sub.lastUpdatedAt);
+        const timeel = actual.find("Time");
+        assert(timeel.length === 1);
+        assert(timeel.prop("value") === sub.lastUpdatedAt);
       });
 
       it("renders link list", () => {
-        const linkList = actual.findByTagName("LinkList");
-        assert(linkList);
-        assert(linkList.props.links === item.links);
+        const linkList = actual.find("LinkList");
+        assert(linkList.length === 1);
+        assert(linkList.prop("links") === item.links);
       });
     });
 
     context("expanded", () => {
       beforeEach(() => {
-        actual.props.onClick();
-        actual.render();
+        actual.simulate("click");
       });
 
       it("is expanded", () => {
-        assert(!actual.hasClassName("stats-subscription-item--collapsed"));
-        assert(actual.hasClassName("stats-subscription-item--expanded"));
+        assert(!actual.hasClass("stats-subscription-item--collapsed"));
+        assert(actual.hasClass("stats-subscription-item--expanded"));
       });
 
       it("toggles expanded on clicked", () => {
-        actual.props.onClick();
-        actual.render();
-        assert(actual.hasClassName("stats-subscription-item--collapsed"));
-        assert(!actual.hasClassName("stats-subscription-item--expanded"));
+        actual.simulate("click");
+        assert(actual.hasClass("stats-subscription-item--collapsed"));
+        assert(!actual.hasClass("stats-subscription-item--expanded"));
       });
 
       it("renders chart list", () => {
-        const chartList = actual.findByTagName("StatsChartList");
-        assert(chartList);
-        assert(chartList.props.stats === item.stats);
-        assert(chartList.props.statsLog === sub.statsLogs[item.id]);
+        const chartList = actual.find("StatsChartList");
+        assert(chartList.length === 1);
+        assert(chartList.prop("stats") === item.stats);
+        assert(chartList.prop("statsLog") === sub.statsLogs[item.id]);
       });
     });
   });

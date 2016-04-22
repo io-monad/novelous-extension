@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, sinon } from "../../../common";
+import { assert, shallow, sinon } from "../../../common";
 import OptionButton from "../../../../app/scripts/lib/views/popup/option-button";
 
 describe("OptionButton", () => {
@@ -12,20 +12,20 @@ describe("OptionButton", () => {
         .withArgs(sinon.match("options"), sinon.match.any)
         .returns("Options Test");
 
-      const actual = render(<OptionButton />);
-      assert(actual.tagName === "button");
-      assert(actual.hasClassName("option-button"));
-      assert(actual.props.title === "Open Options Test");
-      assert(actual.text === " Options Test");
+      const actual = shallow(<OptionButton />);
+      assert(actual.type() === "button");
+      assert(actual.hasClass("option-button"));
+      assert(actual.prop("title") === "Open Options Test");
+      assert(actual.text() === "<Icon /> Options Test");
 
-      const icon = actual.findByTagName("Icon");
-      assert(icon);
-      assert(icon.props.name === "cog");
+      const icon = actual.find("Icon");
+      assert(icon.length === 1);
+      assert(icon.prop("name") === "cog");
     });
 
     it("handles onClick by opening options page", () => {
-      const element = render(<OptionButton />);
-      element.props.onClick();
+      const element = shallow(<OptionButton />);
+      element.simulate("click");
 
       assert(chrome.runtime.openOptionsPage.calledOnce);
     });

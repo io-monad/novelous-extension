@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render } from "../../../common";
+import { assert, shallow } from "../../../common";
 import PopupView from "../../../../app/scripts/lib/views/popup/popup-view";
 import Subscriber from "../../../../app/scripts/lib/subscriptions/subscriber";
 
@@ -7,35 +7,32 @@ describe("PopupView", () => {
   describe("#render", () => {
     let actual;
     beforeEach(() => {
-      actual = render(
+      actual = shallow(
         <PopupView subscriber={new Subscriber()} unreadItemIds={{}} />
       );
     });
 
     it("renders .popup-view", () => {
-      assert(actual.hasClassName("popup-view"));
-      assert(actual.findByTagName("BrandLink"));
-      assert(actual.findByTagName("OptionButton"));
+      assert(actual.hasClass("popup-view"));
+      assert(actual.find("BrandLink").length === 1);
+      assert(actual.find("OptionButton").length === 1);
     });
 
     it("renders Dashboard first", () => {
-      assert(actual.children[1].tagName === "Dashboard");
+      assert(actual.childAt(1).type().name === "Dashboard");
     });
 
     it("switches content by view mode change", () => {
-      const vms = actual.findByTagName("ViewModeSwitch");
+      const vms = actual.find("ViewModeSwitch");
 
-      vms.props.onChange("events");
-      actual.render();
-      assert(actual.children[1].tagName === "ItemsSubscriptionFlatItems");
+      vms.simulate("change", "events");
+      assert(actual.childAt(1).type().name === "ItemsSubscriptionFlatItems");
 
-      vms.props.onChange("categories");
-      actual.render();
-      assert(actual.children[1].tagName === "ItemsSubscriptionCategories");
+      vms.simulate("change", "categories");
+      assert(actual.childAt(1).type().name === "ItemsSubscriptionCategories");
 
-      vms.props.onChange("dashboard");
-      actual.render();
-      assert(actual.children[1].tagName === "Dashboard");
+      vms.simulate("change", "dashboard");
+      assert(actual.childAt(1).type().name === "Dashboard");
     });
   });
 });

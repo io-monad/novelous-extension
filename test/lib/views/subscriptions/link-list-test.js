@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, factory } from "../../../common";
+import { assert, shallow, factory } from "../../../common";
 import LinkList from
   "../../../../app/scripts/lib/views/subscriptions/link-list";
 
@@ -9,27 +9,27 @@ describe("LinkList", () => {
     let actual;
     beforeEach(() => {
       links = factory.buildSync("novelFeedItem").links;
-      actual = render(<LinkList links={links} />);
+      actual = shallow(<LinkList links={links} />);
     });
 
     it("renders .link-list", () => {
-      assert(actual.hasClassName("link-list"));
+      assert(actual.hasClass("link-list"));
     });
 
     it("renders items", () => {
-      assert(actual.children.length === links.length);
+      assert(actual.children().length === links.length);
 
-      actual.children.forEach((item, i) => {
-        assert(item.hasClassName("link-list__item"));
+      actual.children().forEach((item, i) => {
+        assert(item.hasClass("link-list__item"));
 
-        const link = item.findByTagName("Link");
-        assert(link);
-        assert(link.props.href === links[i].url);
-        assert(link.text === links[i].label);
+        const link = item.find("Link");
+        assert(link.length === 1);
+        assert(link.prop("href") === links[i].url);
+        assert(link.childAt(1).text() === links[i].label);
 
-        const icon = link.findByTagName("Icon");
-        assert(icon);
-        assert(icon.props.name === links[i].icon);
+        const icon = link.find("Icon");
+        assert(icon.length === 1);
+        assert(icon.prop("name") === links[i].icon);
       });
     });
   });

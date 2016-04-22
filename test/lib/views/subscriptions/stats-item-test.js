@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, factory } from "../../../common";
+import { assert, shallow, factory } from "../../../common";
 import StatsItem from
   "../../../../app/scripts/lib/views/subscriptions/stats-item";
 
@@ -13,31 +13,31 @@ describe("StatsItem", () => {
     context("in general", () => {
       let actual;
       beforeEach(() => {
-        actual = render(<StatsItem stat={stat} values={[]} />);
+        actual = shallow(<StatsItem stat={stat} values={[]} />);
       });
 
       it("renders .stats-item", () => {
-        assert(actual.hasClassName("stats-item"));
+        assert(actual.hasClass("stats-item"));
       });
 
       it("renders current stat", () => {
-        const current = actual.findByClassName("stats-item__current");
-        assert(current);
-        assert(current.children.tagName === "Link");
-        assert(current.children.props.href === stat.link);
+        const current = actual.find(".stats-item__current");
+        assert(current.length === 1);
+        assert(current.children().type().name === "Link");
+        assert(current.children().prop("href") === stat.link);
 
-        const icon = current.findByTagName("Icon");
-        assert(icon);
-        assert(icon.props.name === stat.icon);
+        const icon = current.find("Icon");
+        assert(icon.length === 1);
+        assert(icon.prop("name") === stat.icon);
 
-        const value = current.findByClassName("stat__value");
-        assert(value);
-        assert(value.children.tagName === "Num");
-        assert(value.children.children === stat.value);
+        const value = current.find(".stat__value");
+        assert(value.length === 1);
+        assert(value.children().type().name === "Num");
+        assert(value.children().children().text() === stat.value.toString());
 
-        const unit = current.findByClassName("stat__unit");
-        assert(unit);
-        assert(unit.children === stat.unit);
+        const unit = current.find(".stat__unit");
+        assert(unit.length === 1);
+        assert(unit.children().text() === stat.unit);
       });
     });
 
@@ -46,26 +46,26 @@ describe("StatsItem", () => {
 
       let actual;
       beforeEach(() => {
-        actual = render(<StatsItem stat={stat} values={values} />);
+        actual = shallow(<StatsItem stat={stat} values={values} />);
       });
 
       it("renders sparkline", () => {
-        const sparkline = actual.findByClassName("stats-item__sparkline");
-        assert(sparkline);
-        assert(sparkline.children.tagName === "Sparklines");
-        assert(sparkline.children.props.data === values);
+        const sparkline = actual.find(".stats-item__sparkline");
+        assert(sparkline.length === 1);
+        assert(sparkline.children().type().name === "Sparklines");
+        assert(sparkline.children().prop("data") === values);
       });
     });
 
     context("with empty values", () => {
       let actual;
       beforeEach(() => {
-        actual = render(<StatsItem stat={stat} values={[]} />);
+        actual = shallow(<StatsItem stat={stat} values={[]} />);
       });
 
       it("does not render sparkline", () => {
-        const sparkline = actual.findByClassName("stats-item__sparkline");
-        assert(!sparkline);
+        const sparkline = actual.find(".stats-item__sparkline");
+        assert(sparkline.length === 0);
       });
     });
   });

@@ -1,22 +1,22 @@
 import React from "react";
-import { assert, render } from "../../../common";
+import { assert, shallow } from "../../../common";
 import Dashboard from "../../../../app/scripts/lib/views/popup/dashboard";
 import Subscriber from "../../../../app/scripts/lib/subscriptions/subscriber";
 
 describe("Dashboard", () => {
   describe("#render", () => {
     it("renders .dashboard", () => {
-      const actual = render(
+      const actual = shallow(
         <Dashboard subscriber={new Subscriber()} unreadItemIds={{}} />
       );
-      assert(actual.hasClassName("dashboard"));
+      assert(actual.hasClass("dashboard"));
 
-      const items = actual.findByTagName("ItemsSubscriptionFlatItems");
-      assert(items);
-      assert(items.props.unreadOnly === true);
+      const items = actual.find("ItemsSubscriptionFlatItems");
+      assert(items.length === 1);
+      assert(items.prop("unreadOnly") === true);
 
-      const stats = actual.findByTagName("StatsSubscriptionFlatItems");
-      assert(stats);
+      const stats = actual.find("StatsSubscriptionFlatItems");
+      assert(stats.length === 1);
     });
   });
 });

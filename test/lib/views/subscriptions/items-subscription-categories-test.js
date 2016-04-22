@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, factory } from "../../../common";
+import { assert, shallow, factory } from "../../../common";
 import ItemsSubscriptionCategories from
   "../../../../app/scripts/lib/views/subscriptions/items-subscription-categories";
 
@@ -9,17 +9,17 @@ describe("ItemsSubscriptionCategories", () => {
     let actual;
     beforeEach(() => {
       subs = factory.buildManySync(3, "itemsSubscription");
-      actual = render(
+      actual = shallow(
         <ItemsSubscriptionCategories subscriptions={subs} unreadItemIds={{}} />
       );
     });
 
     it("renders .items-subscription-categories", () => {
-      assert(actual.hasClassName("items-subscription-categories"));
+      assert(actual.hasClass("items-subscription-categories"));
     });
 
     it("renders items", () => {
-      const items = actual.findAllByTagName("ItemsSubscriptionCategory");
+      const items = actual.find("ItemsSubscriptionCategory");
       assert(items.length === subs.length);
     });
   });

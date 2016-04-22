@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, factory } from "../../../common";
+import { assert, shallow, factory } from "../../../common";
 import ItemsSubscriptionItem from
   "../../../../app/scripts/lib/views/subscriptions/items-subscription-item";
 
@@ -10,51 +10,51 @@ describe("ItemsSubscriptionItem", () => {
       let actual;
       beforeEach(() => {
         item = factory.buildSync("feedItem");
-        actual = render(<ItemsSubscriptionItem item={item} />);
+        actual = shallow(<ItemsSubscriptionItem item={item} />);
       });
 
       it("renders .items-subscription-item", () => {
-        assert(actual.hasClassName("items-subscription-item"));
+        assert(actual.hasClass("items-subscription-item"));
       });
 
       it("renders title", () => {
-        const title = actual.findByClassName("items-subscription-item__title");
-        assert(title);
+        const title = actual.find(".items-subscription-item__title");
+        assert(title.length === 1);
 
-        const icon = title.findByTagName("TypeIcon");
-        assert(icon);
-        assert(icon.props.type === item.type);
+        const icon = title.find("TypeIcon");
+        assert(icon.length === 1);
+        assert(icon.prop("type") === item.type);
 
-        const link = title.findByTagName("Link");
-        assert(link);
-        assert(link.props.href === item.url);
-        assert(link.props.title === item.title);
+        const link = title.find("Link");
+        assert(link.length === 1);
+        assert(link.prop("href") === item.url);
+        assert(link.prop("title") === item.title);
       });
 
       it("renders body", () => {
-        const body = actual.findByTagName("ItemBody");
-        assert(body);
-        assert(body.props.item === item);
-        assert(body.props.expanded === false);
+        const body = actual.find("ItemBody");
+        assert(body.length === 1);
+        assert(body.prop("item") === item);
+        assert(body.prop("expanded") === false);
       });
 
       it("renders time", () => {
-        const time = actual.findByClassName("items-subscription-item__time");
-        assert(time);
+        const time = actual.find(".items-subscription-item__time");
+        assert(time.length === 1);
 
-        const timeel = time.findByTagName("Time");
-        assert(timeel);
-        assert(timeel.props.value === item.createdAt);
+        const timeel = time.find("Time");
+        assert(timeel.length === 1);
+        assert(timeel.prop("value") === item.createdAt);
       });
 
       it("renders author", () => {
-        const author = actual.findByClassName("items-subscription-item__author");
-        assert(author);
+        const author = actual.find(".items-subscription-item__author");
+        assert(author.length === 1);
 
-        const link = author.findByTagName("Link");
-        assert(link);
-        assert(link.props.href === item.authorUrl);
-        assert(link.props.title === item.authorName);
+        const link = author.find("Link");
+        assert(link.length === 1);
+        assert(link.prop("href") === item.authorUrl);
+        assert(link.prop("title") === item.authorName);
       });
     });
 
@@ -63,25 +63,23 @@ describe("ItemsSubscriptionItem", () => {
       let actual;
       beforeEach(() => {
         item = factory.buildSync("feedItem");
-        actual = render(<ItemsSubscriptionItem item={item} />);
+        actual = shallow(<ItemsSubscriptionItem item={item} />);
       });
 
       it("is collapsed by default", () => {
-        assert(actual.hasClassName("items-subscription-item--collapsed"));
-        assert(!actual.hasClassName("items-subscription-item--expanded"));
+        assert(actual.hasClass("items-subscription-item--collapsed"));
+        assert(!actual.hasClass("items-subscription-item--expanded"));
       });
 
       it("has collapsed body", () => {
-        const body = actual.findByClassName("items-subscription-item__body");
-        assert(!body.children.props.expanded);
+        const body = actual.find(".items-subscription-item__body");
+        assert(!body.children().prop("expanded"));
       });
 
       it("toggles expanded on clicked", () => {
-        actual.props.onClick();
-        actual.render();
-
-        assert(!actual.hasClassName("items-subscription-item--collapsed"));
-        assert(actual.hasClassName("items-subscription-item--expanded"));
+        actual.simulate("click");
+        assert(!actual.hasClass("items-subscription-item--collapsed"));
+        assert(actual.hasClass("items-subscription-item--expanded"));
       });
     });
 
@@ -90,25 +88,23 @@ describe("ItemsSubscriptionItem", () => {
       let actual;
       beforeEach(() => {
         item = factory.buildSync("feedItem");
-        actual = render(<ItemsSubscriptionItem item={item} isUnread />);
+        actual = shallow(<ItemsSubscriptionItem item={item} isUnread />);
       });
 
       it("is expanded by default", () => {
-        assert(!actual.hasClassName("items-subscription-item--collapsed"));
-        assert(actual.hasClassName("items-subscription-item--expanded"));
+        assert(!actual.hasClass("items-subscription-item--collapsed"));
+        assert(actual.hasClass("items-subscription-item--expanded"));
       });
 
       it("has expanded body", () => {
-        const body = actual.findByClassName("items-subscription-item__body");
-        assert(body.children.props.expanded);
+        const body = actual.find(".items-subscription-item__body");
+        assert(body.children().prop("expanded"));
       });
 
       it("toggles expanded on clicked", () => {
-        actual.props.onClick();
-        actual.render();
-
-        assert(actual.hasClassName("items-subscription-item--collapsed"));
-        assert(!actual.hasClassName("items-subscription-item--expanded"));
+        actual.simulate("click");
+        assert(actual.hasClass("items-subscription-item--collapsed"));
+        assert(!actual.hasClass("items-subscription-item--expanded"));
       });
     });
 
@@ -117,16 +113,16 @@ describe("ItemsSubscriptionItem", () => {
       let actual;
       beforeEach(() => {
         item = factory.buildSync("feedItem");
-        actual = render(<ItemsSubscriptionItem item={item} isUnread />);
+        actual = shallow(<ItemsSubscriptionItem item={item} isUnread />);
       });
 
       it("is in list", () => {
-        assert(actual.hasClassName("items-subscription-item--in-list"));
-        assert(!actual.hasClassName("items-subscription-item--single"));
+        assert(actual.hasClass("items-subscription-item--in-list"));
+        assert(!actual.hasClass("items-subscription-item--single"));
       });
 
       it("does not render subscription", () => {
-        assert(!actual.findByClassName("items-subscription-item__subscription"));
+        assert(actual.find(".items-subscription-item__subscription").length === 0);
       });
     });
 
@@ -137,26 +133,26 @@ describe("ItemsSubscriptionItem", () => {
       beforeEach(() => {
         sub = factory.buildSync("itemsSubscription");
         item = sub.items[0];
-        actual = render(<ItemsSubscriptionItem subscription={sub} item={item} />);
+        actual = shallow(<ItemsSubscriptionItem subscription={sub} item={item} />);
       });
 
       it("is single", () => {
-        assert(!actual.hasClassName("items-subscription-item--in-list"));
-        assert(actual.hasClassName("items-subscription-item--single"));
+        assert(!actual.hasClass("items-subscription-item--in-list"));
+        assert(actual.hasClass("items-subscription-item--single"));
       });
 
       it("renders subscription", () => {
-        const el = actual.findByClassName("items-subscription-item__subscription");
-        assert(el);
+        const el = actual.find(".items-subscription-item__subscription");
+        assert(el.length === 1);
 
-        const icon = el.findByTagName("SiteIcon");
-        assert(icon);
-        assert(icon.props.name === sub.siteId);
+        const icon = el.find("SiteIcon");
+        assert(icon.length === 1);
+        assert(icon.prop("name") === sub.siteId);
 
-        const link = el.findByTagName("Link");
-        assert(link);
-        assert(link.props.href === sub.feed.url);
-        assert(link.props.children === sub.title);
+        const link = el.find("Link");
+        assert(link.length === 1);
+        assert(link.prop("href") === sub.feed.url);
+        assert(link.prop("children") === sub.title);
       });
     });
   });

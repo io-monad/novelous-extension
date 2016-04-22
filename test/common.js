@@ -53,11 +53,10 @@ class TestExports {
     requireDir("./factories");
     return this._factory;
   }
-
-  static get render() {
-    if (this._render) return this._render;
-    this._render = require("./test-utils/react-render").default;
-    return this._render;
+  static get shallow() {
+    if (this._shallow) return this._shallow;
+    this._shallow = require("enzyme").shallow;
+    return this._shallow;
   }
 }
 

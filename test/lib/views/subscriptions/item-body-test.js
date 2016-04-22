@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, factory } from "../../../common";
+import { assert, shallow, factory } from "../../../common";
 import { Icon } from "../../../../app/scripts/lib/views/common";
 import ItemBody from
   "../../../../app/scripts/lib/views/subscriptions/item-body";
@@ -11,17 +11,18 @@ describe("ItemBody", () => {
       let actual;
       beforeEach(() => {
         item = factory.buildSync("feedItem");
-        actual = render(<ItemBody item={item} expanded={false} />);
+        actual = shallow(<ItemBody item={item} expanded={false} />);
       });
 
       it("renders collapsed CollapsedText", () => {
-        assert(actual.tagName === "CollapsedText");
-        assert(actual.props.expanded === false);
+        assert(actual.type().name === "CollapsedText");
+        assert(actual.prop("expanded") === false);
       });
 
       it("has plain summarized text", () => {
-        const summarized = item.body.slice(0, actual.children.length);
-        assert(actual.children === summarized);
+        const text = actual.children().text();
+        const summarized = item.body.slice(0, text.length);
+        assert(text === summarized);
       });
     });
 
@@ -34,12 +35,12 @@ describe("ItemBody", () => {
           sourceType: "novel",
           body: "▼良い点\nGood points 1\nGood points 2\n▼一言\nTest hitokoto\n\n",
         });
-        actual = render(<ItemBody item={item} expanded />);
+        actual = shallow(<ItemBody item={item} expanded />);
       });
 
       it("renders expanded CollapsedText", () => {
-        assert(actual.tagName === "CollapsedText");
-        assert(actual.props.expanded === true);
+        assert(actual.type().name === "CollapsedText");
+        assert(actual.prop("expanded") === true);
       });
 
       it("has decorated body", () => {
@@ -49,8 +50,8 @@ describe("ItemBody", () => {
           <h2 key={2}><Icon name="commenting-o" />一言</h2>,
           <p key={3}>{"Test hitokoto"}</p>,
         ];
-        assert(actual.children.length === expected.length);
-        actual.children.forEach((el, i) => {
+        assert(actual.children().length === expected.length);
+        actual.children().forEach((el, i) => {
           assert.reactEqual(el, expected[i]);
         });
       });

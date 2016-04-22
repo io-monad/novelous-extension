@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, factory } from "../../../common";
+import { assert, shallow, factory } from "../../../common";
 import StatsSubscriptionFlatItems from
   "../../../../app/scripts/lib/views/subscriptions/stats-subscription-flat-items";
 
@@ -10,15 +10,15 @@ describe("StatsSubscriptionFlatItems", () => {
       let actual;
       beforeEach(() => {
         subs = factory.buildManySync(3, "statsSubscription");
-        actual = render(<StatsSubscriptionFlatItems subscriptions={subs} />);
+        actual = shallow(<StatsSubscriptionFlatItems subscriptions={subs} />);
       });
 
       it("renders .stats-subscription-flat-items", () => {
-        assert(actual.hasClassName("stats-subscription-flat-items"));
+        assert(actual.hasClass("stats-subscription-flat-items"));
       });
 
       it("renders items", () => {
-        const items = actual.findAllByTagName("StatsSubscriptionItem");
+        const items = actual.find("StatsSubscriptionItem");
         assert(items.length === subs.length * subs[0].items.length);
       });
     });
@@ -26,11 +26,11 @@ describe("StatsSubscriptionFlatItems", () => {
     context("with no subscriptions", () => {
       let actual;
       beforeEach(() => {
-        actual = render(<StatsSubscriptionFlatItems subscriptions={[]} />);
+        actual = shallow(<StatsSubscriptionFlatItems subscriptions={[]} />);
       });
 
       it("renders null", () => {
-        assert(actual === null);
+        assert(actual.type() === null);
       });
     });
   });
