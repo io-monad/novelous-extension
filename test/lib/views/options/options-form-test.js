@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "react-jsonschema-form";
-import { assert, render, sinon } from "../../../common";
+import { assert, shallow, sinon } from "../../../common";
 import OptionsForm from "../../../../app/scripts/lib/views/options/options-form";
 import AppVars from "../../../../app/scripts/lib/app/app-vars";
 
@@ -15,37 +15,37 @@ describe("OptionsForm", () => {
         formData: {},
         onSubmit: sinon.spy(),
       };
-      actual = render(<OptionsForm {...props} />);
+      actual = shallow(<OptionsForm {...props} />);
     });
 
     it("renders .options-form", () => {
-      assert(actual.hasClassName("options-form"));
+      assert(actual.hasClass("options-form"));
     });
 
     it("renders Form", () => {
-      const form = actual.findByTagName("Form");
-      assert(form);
-      assert(form.type === Form);
-      assert(form.props.schema === props.schema);
-      assert(form.props.uiSchema === props.uiSchema);
-      assert(form.props.formData === props.formData);
-      assert(form.props.onSubmit === props.onSubmit);
+      const form = actual.find("Form");
+      assert(form.length === 1);
+      assert(form.type() === Form);
+      assert(form.prop("schema") === props.schema);
+      assert(form.prop("uiSchema") === props.uiSchema);
+      assert(form.prop("formData") === props.formData);
+      assert(form.prop("onSubmit") === props.onSubmit);
     });
 
     it("renders BrandLink", () => {
-      const brandLink = actual.findByTagName("BrandLink");
-      assert(brandLink);
-      assert(brandLink.props.showVersion === true);
+      const brandLink = actual.find("BrandLink");
+      assert(brandLink.length === 1);
+      assert(brandLink.prop("showVersion") === true);
     });
 
     it("renders footer links", () => {
-      const footer = actual.findByClassName("options-form__footer");
-      assert(footer);
+      const footer = actual.find(".options-form__footer");
+      assert(footer.length === 1);
 
-      const links = footer.findAllByTagName("Link");
+      const links = footer.find("Link");
       assert(links.length === 2);
-      assert(links[0].props.href === AppVars.twitterUrl);
-      assert(links[1].props.href === AppVars.githubUrl);
+      assert(links.at(0).prop("href") === AppVars.twitterUrl);
+      assert(links.at(1).prop("href") === AppVars.githubUrl);
     });
   });
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render } from "../../../common";
+import { assert, shallow } from "../../../common";
 import SiteIcon from "../../../../app/scripts/lib/views/common/site-icon";
 
 describe("SiteIcon", () => {
@@ -7,7 +7,7 @@ describe("SiteIcon", () => {
     it("renders site icon image", () => {
       chrome.i18n.getMessage.returns("Syosetuka ni Narou");
 
-      const actual = render(
+      const actual = shallow(
         <SiteIcon name="narou" />
       );
       const expected = (
@@ -22,7 +22,7 @@ describe("SiteIcon", () => {
     });
 
     it("renders other site", () => {
-      const actual = render(
+      const actual = shallow(
         <SiteIcon name="other test" />
       );
       const expected = (

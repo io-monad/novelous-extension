@@ -1,25 +1,26 @@
 import React from "react";
-import { assert, render } from "../../../common";
+import { assert, shallow } from "../../../common";
 import LoginRequiredMessage from
   "../../../../app/scripts/lib/views/messages/login-required-message";
 
 describe("LoginRequiredMessage", () => {
   describe("#render", () => {
     it("renders MessageBox", () => {
-      const actual = render(<LoginRequiredMessage />);
-      assert(actual.tagName === "MessageBox");
-      assert(actual.props.message === "loginRequired");
-      assert(actual.props.icon === "user-times");
+      const actual = shallow(<LoginRequiredMessage />);
+      assert(actual.type().name === "MessageBox");
+      assert(actual.prop("message") === "loginRequired");
+      assert(actual.prop("icon") === "user-times");
 
-      assert(actual.children.hasClassName("sites"));
-      assert(actual.children.children.length > 0);
+      const sites = actual.find(".sites");
+      assert(sites.length > 0);
+      assert(sites.children().length > 0);
 
-      actual.children.children.forEach(link => {
-        assert(link.tagName === "a");
-        assert(/^https?:/.test(link.props.href));
-        assert(link.props.target === "_blank");
-        assert(link.findByTagName("SiteIcon"));
-        assert(link.findByTagName("Str"));
+      sites.children().forEach(link => {
+        assert(link.type() === "a");
+        assert(/^https?:/.test(link.prop("href")));
+        assert(link.prop("target") === "_blank");
+        assert(link.find("SiteIcon").length > 0);
+        assert(link.find("Str").length > 0);
       });
     });
   });

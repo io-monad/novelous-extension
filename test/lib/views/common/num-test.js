@@ -1,11 +1,11 @@
 import React from "react";
-import { assert, render } from "../../../common";
+import { assert, shallow } from "../../../common";
 import Num from "../../../../app/scripts/lib/views/common/num";
 
 describe("Num", () => {
   describe("#render", () => {
     it("renders commafied nummber", () => {
-      const actual = render(
+      const actual = shallow(
         <Num>{1234567890}</Num>
       );
       const expected = (

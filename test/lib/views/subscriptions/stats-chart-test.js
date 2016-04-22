@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render } from "../../../common";
+import { assert, shallow } from "../../../common";
 import StatsChart from
   "../../../../app/scripts/lib/views/subscriptions/stats-chart";
 
@@ -11,18 +11,18 @@ describe("StatsChart", () => {
   describe("#render", () => {
     let actual;
     beforeEach(() => {
-      actual = render(
+      actual = shallow(
         <StatsChart label={label} timestamps={timestamps} values={values} />
       );
     });
 
     it("renders .stats-chart", () => {
-      assert(actual.hasClassName("stats-chart"));
+      assert(actual.hasClass("stats-chart"));
     });
 
     it("renders chart canvas", () => {
-      assert(actual.children.tagName === "canvas");
-      assert(actual.children.hasClassName("starts-chart__canvas"));
+      assert(actual.children().type() === "canvas");
+      assert(actual.children().hasClass("starts-chart__canvas"));
     });
   });
 });

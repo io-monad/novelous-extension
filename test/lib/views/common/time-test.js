@@ -1,5 +1,5 @@
 import React from "react";
-import { assert, render, sinonsb } from "../../../common";
+import { assert, shallow, sinonsb } from "../../../common";
 import moment from "../../../../app/scripts/lib/util/moment";
 import Time from "../../../../app/scripts/lib/views/common/time";
 
@@ -17,7 +17,7 @@ describe("Time", () => {
 
   describe("#render", () => {
     it("renders formtatted time", () => {
-      const actual = render(
+      const actual = shallow(
         <Time value={1234567890123} format="Y-M-D H:m:s" />
       );
       const expected = (
@@ -36,7 +36,7 @@ describe("Time", () => {
       const renderTime = clockTime + 3 * 60 * 60 * 1000;
       sinonsb.useFakeTimers(clockTime);
 
-      const actual = render(
+      const actual = shallow(
         <Time value={renderTime} />
       );
       const expected = (

@@ -43,6 +43,7 @@
     "color-string": "^1.2.0",
     "debug": "^2.2.0",
     "del": "^2.2.0",
+    "enzyme": "^2.2.0",
     "esdoc": "^0.4.6",
     "esdoc-es7-plugin": "0.0.3",
     "eslint": "^2.8.0",
