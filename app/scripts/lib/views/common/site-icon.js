@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
+import { translate } from "@io-monad/chrome-util";
 import Sites from "../../sites";
-import { translate } from "../../util/chrome-util";
 
 export default class SiteIcon extends React.Component {
   static propTypes = {

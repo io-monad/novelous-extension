@@ -12,7 +12,7 @@ export default class Link extends React.Component {
   render() {
     const child = this.props.children || this.props.title;
     if (this.props.href) {
-      return <a {...this.props} target="_blank" onClick={stopPropagation}>{child}</a>;
+      return <a target="_blank" onClick={stopPropagation} {...this.props}>{child}</a>;
     }
     return <span {...this.props}>{child}</span>;
   }

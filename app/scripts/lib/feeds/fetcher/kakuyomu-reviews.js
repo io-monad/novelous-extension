@@ -1,7 +1,7 @@
 import _ from "lodash";
+import { translate } from "@io-monad/chrome-util";
 import Feed from "../feed";
 import Kakuyomu from "../../sites/kakuyomu";
-import { translate } from "../../util/chrome-util";
 import promises from "../../util/promises";
 
 /**

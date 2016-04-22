@@ -1,11 +1,11 @@
+import { storage } from "@io-monad/chrome-util";
+import isPromise from "is-promise";
 import { _, assert, sinonsb, factory } from "../../common";
 import BackgroundController from "../../../app/scripts/lib/background/controller";
 import AppData from "../../../app/scripts/lib/app/app-data";
 import Subscriber from "../../../app/scripts/lib/subscriptions/subscriber";
 import Publisher from "../../../app/scripts/lib/publications/publisher";
 import UpdateTimer from "../../../app/scripts/lib/background/update-timer";
-import cutil from "../../../app/scripts/lib/util/chrome-util";
-import isPromiseLike from "../../../app/scripts/lib/util/is-promise-like";
 
 describe("BackgroundController", () => {
   let controller;
@@ -15,7 +15,7 @@ describe("BackgroundController", () => {
   });
 
   function startController(appData) {
-    sinonsb.stub(cutil, "localGet").returns(Promise.resolve(appData || {}));
+    sinonsb.stub(storage, "localGet").returns(Promise.resolve(appData || {}));
     return controller.start();
   }
 
@@ -25,7 +25,7 @@ describe("BackgroundController", () => {
 
   describe("#start", () => {
     it("returns Promise", () => {
-      assert(isPromiseLike(controller.start()));
+      assert(isPromise(controller.start()));
     });
 
     it("initializes members", () => {

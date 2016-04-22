@@ -1,6 +1,6 @@
+import isPromise from "is-promise";
 import { _, assert, sinon } from "../../common";
 import BackgroundAPI from "../../../app/scripts/lib/popup/background-api";
-import isPromiseLike from "../../../app/scripts/lib/util/is-promise-like";
 
 describe("BackgroundAPI", () => {
   it("is Object of API methods", () => {
@@ -9,7 +9,7 @@ describe("BackgroundAPI", () => {
   });
 
   it("returns Promise", () => {
-    assert(isPromiseLike(BackgroundAPI.getAppData()));
+    assert(isPromise(BackgroundAPI.getAppData()));
   });
 
   it("uses getBackgroundPage to call API", () => {

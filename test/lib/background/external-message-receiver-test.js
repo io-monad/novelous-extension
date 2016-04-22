@@ -5,10 +5,8 @@ describe("ExternalMessageReceiver", () => {
   let controller;
   let receiver;
 
-  const events = ExternalMessageReceiver.getMessageTypeMap();
-
   const messagePublishNovel = {
-    type: events.PUBLISH_NOVEL,
+    type: "PUBLISH_NOVEL",
     close: true,
     pubs: [
       {

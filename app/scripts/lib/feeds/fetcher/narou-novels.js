@@ -1,7 +1,7 @@
 import _ from "lodash";
+import { translate } from "@io-monad/chrome-util";
 import Feed from "../feed";
 import Narou from "../../sites/narou";
-import { translate } from "../../util/chrome-util";
 
 /**
  * Feed fetcher of my novels in Narou
