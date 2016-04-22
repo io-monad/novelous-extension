@@ -1,6 +1,6 @@
+import EventEmitter from "events";
 import _ from "lodash";
-import EventEmitter from "eventemitter3";
-import ChromeAlarm from "../util/chrome-alarm";
+import { Alarm } from "@io-monad/chrome-util";
 import AppData from "../app/app-data";
 
 const DEFAULT_UPDATE_PERIOD_MINUTES = AppData.defaults.updatePeriodMinutes;
@@ -13,7 +13,7 @@ export default class UpdateTimer extends EventEmitter {
    */
   constructor(updatePeriodMinutes, lastUpdatedAt) {
     super();
-    this.alarm = new ChromeAlarm("update");
+    this.alarm = new Alarm("update");
     this.updatePeriodMinutes = updatePeriodMinutes;
     this.lastUpdatedAt = lastUpdatedAt;
     this._started = false;

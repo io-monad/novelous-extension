@@ -1,25 +1,15 @@
-import ChromeMessageReceiver from "../util/chrome-message-receiver";
+import { MessageReceiver } from "@io-monad/chrome-util";
 
-export default class BackgroundExternalMessageReceiver extends ChromeMessageReceiver {
-  static getMessageTypes() {
-    return [
-      "PUBLISH_NOVEL",
-    ];
-  }
-
-  _getMessageHandlerMapping(t) {
-    return {
-      [t.PUBLISH_NOVEL]: this.handlePublishNovel,
-    };
-  }
-
+export default class BackgroundExternalMessageReceiver {
   constructor(controller) {
-    super("external");
     this.controller = controller;
+    this.receiver = new MessageReceiver({
+      PUBLISH_NOVEL: this.handlePublishNovel,
+    }, this);
   }
 
   register() {
-    chrome.runtime.onMessageExternal.addListener(this.listener);
+    chrome.runtime.onMessageExternal.addListener(this.receiver.listener);
   }
 
   handlePublishNovel(message, sender) {

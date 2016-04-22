@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import classNames from "classnames";
+import { translate } from "@io-monad/chrome-util";
 import Icon from "../common/icon";
-import { translate } from "../../util/chrome-util";
 
 const viewModes = [
   { name: "dashboard", title: translate("viewModeDashboard"), icon: "tachometer" },

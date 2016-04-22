@@ -1,5 +1,5 @@
 import React from "react";
-import { translate, openOptionsPage } from "../../util/chrome-util";
+import { translate, openOptionsPage } from "@io-monad/chrome-util";
 import Icon from "../common/icon";
 
 const OptionButton = () => (

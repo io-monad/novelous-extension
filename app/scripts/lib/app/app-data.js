@@ -1,7 +1,7 @@
+import EventEmitter from "events";
 import _ from "lodash";
-import EventEmitter from "eventemitter3";
 import jsonSchemaDefaults from "json-schema-defaults";
-import cutil from "../util/chrome-util";
+import { storage } from "@io-monad/chrome-util";
 import appOptionsSchema from "./app-options-schema.json";
 const logger = debug("app-data");
 
@@ -66,7 +66,7 @@ export default class AppData extends EventEmitter {
 
   load() {
     logger("Loading");
-    return cutil.localGet(PROP_KEYS).then((data) => {
+    return storage.localGet(PROP_KEYS).then((data) => {
       this.overwrite(data);
       this.changedKeys = {};  // Reset changed keys
       logger("Loaded successfully", this.data);
@@ -84,7 +84,7 @@ export default class AppData extends EventEmitter {
     this.changedKeys = {};
 
     logger("Saving", savedData);
-    return cutil.localSet(savedData).then(() => {
+    return storage.localSet(savedData).then(() => {
       logger("Saved successfully", keys, this.data);
       return this;
     });

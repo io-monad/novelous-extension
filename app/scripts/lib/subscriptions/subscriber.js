@@ -1,6 +1,6 @@
 import url from "url";
+import EventEmitter from "events";
 import _ from "lodash";
-import EventEmitter from "eventemitter3";
 import promises from "../util/promises";
 import SubscriptionFactory from "./subscription-factory";
 const logger = debug("subscriber");

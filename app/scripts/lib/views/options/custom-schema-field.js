@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { PropTypes } from "react";
 import SchemaField from "react-jsonschema-form/lib/components/fields/SchemaField";
-import { translate, translateMessage } from "../../util/chrome-util";
+import { translate, translateMessage } from "@io-monad/chrome-util";
 
 export default class CustomSchemaField extends React.Component {
   static propTypes = {

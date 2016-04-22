@@ -1,16 +1,11 @@
-import { _, assert, sinon } from "../../../common";
-import cutil from "../../../../app/scripts/lib/util/chrome-util";
+import { _, assert } from "../../../common";
 
 /**
  * Feed fetcher test cases
  */
 export default function fetcherTestCases(settings) {
-  let translateStub;
-  before(() => {
-    translateStub = sinon.stub(cutil, "translate").returns("test");
-  });
-  after(() => {
-    translateStub.restore();
+  beforeEach(() => {
+    chrome.i18n.getMessage.returns("test");
   });
 
   describe("#isLoginRequired", () => {

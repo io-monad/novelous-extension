@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom";
+import isPromise from "is-promise";
+import { storage } from "@io-monad/chrome-util";
 import { assert, sinonsb } from "../../common";
 import OptionsController from "../../../app/scripts/lib/options/controller";
 import AppData from "../../../app/scripts/lib/app/app-data";
-import cutil from "../../../app/scripts/lib/util/chrome-util";
-import isPromiseLike from "../../../app/scripts/lib/util/is-promise-like";
 
 describe("OptionsController", () => {
   let container;
@@ -24,7 +24,7 @@ describe("OptionsController", () => {
 
   function startController(appData) {
     sinonsb.stub(ReactDOM, "render");
-    sinonsb.stub(cutil, "localGet").returns(Promise.resolve(appData || {}));
+    sinonsb.stub(storage, "localGet").returns(Promise.resolve(appData || {}));
     return controller.start();
   }
 
@@ -34,7 +34,7 @@ describe("OptionsController", () => {
 
   describe("#start", () => {
     it("returns Promise", () => {
-      assert(isPromiseLike(controller.start()));
+      assert(isPromise(controller.start()));
     });
 
     it("initializes members", () => {

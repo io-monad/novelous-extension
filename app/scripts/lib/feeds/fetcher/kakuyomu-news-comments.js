@@ -1,7 +1,7 @@
 import _ from "lodash";
+import { translate } from "@io-monad/chrome-util";
 import Feed from "../feed";
 import Kakuyomu from "../../sites/kakuyomu";
-import { translate } from "../../util/chrome-util";
 
 /**
  * Feed fetcher of received comments to author's news in Kakuyomu
