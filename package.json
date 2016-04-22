@@ -22,7 +22,7 @@
     "docs": "esdoc -c esdoc.json"
   },
   "devDependencies": {
-    "@io-monad/chrome-util": "^1.0.0",
+    "@io-monad/chrome-util": "^1.1.0",
     "babel": "^6.5.2",
     "babel-core": "^6.7.6",
     "babel-eslint": "^6.0.2",
