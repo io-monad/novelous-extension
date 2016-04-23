@@ -20,6 +20,8 @@ rules:
   no-param-reassign: off
   no-use-before-define: off
   no-else-return: off
+  no-underscore-dangle: off
+  global-require: off
   react/prefer-stateless-function: off
   quote-props:
     - error

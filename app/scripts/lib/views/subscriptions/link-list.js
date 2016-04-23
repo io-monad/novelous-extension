@@ -20,7 +20,7 @@ export default class LinkList extends React.Component {
           <li key={key} className="link-list__item">
             <Link href={url}>
               <Icon name={icon || "link"} />
-              { label || _.startCase(key) }
+              {label || _.startCase(key)}
             </Link>
           </li>
         )}
