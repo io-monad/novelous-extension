@@ -72,10 +72,10 @@ export default class ItemsSubscription extends Subscription {
     const oldFeed = this.feed;
     this._lastFoundItems = [];
     return super.update().then(feed => {
-      if (oldFeed) {
+      if (oldFeed && oldFeed.version === feed.version) {
         this._lastFoundItems = _.differenceBy(this.items, oldFeed.items, "id");
       } else {
-        // Clear all unread items on first fetch
+        // Clear all unread items on first fetch or version changed
         this.clearUnreadItems();
       }
       return feed;

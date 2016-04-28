@@ -16,6 +16,7 @@ export default class FetcherKakuyomuNewsComments {
   fetchFeed() {
     return this._fetchItems().then(items => {
       return new Feed({
+        version: 2,
         title: translate("kakuyomuNewsCommentsFeed"),
         url: Kakuyomu.URL.getMyTopURL(),
         siteName: translate(Kakuyomu.name),
@@ -26,28 +27,19 @@ export default class FetcherKakuyomuNewsComments {
   }
 
   _fetchItems() {
-    return Kakuyomu.API.getMyUser().then(user => {
-      if (!user.newsCommentEnabled) {
-        // Skip fetching items when comments disabled
-        return [];
-      }
-
-      return Kakuyomu.API.listNewsByUserId(user.id).then(newsList =>
-        _.flatMap(newsList, news => this._buildItem(user, news))
-      );
+    return Kakuyomu.API.listMyNewsComments().then(comments => {
+      return _.map(comments, com => ({
+        id: com.id,
+        title: translate("kakuyomuNewsCommentTitle", [com.userName]),
+        url: com.url,
+        body: com.body,
+        type: "comment",
+        authorName: com.userName,
+        authorUrl: com.userUrl,
+        sourceTitle: com.articleTitle,
+        sourceUrl: com.articleUrl,
+        sourceType: "news",
+      }));
     });
-  }
-
-  _buildItem(user, news) {
-    if (news.commentCount === 0) return [];
-    return {
-      id: `${news.id}-${news.commentCount}`,
-      title: translate("kakuyomuNewsCommentTitle", [news.commentCount]),
-      url: news.url,
-      type: "comment",
-      sourceTitle: news.title,
-      sourceUrl: news.url,
-      sourceType: "news",
-    };
   }
 }

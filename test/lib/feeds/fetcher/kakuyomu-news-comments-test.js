@@ -4,12 +4,8 @@ import FetcherKakuyomuNewsComments from
 import fetcherTestCases from "./fetcher-test-cases";
 
 describe("FetcherKakuyomuNewsComments", () => {
-  const news = fixture.json("kakuyomu/user-news-list.json");
-
   fetcherTestCases({
     fetcher: () => new FetcherKakuyomuNewsComments,
-    itemsFixture: () => [
-      { id: `${news[0].id}-${news[0].commentCount}` },
-    ],
+    itemsFixture: () => fixture.json("kakuyomu/my-news-comment-list.json"),
   });
 });

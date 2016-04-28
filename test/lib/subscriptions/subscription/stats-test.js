@@ -26,6 +26,7 @@ describe("StatsSubscription", () => {
 
   describe("#update", () => {
     it("records current stats to statsLogs", async () => {
+      const item = sub.feed.items[0];
       const [newFeed, newFeedItem] = helpers.getFeedWithNewItem(sub.feed, "novelFeedItem");
       helpers.stubFetchFeed(sub, newFeed);
       sinonsb.stub(_, "now").returns(newFeedItem.updatedAt);
@@ -33,56 +34,61 @@ describe("StatsSubscription", () => {
       await sub.update();
 
       assert(sub.feed === newFeed);
-      assert(_.isObject(sub.statsLogs));
-      assert(_.isObject(sub.statsLogs[newFeedItem.id]));
-
-      const logs = sub.statsLogs[newFeedItem.id];
-      assert(_.isArray(logs.timestamps));
-      assert.deepEqual(logs.timestamps, [_.now()]);
-
-      const expectedStats = _.transform(
-        newFeedItem.stats,
-        (ac, stat) => { ac[stat.key] = [stat.value]; },
-        {}
-      );
-      assert(_.isObject(logs.stats));
-      assert.deepEqual(logs.stats, expectedStats);
+      assert.deepEqual(sub.statsLogs[item.id], {
+        timestamps: [_.now()],
+        stats: _.mapValues(_.keyBy(item.stats, "key"), stat => [stat.value]),
+      });
+      assert.deepEqual(sub.statsLogs[newFeedItem.id], {
+        timestamps: [_.now()],
+        stats: _.mapValues(_.keyBy(newFeedItem.stats, "key"), stat => [stat.value]),
+      });
     });
 
     it("appends current stats to existing statsLogs", async () => {
-      const itemId = sub.feed.items[0].id;
-      const originalLog = _.cloneDeep(sub.statsLogs[itemId]);
+      const item = sub.feed.items[0];
+      const originalLog = _.cloneDeep(sub.statsLogs[item.id]);
 
       const entries = await helpers.updateSubscriptionWithRandomStats(sub, { num: 2 });
 
       const { feed: firstFeed, time: firstTime } = entries[0];
       const { feed: secondFeed, time: secondTime } = entries[1];
-      const firstValues = _.mapValues(_.keyBy(firstFeed.items[0].stats, "key"), "value");
-      const secondValues = _.mapValues(_.keyBy(secondFeed.items[0].stats, "key"), "value");
+      const firstStats = _.mapValues(_.keyBy(firstFeed.items[0].stats, "key"), "value");
+      const secondStats = _.mapValues(_.keyBy(secondFeed.items[0].stats, "key"), "value");
 
-      const updatedLog = sub.statsLogs[itemId];
-      assert(updatedLog.timestamps.length === originalLog.timestamps.length + 2);
-      assert.deepEqual(
-        updatedLog.timestamps.slice(-2),
-        [firstTime, secondTime]
-      );
+      assert.deepEqual(sub.statsLogs[item.id], {
+        timestamps: originalLog.timestamps.concat([firstTime, secondTime]),
+        stats: _.transform(item.stats, (acc, stat) => {
+          acc[stat.key] = originalLog.stats[stat.key].concat([
+            firstStats[stat.key],
+            secondStats[stat.key],
+          ]);
+        }),
+      });
+    });
 
-      assert.deepEqual(
-        _.keys(updatedLog.stats).sort(),
-        _.keys(originalLog.stats).sort()
-      );
-      _.each(updatedLog.stats, (values, key) => {
-        assert(values.length === originalLog.stats[key].length + 2);
-        assert.deepEqual(
-          values.slice(-2),
-          [firstValues[key], secondValues[key]]
-        );
+    it("clears existing statsLogs when feed version has changed", async () => {
+      const item = sub.feed.items[0];
+      const [newFeed, newFeedItem] = helpers.getFeedWithNewItem(sub.feed, "novelFeedItem");
+      newFeed.data.version = 2;
+      helpers.stubFetchFeed(sub, newFeed);
+      sinonsb.stub(_, "now").returns(newFeedItem.updatedAt);
+
+      await sub.update();
+
+      assert(sub.feed === newFeed);
+      assert.deepEqual(sub.statsLogs[item.id], {
+        timestamps: [_.now()],
+        stats: _.mapValues(_.keyBy(item.stats, "key"), stat => [stat.value]),
+      });
+      assert.deepEqual(sub.statsLogs[newFeedItem.id], {
+        timestamps: [_.now()],
+        stats: _.mapValues(_.keyBy(newFeedItem.stats, "key"), stat => [stat.value]),
       });
     });
 
     it("fills past values with 0 for new keys", async () => {
-      const itemId = sub.feed.items[0].id;
-      const originalLog = _.cloneDeep(sub.statsLogs[itemId]);
+      const item = sub.feed.items[0];
+      const originalLog = _.cloneDeep(sub.statsLogs[item.id]);
 
       await helpers.updateSubscriptionWithRandomStats(sub, {
         customFeed(feed) {
@@ -90,7 +96,7 @@ describe("StatsSubscription", () => {
         },
       });
 
-      const updatedLog = sub.statsLogs[itemId];
+      const updatedLog = sub.statsLogs[item.id];
       assert(updatedLog.stats.testkey.length === originalLog.timestamps.length + 1);
       assert(_.every(updatedLog.stats.testkey.slice(0, -1), v => v === 0));
       assert(_.last(updatedLog.stats.testkey) === 12345);

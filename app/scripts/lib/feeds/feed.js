@@ -2,6 +2,7 @@ import _ from "lodash";
 
 /**
  * @typedef {Object} FeedData
+ * @property {number?}    version - Version of the feed.
  * @property {string}     title - Title of the feed.
  * @property {string}     url - URL of the page to view the feed contents.
  * @property {string}     siteName - Name of the site.
@@ -70,6 +71,13 @@ export default class Feed {
    */
   toObject() {
     return this.data;
+  }
+
+  /**
+   * @return {number} Version of the feed.
+   */
+  get version() {
+    return this.data.version;
   }
 
   /**

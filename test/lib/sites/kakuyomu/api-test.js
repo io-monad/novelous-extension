@@ -48,6 +48,10 @@ describe("KakuyomuAPI", () => {
       call: (api) => api.listMyNovels(),
       expect: ["MyNovelLister", "listNovels"],
     },
+    "#listMyNewsComments": {
+      call: (api) => api.listMyNewsComments(),
+      expect: ["MyNewsCommentLister", "listReceivedComments"],
+    },
   };
   _.each(apiTests, (data, name) => {
     describe(name, () => {

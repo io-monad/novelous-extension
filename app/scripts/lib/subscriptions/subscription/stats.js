@@ -44,7 +44,13 @@ export default class StatsSubscription extends Subscription {
   }
 
   update() {
+    const oldFeed = this.feed;
     return super.update().then(feed => {
+      if (!oldFeed || oldFeed.version !== feed.version) {
+        // Clear all logs on first fetch or version changed
+        this.data.statsLogs = {};
+      }
+
       const logs = this.data.statsLogs || (this.data.statsLogs = {});
       this.items.forEach(item => {
         if (item.stats) {
