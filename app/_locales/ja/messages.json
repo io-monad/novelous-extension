@@ -57,9 +57,9 @@
     }
   },
   "kakuyomuNewsCommentTitle": {
-    "message": "$number$番目のコメント",
+    "message": "$authorName$さんのコメント",
     "placeholders": {
-      "number": { "content": "$1" }
+      "authorName": { "content": "$1" }
     }
   },
 

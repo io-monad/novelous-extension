@@ -6,7 +6,7 @@ import ItemBody from
 
 describe("ItemBody", () => {
   describe("#render", () => {
-    context("collapsed", () => {
+    context("collapsed with body", () => {
       let item;
       let actual;
       beforeEach(() => {
@@ -19,10 +19,29 @@ describe("ItemBody", () => {
         assert(actual.prop("expanded") === false);
       });
 
-      it("has plain summarized text", () => {
+      it("has plain summarized body", () => {
         const text = actual.children().text();
         const summarized = item.body.slice(0, text.length);
         assert(text === summarized);
+      });
+    });
+
+    context("collapsed with summary", () => {
+      let item;
+      let actual;
+      beforeEach(() => {
+        item = factory.buildSync("feedItem", { body: null });
+        item.summary = "Test Summary";
+        actual = shallow(<ItemBody item={item} expanded={false} />);
+      });
+
+      it("renders collapsed CollapsedText", () => {
+        assert(actual.type().name === "CollapsedText");
+        assert(actual.prop("expanded") === false);
+      });
+
+      it("has summary", () => {
+        assert(actual.children().text() === "Test Summary");
       });
     });
 

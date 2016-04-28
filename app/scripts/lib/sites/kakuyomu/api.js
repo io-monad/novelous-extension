@@ -9,6 +9,7 @@ const APIClasses = {
   UserNewsLister: () => require("./api/user-news-lister").default,
   MyUserFetcher: () => require("./api/my-user-fetcher").default,
   MyNovelLister: () => require("./api/my-novel-lister").default,
+  MyNewsCommentLister: () => require("./api/my-news-comment-lister").default,
 };
 
 /**
@@ -69,5 +70,9 @@ export default class KakuyomuAPI {
 
   listMyNovels() {
     return this._getAPI("MyNovelLister").listNovels();
+  }
+
+  listMyNewsComments() {
+    return this._getAPI("MyNewsCommentLister").listReceivedComments();
   }
 }

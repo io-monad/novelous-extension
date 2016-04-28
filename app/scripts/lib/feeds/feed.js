@@ -2,6 +2,7 @@ import _ from "lodash";
 
 /**
  * @typedef {Object} FeedData
+ * @property {number?}    version - Version of the feed.
  * @property {string}     title - Title of the feed.
  * @property {string}     url - URL of the page to view the feed contents.
  * @property {string}     siteName - Name of the site.
@@ -15,6 +16,7 @@ import _ from "lodash";
  * @property {string}   title - Title of the item.
  * @property {?string}  url - URL of the page to view the item.
  * @property {?string}  body - Body of the item. Plain text.
+ * @property {?string}  summary - Summarized body of the item. Plain text.
  * @property {?string}  type - Type of the item like "comment", "review", etc.
  * @property {?string}  authorName - Name of the author who created the item.
  * @property {?string}  authorUrl - URL of the author page.
@@ -70,6 +72,13 @@ export default class Feed {
    */
   toObject() {
     return this.data;
+  }
+
+  /**
+   * @return {number} Version of the feed.
+   */
+  get version() {
+    return this.data.version;
   }
 
   /**

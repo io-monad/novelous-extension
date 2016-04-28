@@ -15,9 +15,8 @@ export default class ItemBody extends React.Component {
     expanded: PropTypes.bool.isRequired,
   };
 
-  getDecoratedBody() {
-    const { item } = this.props;
-    if (item.type === "comment" && item.sourceType === "novel") {
+  getDecoratedBody(item) {
+    if (item.type === "comment" && item.sourceType === "novel" && item.body) {
       const output = [];
       const re = /^▼(\S+)$/mg;
       let lastIndex = 0;
@@ -43,11 +42,21 @@ export default class ItemBody extends React.Component {
     }
   }
 
+  getSummary(item) {
+    if (item.summary) {
+      return item.summary.slice(0, 100);
+    } else if (item.body) {
+      return item.body.slice(0, 100);
+    } else {
+      return "";
+    }
+  }
+
   render() {
     const { item, expanded } = this.props;
     return (
       <CollapsedText expanded={expanded}>
-        {expanded ? this.getDecoratedBody() : item.body.slice(0, 100)}
+        {expanded ? this.getDecoratedBody(item) : this.getSummary(item)}
       </CollapsedText>
     );
   }

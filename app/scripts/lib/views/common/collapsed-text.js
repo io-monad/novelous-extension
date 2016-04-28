@@ -7,6 +7,10 @@ export default class CollapsedText extends React.Component {
     children: PropTypes.any.isRequired,
     expanded: PropTypes.bool,
     defaultExpanded: PropTypes.bool,
+    expandable: PropTypes.bool,
+  };
+  static defaultProps = {
+    expandable: true,
   };
 
   constructor(props) {
@@ -26,6 +30,7 @@ export default class CollapsedText extends React.Component {
     }
   }
   render() {
+    const { expandable } = this.props;
     const expanded = this.isExapnded();
     return (
       <div
@@ -33,8 +38,9 @@ export default class CollapsedText extends React.Component {
           "collapsed-text": true,
           "collapsed-text--collapsed": !expanded,
           "collapsed-text--expanded": expanded,
+          "collapsed-text--exapandable": expandable,
         })}
-        onClick={this.handleClick}
+        onClick={expandable ? this.handleClick : null}
       >
         {this.props.children}
       </div>

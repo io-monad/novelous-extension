@@ -4,6 +4,7 @@ import Feed from "../../../app/scripts/lib/feeds/feed";
 describe("Feed", () => {
   it("new Feed", () => {
     const data = {
+      version: 2,
       title: "test title",
       url: "http://example.com/",
       siteName: "test site",
@@ -12,6 +13,7 @@ describe("Feed", () => {
     };
     const feed = new Feed(data);
 
+    assert(feed.version === data.version);
     assert(feed.title === data.title);
     assert(feed.url === data.url);
     assert(feed.siteName === data.siteName);

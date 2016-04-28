@@ -41,6 +41,18 @@ describe("ItemsSubscription", () => {
       });
     });
 
+    it("clears all unread items when feed version has changed", () => {
+      const [newFeed] = helpers.getFeedWithNewItem(sub.feed);
+      newFeed.data.version = 2;
+      helpers.stubFetchFeed(sub, newFeed);
+
+      return sub.update().then(() => {
+        assert(sub.feed === newFeed);
+        assert.deepEqual(sub.unreadItems, []);
+        assert.deepEqual(sub.lastFoundItems, []);
+      });
+    });
+
     it("does not clear unread items not on first time", async () => {
       const [newFeed, newFeedItem] = helpers.getFeedWithNewItem(sub.feed);
       helpers.stubFetchFeed(sub, newFeed);
