@@ -28,6 +28,7 @@ export default class ItemsSubscriptionItem extends React.Component {
   render() {
     const { subscription, item, isUnread, isHidden } = this.props;
     const { expanded } = this.state;
+    const expandable = !!item.body;
     const cls = "items-subscription-item";
     return (
       <article
@@ -36,12 +37,12 @@ export default class ItemsSubscriptionItem extends React.Component {
           [`${cls}--single`]: subscription,
           [`${cls}--in-list`]: !subscription,
           [`${cls}--unread`]: isUnread,
-          [`${cls}--expandable`]: !!item.body,
+          [`${cls}--expandable`]: expandable,
           [`${cls}--collapsed`]: !expanded,
           [`${cls}--expanded`]: expanded,
           hidden: isHidden,
         })}
-        onClick={this.handleExpand}
+        onClick={expandable ? this.handleExpand : null}
       >
         <header className={`${cls}__header`}>
           <h1 className={`${cls}__title`}>
@@ -49,9 +50,9 @@ export default class ItemsSubscriptionItem extends React.Component {
             <Link href={item.url} title={item.title} />
           </h1>
         </header>
-        {item.body &&
+        {(item.body || item.summary) &&
           <div className={`${cls}__body`}>
-            <ItemBody item={item} expanded={expanded} />
+            <ItemBody item={item} expanded={expanded} expandable={expandable} />
           </div>
         }
         <footer className={`${cls}__footer`}>

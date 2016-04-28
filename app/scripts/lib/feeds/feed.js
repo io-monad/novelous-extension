@@ -16,6 +16,7 @@ import _ from "lodash";
  * @property {string}   title - Title of the item.
  * @property {?string}  url - URL of the page to view the item.
  * @property {?string}  body - Body of the item. Plain text.
+ * @property {?string}  summary - Summarized body of the item. Plain text.
  * @property {?string}  type - Type of the item like "comment", "review", etc.
  * @property {?string}  authorName - Name of the author who created the item.
  * @property {?string}  authorUrl - URL of the author page.

@@ -11,6 +11,7 @@ describe("CollapsedText", () => {
       assert(actual.hasClass("collapsed-text"));
       assert(actual.hasClass("collapsed-text--collapsed"));
       assert(!actual.hasClass("collapsed-text--expanded"));
+      assert(actual.hasClass("collapsed-text--exapandable"));
       assert(actual.text() === "Test text");
     });
 
@@ -20,6 +21,7 @@ describe("CollapsedText", () => {
       );
       assert(!actual.hasClass("collapsed-text--collapsed"));
       assert(actual.hasClass("collapsed-text--expanded"));
+      assert(actual.hasClass("collapsed-text--exapandable"));
     });
 
     it("does not handle onClick with expanded prop", () => {
@@ -35,6 +37,7 @@ describe("CollapsedText", () => {
       );
       assert(actual.hasClass("collapsed-text--collapsed"));
       assert(!actual.hasClass("collapsed-text--expanded"));
+      assert(actual.hasClass("collapsed-text--exapandable"));
     });
 
     it("renders defaultExpanded={true}", () => {
@@ -43,6 +46,25 @@ describe("CollapsedText", () => {
       );
       assert(!actual.hasClass("collapsed-text--collapsed"));
       assert(actual.hasClass("collapsed-text--expanded"));
+      assert(actual.hasClass("collapsed-text--exapandable"));
+    });
+
+    it("renders expandable={false}", () => {
+      const actual = shallow(
+        <CollapsedText expandable={false}>Test text</CollapsedText>
+      );
+      assert(actual.hasClass("collapsed-text"));
+      assert(actual.hasClass("collapsed-text--collapsed"));
+      assert(!actual.hasClass("collapsed-text--expanded"));
+      assert(!actual.hasClass("collapsed-text--exapandable"));
+      assert(actual.text() === "Test text");
+    });
+
+    it("does not handle onClick with expandable={false}", () => {
+      const actual = shallow(<CollapsedText expandable={false}>Test</CollapsedText>);
+      actual.simulate("click");
+      assert(actual.hasClass("collapsed-text--collapsed"));
+      assert(!actual.hasClass("collapsed-text--expanded"));
     });
 
     it("handles onClick to toggle expanded with defaultExpanded prop", () => {

@@ -32,7 +32,7 @@ export default class FetcherKakuyomuNewsComments {
         id: com.id,
         title: translate("kakuyomuNewsCommentTitle", [com.userName]),
         url: com.url,
-        body: com.body,
+        summary: com.body,
         type: "comment",
         authorName: com.userName,
         authorUrl: com.userUrl,
