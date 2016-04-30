@@ -14,7 +14,7 @@ function getPackExtension() {
 }
 
 gulp.task("pack", ["build"], () => {
-  const name = packageDetails.name;
+  const name = packageDetails.name.replace(/^@[\w-]+\//, "");
   const version = packageDetails.version;
   const extname = getPackExtension();
   const filename = `${name}-${version}-${args.vendor}${extname}`;
