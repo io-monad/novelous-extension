@@ -1,11 +1,13 @@
 {
   "name": "@io-monad/novelous-extension",
-  "version": "1.1.0",
   "description": "An extension that helps publishing your novel on various Japanese novel sites.",
   "author": "IRIDE Monad <iride.monad@gmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/io-monad/novelous-extension",
-  "repository": "io-monad/novelous-extension",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/io-monad/novelous-extension.git"
+  },
   "bugs": {
     "url": "https://github.com/io-monad/novelous-extension/issues"
   },
@@ -14,16 +16,24 @@
     "app/scripts",
     "app/manifest.json"
   ],
+  "config": {
+    "ghooks": {
+      "pre-commit": "gulp lint",
+      "commit-msg": "validate-commit-msg",
+      "pre-push": "mocha --reporter progress"
+    },
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "scripts": {
     "postinstall": "bower install",
     "test": "mocha",
     "test:watch": "mocha --watch",
     "build": "gulp build --vendor=chrome",
     "watch": "gulp build --watch --vendor=chrome",
-    "pack:chrome": "gulp pack --production --vendor=chrome",
-    "pack:moz": "gulp pack --production --vendor=moz",
-    "pack:opera": "gulp pack --production --vendor=opera",
-    "docs": "esdoc -c esdoc.json"
+    "docs": "esdoc -c esdoc.json",
+    "semantic-release": "semantic-release pre && gulp release --production && npm publish --access public && semantic-release post"
   },
   "dependencies": {
     "@io-monad/chrome-util": "^2.0.0",
@@ -60,6 +70,7 @@
     "babel-runtime": "^6.6.1",
     "bluebird": "^3.3.5",
     "bower": "^1.7.9",
+    "cz-conventional-changelog": "^1.1.6",
     "del": "^2.2.0",
     "enzyme": "^2.2.0",
     "esdoc": "^0.4.6",
@@ -72,14 +83,12 @@
     "eslint-plugin-react": "^5.0.1",
     "factory-girl": "^3.1.0",
     "fake-xml-http-request": "^1.4.0",
+    "ghooks": "^1.2.1",
     "gulp": "^3.9.1",
-    "gulp-bump": "^2.1.0",
     "gulp-cache": "^0.4.4",
     "gulp-clean-css": "^2.0.6",
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^2.0.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-git": "^1.7.1",
     "gulp-if": "^2.0.0",
     "gulp-json-transform": "^0.3.0",
     "gulp-less": "^3.0.5",
@@ -88,7 +97,6 @@
     "gulp-plumber": "^1.1.0",
     "gulp-sequence": "^0.4.5",
     "gulp-sourcemaps": "^2.0.0-alpha",
-    "gulp-tag-version": "^1.3.0",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
     "gulp-zip": "^3.2.0",
@@ -97,9 +105,11 @@
     "power-assert": "^1.3.1",
     "react-addons-test-utils": "^15.0.1",
     "require-dir": "^0.3.0",
+    "semantic-release": "^4.3.5",
     "sinon": "^1.17.3",
     "sinon-chrome": "^1.1.2",
     "uglify-save-license": "^0.4.1",
+    "validate-commit-msg": "^2.6.1",
     "vinyl-named": "^1.1.0",
     "webpack": "^1.13.0",
     "webpack-build": "^1.0.1",

@@ -1,12 +1,13 @@
 # Novelous Extension
 
-[![wercker status](https://app.wercker.com/status/49bea2b1aed53fb3fb3bb9dfec202111/s/master "wercker status")](https://app.wercker.com/project/bykey/49bea2b1aed53fb3fb3bb9dfec202111)
+[![wercker status](https://app.wercker.com/status/49bea2b1aed53fb3fb3bb9dfec202111/s/master "wercker status")](https://app.wercker.com/project/bykey/49bea2b1aed53fb3fb3bb9dfec202111) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ![](app/images/logo.png)
 
-「小説家になろう」「カクヨム」などの小説サイトでの執筆作業をサポートする拡張機能です。
+「[小説家になろう](http://syosetu.com/)」「[カクヨム](https://kakuyomu.jp/)」などの小説サイトでの執筆作業をサポートする拡張機能です。
 
-:information_source: 「小説家になろう」は株式会社ヒナプロジェクトの登録商標です。
+- :information_source: 「小説家になろう」は株式会社ヒナプロジェクトの登録商標です。
+- :information_source: 「カクヨム」は株式会社ＫＡＤＯＫＡＷＡの登録出願中商標です。
 
 ## 機能
 
@@ -140,29 +141,17 @@ chrome.runtime.sendMessage(
 
     $ npm run test:watch
 
-#### パック
+### リリース
 
-本番向けの zip ファイル (または xpi ファイル) を `packages` ディレクトリ内に生成します。
+[semantic-release](https://github.com/semantic-release/semantic-release) によるリリースの自動化を行なっています。
 
-	$ npm run pack:chrome   // For Chrome
-	$ npm run pack:moz      // For Firefox
-	$ npm run pack:opera    // For Opera
-
-#### バージョンバンプ
-
-`manifest.json` と `package.json` にあるバージョンをバンプして、その変更を git リポジトリにコミットし、git のタグを作ります。
-
-    $ gulp patch      // => 0.0.X
-    $ gulp feature    // => 0.X.0
-    $ gulp release    // => X.0.0
+- バージョンは自動で決定されます。`package.json` および `manifest.json` の中の `version` はリリース時に設定されます。
+- リリース時の git タグ作成、及びそのリリースノート作成はコミットメッセージによって自動で作成されます。
+- [Wercker](https://app.wercker.com/project/bykey/49bea2b1aed53fb3fb3bb9dfec202111) によりコミットの度に自動テストが実行され、テストが通ればリリース用の zip ファイルが GitHub 上の Release として作成されます。（Chrome ウェブストアへのアップロード自体は @io-monad が手動で行なっています :persevere:）
 
 ### Contributing
 
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+Please read [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ### License
 
