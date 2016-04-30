@@ -36,19 +36,5 @@ build:
           echo "npm version $(npm -v) running"
 
 deploy:
-  after-steps:
-    - script:
-        name: semantic-release
-        code: npm run semantic-release
-
-    - script:
-        name: read VERSION
-        code: |
-          [ -s $WERCKER_ROOT/VERSION ]
-          export RELEASE_TAG=`cat $WERCKER_ROOT/VERSION`
-          echo "RELEASE_TAG = $RELEASE_TAG"
-
-    - tcnksm/ghr@0.2.0:
-        token: $GH_TOKEN
-        input: packages
-        version: $RELEASE_TAG
+  steps:
+    - io-monad/semantic-release

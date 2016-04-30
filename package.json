@@ -1,6 +1,7 @@
 {
   "name": "@io-monad/novelous-extension",
   "description": "An extension that helps publishing your novel on various Japanese novel sites.",
+  "chromeExtensionId": "gfhinffnndljgbjfpbmeipdnghnicbhc",
   "author": "IRIDE Monad <iride.monad@gmail.com>",
   "version": "0.0.0-placeholder",
   "license": "MIT",
@@ -71,6 +72,7 @@
     "babel-runtime": "^6.6.1",
     "bluebird": "^3.3.5",
     "bower": "^1.7.9",
+    "chrome-extension-deploy": "^2.0.1",
     "cz-conventional-changelog": "^1.1.6",
     "del": "^2.2.0",
     "enzyme": "^2.2.0",
