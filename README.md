@@ -145,9 +145,10 @@ chrome.runtime.sendMessage(
 
 [semantic-release](https://github.com/semantic-release/semantic-release) によるリリースの自動化を行なっています。
 
+- `master` への変更ごとに [CI](https://app.wercker.com/project/bykey/49bea2b1aed53fb3fb3bb9dfec202111) によるテストが通れば自動リリースが実行されます。
 - バージョンは自動で決定されます。`package.json` および `manifest.json` の中の `version` はリリース時に設定されます。
 - リリース時の git タグ作成、及びそのリリースノート作成はコミットメッセージによって自動で作成されます。
-- [Wercker](https://app.wercker.com/project/bykey/49bea2b1aed53fb3fb3bb9dfec202111) によりコミットの度に自動テストが実行され、テストが通ればリリース用の zip ファイルが GitHub 上の Release として作成されます。（Chrome ウェブストアへのアップロード自体は @io-monad が手動で行なっています :persevere:）
+- Chrome ウェブストアへの zip ファイルのアップロードも自動で行われます。
 
 ### Contributing
 
