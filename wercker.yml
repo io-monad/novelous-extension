@@ -36,7 +36,7 @@ build:
           echo "npm version $(npm -v) running"
 
 deploy:
-  steps:
+  after-steps:
     - script:
         name: semantic-release
         code: npm run semantic-release

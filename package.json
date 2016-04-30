@@ -2,6 +2,7 @@
   "name": "@io-monad/novelous-extension",
   "description": "An extension that helps publishing your novel on various Japanese novel sites.",
   "author": "IRIDE Monad <iride.monad@gmail.com>",
+  "version": "0.0.0-placeholder",
   "license": "MIT",
   "homepage": "https://github.com/io-monad/novelous-extension",
   "repository": {
