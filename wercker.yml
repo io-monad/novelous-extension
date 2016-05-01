@@ -38,16 +38,45 @@ build:
 deploy:
   steps:
     - script:
+        name: debug info
+        code: |
+          echo "# In `pwd`"
+          ls -la
+          echo "# In `pwd`/node_modules/.bin"
+          ls -la node_modules/.bin
+          echo "# node -v"
+          node -v
+          echo "# npm -v"
+          npm -v
+          echo "# gulp --version"
+          node_modules/.bin/gulp --version
+          echo "# gulp -T"
+          node_modules/.bin/gulp -T
+
+    - script:
         name: semantic-release pre
-        code: node_modules/.bin/semantic-release pre
+        code: |
+          echo "Running: semantic-release pre"
+          node_modules/.bin/semantic-release pre
+          echo "Exited with code $?"
+
     - script:
         name: gulp release
-        code: node_modules/.bin/gulp release --production
+        code: |
+          echo "Running: gulp release"
+          node_modules/.bin/gulp release --production
+          echo "Exited with code $?"
     - script:
         name: npm publish
-        code: npm publish --access public
+        code: |
+          echo "Running: npm publish"
+          npm publish --access public
+          echo "Exited with code $?"
     - script:
         name: semantic-release post
-        code: node_modules/.bin/semantic-release post
+        code: |
+          echo "Running: semantic-release post"
+          node_modules/.bin/semantic-release post
+          echo "Exited with code $?"
 
     # - io-monad/semantic-release
