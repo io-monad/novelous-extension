@@ -37,4 +37,17 @@ build:
 
 deploy:
   steps:
-    - io-monad/semantic-release
+    - script:
+        name: semantic-release pre
+        code: node_modules/.bin/semantic-release pre
+    - script:
+        name: gulp release
+        code: node_modules/.bin/gulp release --production
+    - script:
+        name: npm publish
+        code: npm publish --access public
+    - script:
+        name: semantic-release post
+        code: node_modules/.bin/semantic-release post
+
+    # - io-monad/semantic-release
