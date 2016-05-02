@@ -1,6 +1,15 @@
 box: node:5.11.0
 build:
   steps:
+    # Configure npm and bower to allow root scripts
+    - script:
+        name: enable root/sudo for npm/bower
+        code: |
+          # https://docs.npmjs.com/misc/config#unsafe-perm
+          npm config set unsafe-perm true
+          # https://github.com/bower/bower/issues/1752#issuecomment-113455403
+          echo "{\"allow_root\": true}" > ~/.bowerrc
+
     - npm-install
     - npm-test
     - io-monad/semantic-release@2.0.0:
