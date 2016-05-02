@@ -23,13 +23,13 @@ factory.builder = (n, name) => {
 };
 
 factory.timestamp = (base = TIMESTAMP_BASE) => {
-  return () => base + _.random(0, 365 * 24 * 60 * 60 * 1000);
+  return () => base + _.random(0, 24 * 60 * 60 * 1000);
 };
 
 factory.timestamps = (n, base = TIMESTAMP_BASE) => {
   return () => {
     let time = base;
-    return _.times(n, () => (time += _.random(1, 24 * 60 * 60 * 1000)));
+    return _.times(n, () => (time += _.random(1, 60 * 60 * 1000)));
   };
 };
 

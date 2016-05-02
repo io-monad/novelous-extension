@@ -27,16 +27,20 @@ describe("StatsSubscription", () => {
   describe("#update", () => {
     it("records current stats to statsLogs", async () => {
       const item = sub.feed.items[0];
+      const originalLog = _.cloneDeep(sub.statsLogs[item.id]);
+
       const [newFeed, newFeedItem] = helpers.getFeedWithNewItem(sub.feed, "novelFeedItem");
       helpers.stubFetchFeed(sub, newFeed);
-      sinonsb.stub(_, "now").returns(newFeedItem.updatedAt);
+      sinonsb.stub(_, "now").returns(Math.max(item.updatedAt, newFeedItem.updatedAt));
 
       await sub.update();
 
       assert(sub.feed === newFeed);
       assert.deepEqual(sub.statsLogs[item.id], {
-        timestamps: [_.now()],
-        stats: _.mapValues(_.keyBy(item.stats, "key"), stat => [stat.value]),
+        timestamps: originalLog.timestamps.concat([_.now()]),
+        stats: _.mapValues(_.keyBy(item.stats, "key"), (stat, key) => {
+          return originalLog.stats[key].concat([stat.value]);
+        }),
       });
       assert.deepEqual(sub.statsLogs[newFeedItem.id], {
         timestamps: [_.now()],
