@@ -75,6 +75,9 @@
   "wentWrong": {
     "message": "申し訳ございません。問題が発生しました。"
   },
+  "confirmPublishOverwrite": {
+    "message": "小説の入力内容が変更されています。\n上書きしてもよろしいですか？"
+  },
 
   "options": {
     "message": "設定"

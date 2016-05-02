@@ -2,34 +2,69 @@ import { _, assert, factory } from "../../../common";
 import publish from "../../../../app/scripts/lib/sites/kakuyomu/publish";
 
 describe("KakuyomuPublish", () => {
-  it("publishes novel to sites", () => {
-    const pub = factory.buildSync("publication", {
+  let pub;
+  let publishUrl;
+  before(() => {
+    pub = factory.buildSync("publication", {
       sites: {
         kakuyomu: { novelId: "12341234" },
       },
     });
-    chrome.tabs.create.callsArgWithAsync(1, { id: 123 });
-    chrome.tabs.executeScript.callsArgWithAsync(2, [null]);
+    publishUrl = `https://kakuyomu.jp/my/works/${pub.sites.kakuyomu.novelId}/episodes/new`;
+  });
+
+  it("opens a new tab with publication contents", () => {
+    chrome.tabs.query.yieldsAsync([]);
+    chrome.tabs.create.yieldsAsync({ id: 123 });
+    chrome.tabs.executeScript.yieldsAsync([null]);
 
     return publish(pub).then(() => {
-      assert(chrome.tabs.create.calledOnce);
-      assert.deepEqual(chrome.tabs.create.args[0][0], {
-        url: `https://kakuyomu.jp/my/works/${pub.sites.kakuyomu.novelId}/episodes/new`,
-      });
-      assert(chrome.tabs.executeScript.calledOnce);
+      assert(chrome.tabs.query.calledOnce === true);
+      assert.deepEqual(chrome.tabs.query.args[0][0], { url: publishUrl });
+
+      assert(chrome.tabs.create.calledOnce === true);
+      assert.deepEqual(chrome.tabs.create.args[0][0], { url: publishUrl });
+
+      assert(chrome.tabs.executeScript.calledOnce === true);
       assert(chrome.tabs.executeScript.args[0][0] === 123);
       assert(_.isString(chrome.tabs.executeScript.args[0][1].code));
 
       const code = chrome.tabs.executeScript.args[0][1].code;
-      const formValue = (name) => {
-        const re = new RegExp(`form\\.${name}\\.value = (.+?);`);
-        return JSON.parse(code.match(re)[1]);
-      };
+      const embedPub = JSON.parse(code.match(/var pub = (.+?);/)[1]);
+      assert.deepEqual(embedPub, {
+        title: pub.title,
+        body: pub.body,
+        date: "2016-03-01",
+        time: "11:34",
+      });
+    });
+  });
 
-      assert(formValue("title") === pub.title);
-      assert(formValue("body") === pub.body);
-      assert(formValue("reservation_date") === "2016-03-01");
-      assert(formValue("reservation_time") === "11:34");
+  it("updates an existing tab with publication contents", () => {
+    chrome.tabs.query.yieldsAsync([{ id: 123 }]);
+    chrome.tabs.update.yieldsAsync({ id: 123 });
+    chrome.tabs.executeScript.yieldsAsync([null]);
+
+    return publish(pub).then(() => {
+      assert(chrome.tabs.query.calledOnce === true);
+      assert.deepEqual(chrome.tabs.query.args[0][0], { url: publishUrl });
+
+      assert(chrome.tabs.update.calledOnce === true);
+      assert(chrome.tabs.update.args[0][0] === 123);
+      assert.deepEqual(chrome.tabs.update.args[0][1], { active: true });
+
+      assert(chrome.tabs.executeScript.calledOnce === true);
+      assert(chrome.tabs.executeScript.args[0][0] === 123);
+      assert(_.isString(chrome.tabs.executeScript.args[0][1].code));
+
+      const code = chrome.tabs.executeScript.args[0][1].code;
+      const embedPub = JSON.parse(code.match(/var pub = (.+?);/)[1]);
+      assert.deepEqual(embedPub, {
+        title: pub.title,
+        body: pub.body,
+        date: "2016-03-01",
+        time: "11:34",
+      });
     });
   });
 });

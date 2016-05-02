@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { translate } from "@io-monad/chrome-util";
 import moment from "../../util/moment";
 import openPage from "../../util/open-page";
 import KakuyomuURL from "./url";
@@ -12,7 +13,7 @@ import KakuyomuURL from "./url";
 export default function publish(publication) {
   const url = getURL(publication);
   const code = getCode(publication);
-  return openPage(url, code);
+  return openPage(url, code, { update: true });
 }
 
 function getURL(pub) {
@@ -24,31 +25,44 @@ function getURL(pub) {
 }
 
 function getCode(pub) {
-  const title = JSON.stringify(pub.title || "");
-  const body = JSON.stringify(pub.body || "");
-  let code = `
+  const embedPub = {
+    title: pub.title || "",
+    body: pub.body || "",
+  };
+  if (pub.time) {
+    const time = moment(pub.time).tz("Asia/Tokyo");
+    embedPub.date = time.format("YYYY-MM-DD");
+    embedPub.time = time.format("HH:mm");
+  }
+  return `
+    var pub = ${JSON.stringify(embedPub)};
     var form = document.getElementById("episode-editForm");
+
+    var lastPub = window.novelousLastPublication || { title: "", body: "" };
+    if (form.title.value !== lastPub.title || form.body.value !== lastPub.body) {
+      if (!confirm(${JSON.stringify(translate("confirmPublishOverwrite"))})) {
+        return;
+      }
+    }
 
     var change = document.createEvent("HTMLEvents");
     change.initEvent("change", true, true);
 
-    form.title.value = ${title};
+    form.title.value = pub.title;
     form.title.dispatchEvent(change);
-    form.body.value = ${body};
+    form.body.value = pub.body;
     form.body.dispatchEvent(change);
-  `;
 
-  if (pub.time) {
-    const time = moment(pub.time).tz("Asia/Tokyo");
-    const dateValue = JSON.stringify(time.format("YYYY-MM-DD"));
-    const timeValue = JSON.stringify(time.format("HH:mm"));
-    code += `
-      document.querySelector(".js-reservation-panel-button").click();
+    if (pub.date && pub.time) {
+      var button = document.querySelector(".js-reservation-panel-button");
+      if (!/isPanelShown/.test(button.className)) {
+        button.click();
+      }
       document.getElementById("reservationInput-reserved").click();
-      form.reservation_date.value = ${dateValue};
-      form.reservation_time.value = ${timeValue};
-    `;
-  }
+      form.reservation_date.value = pub.date;
+      form.reservation_time.value = pub.time;
+    }
 
-  return code;
+    window.novelousLastPublication = pub;
+  `;
 }

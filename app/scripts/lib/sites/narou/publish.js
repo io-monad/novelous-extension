@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { translate } from "@io-monad/chrome-util";
 import moment from "../../util/moment";
 import openPage from "../../util/open-page";
 import NarouURL from "./url";
@@ -12,7 +13,7 @@ import NarouURL from "./url";
 export default function publish(publication) {
   const url = getURL(publication);
   const code = getCode(publication);
-  return openPage(url, code);
+  return openPage(url, code, { update: true });
 }
 
 function getURL(pub) {
@@ -24,25 +25,36 @@ function getURL(pub) {
 }
 
 function getCode(pub) {
-  const title = JSON.stringify(pub.title || "");
-  const body = JSON.stringify(pub.body || "");
-  let code = `
-    var form = document.getElementById("manage_form");
-    form.subtitle.value = ${title};
-    form.novel.value = ${body};
-  `;
-
+  const embedPub = {
+    title: pub.title || "",
+    body: pub.body || "",
+  };
   if (pub.time) {
     const time = moment(pub.time).tz("Asia/Tokyo");
-    const monthValue = JSON.stringify(time.format("YYYY-MM"));
-    const dayValue = JSON.stringify(time.format("D"));
-    const hourValue = JSON.stringify(time.format("H"));
-    code += `
-      form.month.value = ${monthValue};
-      form.day.value = ${dayValue};
-      form.hour.value = ${hourValue};
-    `;
+    embedPub.month = time.format("YYYY-MM");
+    embedPub.day = time.format("D");
+    embedPub.hour = time.format("H");
   }
+  return `
+    var pub = ${JSON.stringify(embedPub)};
+    var form = document.getElementById("manage_form");
 
-  return code;
+    var lastPub = window.novelousLastPublication || { title: "", body: "" };
+    if (form.subtitle.value !== lastPub.title || form.novel.value !== lastPub.body) {
+      if (!confirm(${JSON.stringify(translate("confirmPublishOverwrite"))})) {
+        return;
+      }
+    }
+
+    form.subtitle.value = pub.title;
+    form.novel.value = pub.body;
+
+    if (pub.month && pub.day) {
+      form.month.value = pub.month;
+      form.day.value = pub.day;
+      form.hour.value = pub.hour;
+    }
+
+    window.novelousLastPublication = pub;
+  `;
 }
