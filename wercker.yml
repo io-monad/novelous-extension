@@ -3,7 +3,6 @@ build:
   steps:
     - npm-install
     - npm-test
-    - io-monad/semantic-release@1.1.0:
+    - io-monad/semantic-release@2.0.0:
         github_token: $GH_TOKEN
         npm_token: $NPM_TOKEN
-        branch: master

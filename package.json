@@ -28,6 +28,9 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "release": {
+    "verifyConditions": "sr-condition-wercker"
+  },
   "scripts": {
     "postinstall": "bower install",
     "test": "mocha",
@@ -111,6 +114,7 @@
     "semantic-release": "^4.3.5",
     "sinon": "^1.17.3",
     "sinon-chrome": "^1.1.2",
+    "sr-condition-wercker": "^1.0.1",
     "uglify-save-license": "^0.4.1",
     "validate-commit-msg": "^2.6.1",
     "vinyl-named": "^1.1.0",
