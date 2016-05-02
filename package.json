@@ -29,7 +29,6 @@
     }
   },
   "release": {
-    "branch": "release",
     "verifyConditions": "sr-condition-wercker"
   },
   "scripts": {
