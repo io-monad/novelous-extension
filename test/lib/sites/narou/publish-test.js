@@ -30,8 +30,7 @@ describe("NarouPublish", () => {
       assert.deepEqual(embedPub, {
         title: pub.title,
         body: pub.body,
-        month: "2016-03",
-        day: "1",
+        date: "2016年3月1日",
         hour: "11",
       });
     });
@@ -59,8 +58,7 @@ describe("NarouPublish", () => {
       assert.deepEqual(embedPub, {
         title: pub.title,
         body: pub.body,
-        month: "2016-03",
-        day: "1",
+        date: "2016年3月1日",
         hour: "11",
       });
     });

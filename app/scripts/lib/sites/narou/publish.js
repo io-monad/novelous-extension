@@ -31,8 +31,7 @@ function getCode(pub) {
   };
   if (pub.time) {
     const time = moment(pub.time).tz("Asia/Tokyo");
-    embedPub.month = time.format("YYYY-MM");
-    embedPub.day = time.format("D");
+    embedPub.date = time.format("YYYY年M月D日");
     embedPub.hour = time.format("H");
   }
   return `
@@ -49,9 +48,8 @@ function getCode(pub) {
     form.subtitle.value = pub.title;
     form.novel.value = pub.body;
 
-    if (pub.month && pub.day) {
-      form.month.value = pub.month;
-      form.day.value = pub.day;
+    if (pub.date) {
+      form.reserve_date.value = pub.date;
       form.hour.value = pub.hour;
     }
 
