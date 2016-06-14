@@ -22,6 +22,7 @@ rules:
   no-else-return: off
   no-underscore-dangle: off
   global-require: off
+  newline-per-chained-call: off
   react/prefer-stateless-function: off
   quote-props:
     - error
