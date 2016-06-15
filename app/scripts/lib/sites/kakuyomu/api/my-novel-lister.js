@@ -56,7 +56,7 @@ export default class KakuyomuMyNovelLister {
   }
 
   _parseIdList($) {
-    return _.map($("#works-hasWorks > ul > li"), (item) => {
+    return _.map($("#works-hasWorks > ul > li.widget-list-child"), (item) => {
       const $item = $(item);
       const editUrl = $item.find("h3 > a").last().attr("href");
       return editUrl.match(/\/works\/(\d+)/)[1];
@@ -69,7 +69,7 @@ export default class KakuyomuMyNovelLister {
     const authorUrl = resolve($("#profile > h2").first().children("a").attr("href"));
     const authorUserId = authorUrl.match(/\/users\/([^\/]+)/)[1];
 
-    return _.map($("#works-hasWorks > ul > li"), (item) => {
+    return _.map($("#works-hasWorks > ul > li.widget-list-child"), (item) => {
       const $item = $(item);
       const novel = { authorName, authorUrl, authorUserId };
 
