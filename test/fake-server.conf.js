@@ -8,7 +8,7 @@ export default {
     "kakuyomu/original-novel.html",
   "https://kakuyomu.jp/works/4852201425154996024/reviews":
     "kakuyomu/review-list.html",
-  "https://kakuyomu.jp/works/1177354054880772094/reviews":
+  "https://kakuyomu.jp/works/1177354054881227205/reviews":
     "kakuyomu/review-list-empty.html",
   "https://kakuyomu.jp/users/kadokawabooks/works":
     "kakuyomu/user-novel-list.html",
